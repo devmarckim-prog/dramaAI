@@ -72,15 +72,6 @@ function showLoginModal(){
             Google로 계속하기
           </button>
           <div class="login-agree">가입 시 <a href="#">이용약관</a> 및 <a href="#">개인정보처리방침</a>에 동의합니다</div>
-          <div class="api-key-toggle" onclick="toggleApiKeyInput()" style="margin-top:18px;cursor:pointer;font-size:11px;color:var(--ink4,#888);display:flex;align-items:center;gap:4px;justify-content:center;">
-            <span id="api-key-arrow">▶</span> 사용자 API 키 입력
-          </div>
-          <div id="api-key-section" style="display:none;margin-top:10px;">
-            <input class="login-input" type="password" placeholder="Anthropic API 키 (선택사항)" id="user-api-key-inp"
-              style="font-size:12px;padding:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#fff;width:100%;box-sizing:border-box;">
-            <button class="btn btn-ghost" style="width:100%;margin-top:8px;font-size:11px;padding:8px" onclick="saveUserApiKey()">키 저장</button>
-            <div style="font-size:10px;color:var(--ink4,#666);margin-top:6px;text-align:center;">서버 기본 키가 설정되어 있어 입력하지 않아도 됩니다</div>
-          </div>
         </div>
       </div>
     </div>`;
@@ -94,7 +85,12 @@ function closeLoginModal(e){
 
 async function doLogin(method){
   if (method === 'google') {
-    window.loginWithGoogle();
+    try {
+      await window.loginWithGoogle();
+    } catch(e) {
+      console.error('Google login error:', e);
+      showToast('로그인 서버에 연결할 수 없습니다. 백엔드 서버가 실행 중인지 확인해주세요.', 'error');
+    }
   } else {
     showToast('지원하지 않는 로그인 방식입니다.', 'info');
   }
