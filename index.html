@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>드라마스크립트 AI ? K-드라마 대본 생성</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="toast-container"></div>
+<div id="modal-container"></div>
+
+<!-- 플로팅 AI 에이전트 -->
+<button id="floating-agent-toggle" onclick="toggleFloatingAgent()" title="AI 대본 수정">?</button>
+<div id="floating-agent">
+  <div id="floating-agent-header" onclick="toggleFloatingAgent()">
+    <div id="floating-agent-title">
+      <div class="agent-dot"></div>
+      AGENT ? AI 대본 수정
+    </div>
+    <button id="floating-agent-close">?</button>
+  </div>
+  <div id="floating-agent-context">씬을 선택하거나 줄을 클릭해서 수정 요청하세요</div>
+  <div id="floating-agent-history"></div>
+  <div id="floating-agent-input-row">
+    <textarea id="floating-agent-textarea" placeholder="예: 이 씬 대사를 더 날카롭게 / 지문을 더 영화적으로..." rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFloatingAgent()}"></textarea>
+    <button id="floating-agent-send" onclick="sendFloatingAgent()">↑</button>
+  </div>
+</div>
+<div id="login-modal-wrap"></div>
+
+<!-- ================ NAV ================ -->
+<nav class="nav">
+  <a class="nav-logo" href="#" onclick="showPage('home');return false;">드라마스크립트<span>AI</span></a>
+  <div class="nav-actions" id="nav-actions">
+    <!-- JS로 로그인 상태에 따라 채워짐 -->
+  </div>
+</nav>
+
+<!-- ================ HOME ================ -->
+<div id="page-home" class="page active">
+  <div class="hero-section">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-bg-img"></div>
+    <div class="hero-bg-grad"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-deco hero-deco-1">드라마</div>
+    <div class="hero-deco hero-deco-2">DRAMA</div>
+    <div class="hero-content">
+      <div class="hero-badge-home">? K-드라마 전문 AI 대본 작가</div>
+      <h1 class="hero-title-home">당신의 이야기를<br><em>드라마로 탄생</em>시킵니다</h1>
+      <p class="hero-sub-home">15년 경력 드라마 작가의 노하우를 담은 AI가 플랫폼·장르·인물 설정부터 회차별 씬 구성, 제작비 추정, PPL 제안까지 완성된 기획서를 자동 생성합니다.</p>
+      <div class="hero-actions-home">
+        <button class="btn-hero-primary" onclick="handleStartBtn()">무료로 시작하기</button>
+      </div>
+    </div>
+    <div class="scroll-hint"><span>scroll</span><div class="scroll-arrow"></div></div>
+  </div>
+  <div class="feature-section">
+    <div class="section-header">
+      <div class="section-title">왜 드라마스크립트 AI인가요?</div>
+      <div class="section-sub">전문 작가의 노하우를 AI가 담아냅니다</div>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card"><div class="feature-icon">??</div><div class="feature-title">전문 대본 포맷</div><div class="feature-desc">S#, 지문, 대사 등 정식 시나리오 포맷으로 영상화에 최적화된 대본을 생성합니다.</div></div>
+      <div class="feature-card"><div class="feature-icon">??</div><div class="feature-title">플랫폼별 최적화</div><div class="feature-desc">OTT, 지상파, 숏폼 웹드라마 등 플랫폼 특성에 맞는 톤과 호흡으로 집필합니다.</div></div>
+      <div class="feature-card"><div class="feature-icon">??</div><div class="feature-title">캐스팅 추천</div><div class="feature-desc">인물 설정에 맞는 배우 후보 3인과 예상 캐스팅비를 자동으로 제안합니다.</div></div>
+      <div class="feature-card"><div class="feature-icon">??</div><div class="feature-title">제작비 상세 견적</div><div class="feature-desc">로케이션, 출연료, VFX까지 씬별 세부 항목을 포함한 회차별 제작비를 산출합니다.</div></div>
+      <div class="feature-card"><div class="feature-icon">??</div><div class="feature-title">PPL 제안서</div><div class="feature-desc">씬에 자연스럽게 녹아드는 브랜드 협찬 제안과 예상 PPL 수익을 제공합니다.</div></div>
+      <div class="feature-card"><div class="feature-icon">?</div><div class="feature-title">즉시 결과 확인</div><div class="feature-desc">입력값 기반으로 완성된 기획서 구조를 바로 확인. 언제든 수정·재생성 가능합니다.</div></div>
+    </div>
+  </div>
+  <div class="pricing-section">
+    <div class="section-title">요금제</div>
+    <div class="section-sub" style="margin-bottom:40px">지금은 데모 모드로 누구나 무료로 사용할 수 있습니다.</div>
+    <div class="pricing-grid">
+      <div class="pricing-card"><div class="pricing-name">스타터</div><div class="pricing-price">\0</div><div class="pricing-period">영구 무료</div><hr class="pricing-divider"><ul class="pricing-features"><li>월 3개 프로젝트</li><li>4부작까지</li><li>기획안 + 줄거리</li><li>캐스팅 추천</li></ul><br><button class="btn btn-ghost" style="width:100%" onclick="handleStartBtn()">시작하기</button></div>
+      <div class="pricing-card featured"><div class="pricing-badge">인기</div><div class="pricing-name">프로</div><div class="pricing-price">\29,000</div><div class="pricing-period">/월</div><hr class="pricing-divider"><ul class="pricing-features"><li>무제한 프로젝트</li><li>최대 16부작</li><li>전체 대본 생성</li><li>PPL 제안서</li><li>PDF 내보내기</li></ul><br><button class="btn btn-primary" style="width:100%" onclick="showPlanModal('pro')">14일 무료 체험</button></div>
+      <div class="pricing-card"><div class="pricing-name">스튜디오</div><div class="pricing-price">\99,000</div><div class="pricing-period">/월</div><hr class="pricing-divider"><ul class="pricing-features"><li>팀 계정 5인</li><li>무제한 부작</li><li>실시간 협업</li><li>우선 지원</li></ul><br><button class="btn btn-ghost" style="width:100%" onclick="showPlanModal('studio')">문의하기</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================ PROJECTS ================ -->
+<div id="page-projects" class="page">
+  <div class="projects-page-wrap">
+    <div class="projects-page-header">
+      <div>
+        <div class="projects-page-title">내 프로젝트</div>
+        <div class="projects-page-sub" id="projects-page-sub">생성한 드라마 기획서를 관리하세요</div>
+      </div>
+      <button class="btn btn-primary" onclick="showPage('wizard')">+ 새 프로젝트</button>
+    </div>
+    <div id="project-cards-wrap"></div>
+  </div>
+</div>
+
+<!-- ================ WIZARD ================ -->
+<div id="page-wizard" class="page">
+  <div class="wizard-wrap">
+    <div class="wizard-title">새 드라마 프로젝트</div>
+    <div class="wizard-sub">단계별로 정보를 입력하면 기획서와 대본을 자동 생성합니다</div>
+    <div class="step-bar">
+      <div class="step-item"><div class="step-dot active" id="sdot-0">1</div><div class="step-label active" id="slabel-0">플랫폼</div></div>
+      <div class="step-item"><div class="step-dot" id="sdot-1">2</div><div class="step-label" id="slabel-1">장르</div></div>
+      <div class="step-item"><div class="step-dot" id="sdot-2">3</div><div class="step-label" id="slabel-2">스토리</div></div>
+      <div class="step-item"><div class="step-dot" id="sdot-3">4</div><div class="step-label" id="slabel-3">인물</div></div>
+      <div class="step-item"><div class="step-dot" id="sdot-4">5</div><div class="step-label" id="slabel-4">확인</div></div>
+    </div>
+    <div class="step-panel active" id="step-0">
+      <!-- 플랫폼 -->
+      <div class="form-section">
+        <label class="form-label">타겟 플랫폼</label>
+        <div class="option-grid option-grid-2" id="grid-platform">
+          <button class="option-btn selected" onclick="selectOpt(this)">
+            <strong>?? 극장 개봉</strong><span>영화적 연출 · 단일 장편 · 독립/메이저</span>
+          </button>
+          <button class="option-btn" onclick="selectOpt(this)">
+            <strong>?? OTT 오리지널</strong><span>넷플릭스·Disney+·웨이브 · 수위 자유</span>
+          </button>
+          <button class="option-btn" onclick="selectOpt(this)">
+            <strong>?? 지상파 / 종편</strong><span>KBS·MBC·SBS·tvN · 대중성 중심</span>
+          </button>
+          <button class="option-btn" onclick="selectOpt(this)">
+            <strong>?? 소셜미디어</strong><span>유튜브·틱톡·인스타 · 숏폼 10~20분</span>
+          </button>
+        </div>
+      </div>
+      <!-- 회차 수 -->
+      <div class="form-section">
+        <label class="form-label">총 회차 수</label>
+        <div class="slider-row">
+          <input type="range" class="range-slider" id="slider-ep" min="1" max="24" value="8"
+            oninput="document.getElementById('val-ep').textContent=this.value+'부작'">
+          <span class="slider-val" id="val-ep">8부작</span>
+        </div>
+      </div>
+      <!-- 회당 분량 0~300분 -->
+      <div class="form-section">
+        <label class="form-label">회당 분량</label>
+        <div class="slider-row">
+          <input type="range" class="range-slider" id="slider-rt" min="5" max="300" step="5" value="60"
+            oninput="updateRuntimeLabel(this.value)">
+          <span class="slider-val" id="val-rt">60분</span>
+        </div>
+        <div class="form-sub" id="rt-hint" style="margin-top:6px">표준 드라마 (60분)</div>
+      </div>
+      <!-- 타겟층 -->
+      <div class="form-section">
+        <label class="form-label">타겟층</label>
+        <!-- 연령대 듀얼 슬라이더 -->
+        <div style="margin-bottom:14px">
+          <div style="font-size:11px;color:var(--ink3);margin-bottom:6px">연령대 범위</div>
+          <div class="dual-slider-wrap" id="age-slider-wrap">
+            <div class="dual-track">
+              <div class="dual-fill" id="age-fill"></div>
+            </div>
+            <input type="range" class="dual-input" id="age-min" min="10" max="70" value="20"
+              oninput="updateAgeSlider()">
+            <input type="range" class="dual-input" id="age-max" min="10" max="70" value="39"
+              oninput="updateAgeSlider()">
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-top:6px">
+            <span style="color:var(--ink3)">10대</span>
+            <span style="font-weight:700;color:var(--gold)" id="age-label">20 ~ 39세</span>
+            <span style="color:var(--ink3)">70+</span>
+          </div>
+        </div>
+        <!-- 성별 -->
+        <div style="font-size:11px;color:var(--ink3);margin-bottom:6px">주 시청자 성별</div>
+        <div style="display:flex;gap:8px">
+          <button class="gender-btn selected" id="gbtn-f" onclick="toggleGender('f')">?? 여성</button>
+          <button class="gender-btn" id="gbtn-m" onclick="toggleGender('m')">?? 남성</button>
+          <button class="gender-btn" id="gbtn-a" onclick="toggleGender('a')">?? 모두</button>
+        </div>
+      </div>
+    </div>
+    <div class="step-panel" id="step-1">
+      <div class="form-section">
+        <label class="form-label">장르 / 톤앤매너</label>
+        <div class="option-grid option-grid-2" id="grid-genre">
+          <button class="option-btn selected" onclick="selectOpt(this)"><strong>로맨틱 코미디</strong><span>티키타카 대사, 통통 튀는 연출</span></button>
+          <button class="option-btn" onclick="selectOpt(this)"><strong>스릴러 / 범죄 수사</strong><span>건조한 지문, 치밀한 서스펜스</span></button>
+          <button class="option-btn" onclick="selectOpt(this)"><strong>사극 (정통/퓨전)</strong><span>웅장한 배경, 신분 체계</span></button>
+          <button class="option-btn" onclick="selectOpt(this)"><strong>일일극 / 막장</strong><span>빠른 전개, 자극적 텐션</span></button>
+          <button class="option-btn" onclick="selectOpt(this)"><strong>휴먼 / 힐링</strong><span>담백한 대사, 잔잔한 감동</span></button>
+          <button class="option-btn" onclick="selectOpt(this)"><strong>크리처 / SF</strong><span>스펙터클, 세계관 구축</span></button>
+          <button class="option-btn" onclick="selectOpt(this)"><strong>액션 / 첩보</strong><span>강렬한 액션, 긴장감</span></button>
+          <button class="option-btn" onclick="selectOpt(this)"><strong>의학 / 법정</strong><span>전문 직업군, 갈등 드라마</span></button>
+        </div>
+        <!-- 기타 직접 입력 ? 항상 보임 -->
+        <div style="margin-top:12px">
+          <label class="form-label" style="margin-bottom:6px">기타 (직접 입력)</label>
+          <input class="form-input" id="inp-genre-other"
+            placeholder="기타 (직접 입력) ? 위에 없는 장르를 여기에 써주세요"
+            oninput="if(this.value.trim()) document.querySelectorAll('#grid-genre .option-btn').forEach(b=>b.classList.remove('selected'))">
+        </div>
+      </div>
+    </div>
+    <div class="step-panel" id="step-2">
+      <div class="form-section">
+        <label class="form-label">로그라인 / 소재 <span style="color:var(--gold)">*</span></label>
+        <div class="form-sub">한 줄로 이야기를 요약해주세요 ? 입력 내용으로 가제를 자동 생성합니다</div>
+        <textarea class="form-input form-textarea" id="inp-logline" placeholder="예: 식당을 열기 위해 세입자로 들어온 여자 쉐프와 냉철한 남자 건물주와의 로맨스"></textarea>
+      </div>
+      <!-- 시대 배경 타임라인 슬라이더 -->
+      <div class="form-section">
+        <label class="form-label">시대 배경</label>
+        <div class="form-sub">슬라이더를 움직이면 해당 시대의 역사적 맥락이 표시됩니다</div>
+        <div style="margin:10px 0 6px">
+          <div class="slider-row">
+            <span style="font-size:11px;color:var(--ink3);min-width:52px">BC 10000</span>
+            <input type="range" class="range-slider" id="slider-era" min="-10000" max="3000" step="10" value="2026"
+              oninput="updateEraLabel(parseInt(this.value))">
+            <span style="font-size:11px;color:var(--ink3);min-width:44px;text-align:right">AD 3000</span>
+          </div>
+          <div style="display:flex;justify-content:flex-end;margin-top:6px">
+            <button type="button" onclick="jumpToNow()" style="padding:4px 12px;font-size:11px;font-weight:600;border-radius:20px;border:0.5px solid var(--gold);background:rgba(201,147,58,.1);color:var(--gold);cursor:pointer;font-family:var(--sans);transition:all .15s" onmouseover="this.style.background='rgba(201,147,58,.2)'" onmouseout="this.style.background='rgba(201,147,58,.1)'">?? 현재</button>
+          </div>
+        </div>
+        <!-- 시대 표시 카드 -->
+        <div class="era-card" id="era-card">
+          <div class="era-year" id="era-year">2026년</div>
+          <div class="era-tags" id="era-tags"></div>
+        </div>
+        <!-- 기타 직접 입력 -->
+        <div style="margin-top:10px">
+          <input class="form-input" id="inp-era-custom" placeholder="기타 ? 직접 시대 배경을 입력해주세요 (예: 조선 후기, 근미래 2050년대)">
+        </div>
+      </div>
+      <div class="form-section">
+        <label class="form-label">주요 배경</label>
+        <input class="form-input" id="inp-setting" placeholder="예: 서울 마포구 오래된 골목, 대형 병원…">
+      </div>
+      <div class="form-section">
+        <label class="form-label">추가 설정 (선택)</label>
+        <textarea class="form-input form-textarea" id="inp-extra" placeholder="예: 재개발 갈등, 전 남자친구 등장 등"></textarea>
+      </div>
+    </div>
+    <div class="step-panel" id="step-3">
+      <!-- 인물 설정 박스 -->
+      <div class="char-mode-box">
+        <!-- AI 자동 생성 영역 -->
+        <div class="char-mode-section">
+          <div class="char-mode-header">
+            <div class="char-mode-icon">?</div>
+            <div class="char-mode-info">
+              <div class="char-mode-title">AI가 자동 설정</div>
+              <div class="char-mode-desc">로그라인 기반으로 인물을 자동으로 채워드립니다</div>
+            </div>
+            <button class="char-mode-btn char-mode-btn-primary" onclick="autoFillChars()">자동 생성</button>
+          </div>
+        </div>
+
+        <!-- AI 자동생성 완료 배너 (기본 숨김) -->
+        <div id="char-auto-banner" style="display:none;align-items:flex-start;gap:14px;background:linear-gradient(135deg,rgba(201,147,58,.08),rgba(201,147,58,.15));border-top:0.5px solid rgba(201,147,58,.3);padding:16px 20px">
+          <span style="font-size:22px;flex-shrink:0">?</span>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:6px">AI 자동 생성 완료</div>
+            <div style="font-size:12px;color:var(--ink2);line-height:1.7">
+              생성 후 AI가 로그라인을 분석해 인물을 완성합니다.<br>
+              <span style="color:var(--ink3);font-size:11px">
+                미리보기 ? 여주: <strong class="char-auto-name1"></strong> (<span class="char-auto-job1"></span>) &nbsp;/&nbsp;
+                남주: <strong class="char-auto-name2"></strong> (<span class="char-auto-job2"></span>)
+              </span>
+            </div>
+          </div>
+          <button class="char-mode-btn char-mode-btn-ghost" style="font-size:11px;white-space:nowrap" onclick="resetAutoChars()">초기화</button>
+        </div>
+
+        <div class="char-mode-divider" id="char-mode-divider-manual"><span>또는</span></div>
+        <!-- 수동 설정 영역 -->
+        <div id="char-mode-box-manual" class="char-mode-section">
+          <div class="char-mode-header">
+            <div class="char-mode-icon">??</div>
+            <div class="char-mode-info">
+              <div class="char-mode-title">수동으로 설정하기</div>
+              <div class="char-mode-desc">이름, 직업, 성격 등 인물을 직접 입력합니다</div>
+            </div>
+            <button class="char-mode-btn char-mode-btn-ghost" onclick="toggleManualChars()" id="btn-manual-toggle">펼치기 ?</button>
+          </div>
+          <!-- 수동 입력 영역 (접혀있다가 펼쳐짐) -->
+          <div id="manual-chars-wrap" style="display:none;margin-top:16px">
+            <div class="char-builder" id="char-builder">
+              <div class="char-row" id="char-row-0">
+                <div class="char-row-header">
+                  <span class="char-row-label">주인공 1</span>
+                  <select class="char-role-select" id="char-role-0"><option value="여주">여주</option><option value="남주">남주</option><option value="주연">주연</option><option value="조연">조연</option><option value="악역">악역</option></select>
+                </div>
+                <div class="char-fields">
+                  <input class="form-input" id="char-name-0" placeholder="이름">
+                  <input class="form-input" id="char-age-0" placeholder="나이">
+                  <input class="form-input" id="char-gender-0" placeholder="성별">
+                  <input class="form-input" id="char-job-0" placeholder="직업">
+                  <input class="form-input" id="char-personality-0" placeholder="성격 / 결핍">
+                  <input class="form-input" id="char-looks-0" placeholder="외모 특징">
+                </div>
+              </div>
+              <div class="char-row" id="char-row-1">
+                <div class="char-row-header">
+                  <span class="char-row-label">주인공 2</span>
+                  <select class="char-role-select" id="char-role-1"><option value="여주">여주</option><option value="남주" selected>남주</option><option value="주연">주연</option><option value="조연">조연</option><option value="악역">악역</option></select>
+                </div>
+                <div class="char-fields">
+                  <input class="form-input" id="char-name-1" placeholder="이름">
+                  <input class="form-input" id="char-age-1" placeholder="나이">
+                  <input class="form-input" id="char-gender-1" placeholder="성별">
+                  <input class="form-input" id="char-job-1" placeholder="직업">
+                  <input class="form-input" id="char-personality-1" placeholder="성격 / 결핍">
+                  <input class="form-input" id="char-looks-1" placeholder="외모 특징">
+                </div>
+              </div>
+            </div>
+            <br>
+            <button class="btn-ai-auto" style="background:var(--paper2);border:0.5px solid var(--border2)" onclick="addChar()">
+              <span style="font-size:18px">＋</span>
+              <div>
+                <div style="font-weight:700;font-size:13px;color:var(--ink)">인물 추가</div>
+                <div style="font-size:11px;color:var(--ink3)">조연, 악역, 단역 등 새 인물을 추가합니다</div>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="step-panel" id="step-4">
+      <div class="confirm-hero">
+        <div class="confirm-hero-bg"></div>
+        <div class="confirm-hero-title" id="confirm-title">가제</div>
+        <div class="confirm-hero-logline" id="confirm-logline">로그라인을 입력하면 여기에 표시됩니다.</div>
+        <div class="confirm-hero-tags" id="confirm-tags"></div>
+      </div>
+      <div class="confirm-grid" id="confirm-grid"></div>
+      <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:8px">등장인물</div>
+      <div class="confirm-chars" id="confirm-chars"></div>
+      <div id="api-mode-notice" style="border-radius:var(--r);padding:14px 16px;font-size:12px;line-height:1.7;border:0.5px solid;background:#f0fdf4;border-color:#1D9E75;margin-bottom:24px">
+        <strong style="color:#1D9E75">? 생성 준비 완료</strong><br>버튼을 누르면 입력하신 설정으로 기획서와 대본이 생성됩니다.
+      </div>
+    </div>
+    <div class="wizard-nav">
+      <button class="btn btn-ghost" id="btn-prev" onclick="prevStep()" style="display:none">← 이전</button>
+      <div class="step-counter" id="step-counter">1 / 5</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" id="btn-next" onclick="nextStep()">다음 →</button>
+        <button class="btn-generate-big" id="btn-generate" onclick="startGenerate()" style="display:none">
+          <span class="btn-generate-icon">?</span>
+          <span>생성 시작</span>
+          <div class="btn-generate-ripple"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================ GENERATING ================ -->
+<div id="page-generating" class="page">
+  <div class="generating-wrap">
+    <div class="gen-icon">??</div>
+    <div class="gen-title" id="gen-title">AI가 대본을 집필 중입니다</div>
+    <div class="gen-sub">15년 경력 드라마 작가의 노하우로 당신의 이야기를 완성하고 있습니다</div>
+    <div style="max-width:480px;margin:0 auto">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+        <span class="progress-label" id="gen-progress-label">준비 중...</span>
+        <span style="font-size:22px;font-weight:800;color:var(--gold);font-family:var(--serif)" id="gen-pct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="gen-progress"></div></div>
+      <div id="gen-wait-notice" style="display:none;margin-top:10px;font-size:12px;color:var(--ink3);text-align:center;animation:fadeIn .3s ease">
+        <div class="typing-dots" style="display:inline-flex;margin-right:6px"><span></span><span></span><span></span></div>
+        Claude가 대본을 작성하고 있습니다. 분량에 따라 30~60초 소요될 수 있습니다.
+      </div>
+    </div>
+    <div class="gen-steps">
+      <div class="gen-step" id="gstep-0"><div class="gen-step-dot"></div>기획안 및 로그라인 설계</div>
+      <div class="gen-step" id="gstep-1"><div class="gen-step-dot"></div>인물 관계도 및 갈등 구조 설정</div>
+      <div class="gen-step" id="gstep-2"><div class="gen-step-dot"></div>회차별 씬 구성</div>
+      <div class="gen-step" id="gstep-3"><div class="gen-step-dot"></div>캐스팅 추천 및 출연료 산출</div>
+      <div class="gen-step" id="gstep-4"><div class="gen-step-dot"></div>회차별 제작비 계산</div>
+      <div class="gen-step" id="gstep-5"><div class="gen-step-dot"></div>PPL 제안서 작성</div>
+      <div class="gen-step" id="gstep-6"><div class="gen-step-dot"></div>1화 대본 집필</div>
+    </div>
+  </div>
+</div>
+
+<!-- ================ RESULT ================ -->
+<div id="page-result" class="page">
+  <div class="result-hero">
+    <div class="result-hero-bg"></div>
+    <div class="result-hero-sample" id="result-hero-sample"></div>
+    <div class="result-hero-overlay"></div>
+    <div class="result-hero-content">
+      <div class="result-hero-badge" id="result-badge">? OTT 오리지널 · 로맨틱 코미디 · 8부작</div>
+      <div>
+        <div class="result-hero-title" id="result-hero-title-el" onclick="startTitleEdit()" title="클릭하여 수정">드라마 제목</div>
+        <input class="result-hero-title-edit" id="result-title-edit-input" onblur="finishTitleEdit()" onkeydown="if(event.key==='Enter')finishTitleEdit()">
+      </div>
+      <div class="result-hero-logline" id="result-logline">로그라인이 여기에 표시됩니다.</div>
+      <div class="result-hero-tags" id="result-tags"></div>
+    </div>
+    <div class="result-hero-stats">
+      <div class="hero-stat"><div class="hero-stat-value" id="stat-budget">-</div><div class="hero-stat-label">총 제작비</div></div>
+      <div class="hero-stat"><div class="hero-stat-value" id="stat-scenes">-</div><div class="hero-stat-label">총 씬 수</div></div>
+      <div class="hero-stat"><div class="hero-stat-value" id="stat-ppl">-</div><div class="hero-stat-label">PPL 예상 수익</div></div>
+    </div>
+  </div>
+  <div class="result-wrap">
+    <div class="result-sidebar">
+      <!-- 프로젝트 목록 버튼 (최상단 강조) -->
+      <div class="sb-project-top">
+        <button class="sb-project-btn" onclick="showPage('projects')">
+          <span class="sb-back-arrow">&#8592;</span>
+          <div class="sb-project-btn-text">
+            <div class="sb-project-btn-main">프로젝트 목록</div>
+            <div class="sb-project-btn-sub">전체 프로젝트로 돌아가기</div>
+          </div>
+          <span class="sb-project-badge">목록</span>
+        </button>
+      </div>
+      <!-- 제목/메타 -->
+      <div style="padding:14px 16px 8px">
+        <span class="sidebar-section-label" id="sidebar-title-label">제목</span>
+        <div class="sidebar-meta" id="sidebar-meta"></div>
+      </div>
+      <div class="sb-divider"></div>
+      <button class="sidebar-item active" onclick="showPanel('overview')"><div class="sidebar-dot"></div>개요 &amp; 갈등</button>
+      <button class="sidebar-item" onclick="showPanel('characters')"><div class="sidebar-dot"></div>인물 · 관계도 · 캐스팅</button>
+      <button class="sidebar-item" onclick="showPanel('episodes')"><div class="sidebar-dot"></div>회차별 줄거리</button>
+      <button class="sidebar-item" onclick="showPanel('budget')"><div class="sidebar-dot"></div>제작비</button>
+      <button class="sidebar-item" onclick="showPanel('ppl')"><div class="sidebar-dot"></div>PPL 제안서</button>
+      <button class="sidebar-item" onclick="showPanel('similar')"><div class="sidebar-dot"></div>유사 컨텐츠</button>
+      <div class="sb-divider"></div>
+      <span class="sidebar-section-label" style="padding:10px 16px 6px;display:block">회차별 대본</span>
+      <div id="sidebar-script-eps"></div>
+      <div style="flex:1"></div>
+      <div style="padding:0 16px 8px"><button class="btn btn-ghost" style="width:100%;font-size:12px" onclick="showFullScript()">?? 대본만 보기</button></div>
+      <div style="padding:0 16px 16px"><button class="btn btn-teal" style="width:100%;font-size:12px" onclick="showPdfModal()">PDF 내보내기</button></div>
+    </div>
+    <div class="result-main" id="result-main">
+      <!-- 개요 -->
+      <div class="result-panel active" id="panel-overview">
+        <div id="overview-img-banner" style="width:100%;border-radius:var(--r2);overflow:hidden;margin-bottom:28px;min-height:160px;background:var(--paper3);display:none"><img id="overview-sample-img" src="" alt="" style="width:100%;display:block;border-radius:var(--r2)"></div>
+        <div class="info-grid">
+          <div class="info-card"><div class="info-card-label">총 제작비</div><div class="info-card-value" id="ov-budget">-</div></div>
+          <div class="info-card"><div class="info-card-label">회당 평균</div><div class="info-card-value" id="ov-avg">-</div></div>
+          <div class="info-card"><div class="info-card-label">PPL 수익</div><div class="info-card-value" id="ov-ppl">-</div></div>
+          <div class="info-card"><div class="info-card-label">순 제작비</div><div class="info-card-value" id="ov-net">-</div></div>
+        </div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:8px">로그라인</div>
+        <div class="logline-box" id="ov-logline">-</div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:8px">전체 줄거리</div>
+        <div class="story-box" id="ov-story">-</div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:10px">갈등 구조</div>
+        <div class="conflict-grid" id="ov-conflicts"></div>
+      </div>
+      <!-- 인물 -->
+      <div class="result-panel" id="panel-characters">
+        <div class="panel-title">인물 · 관계도 · 캐스팅</div>
+        <div class="panel-sub">인물 카드를 클릭하면 추천 캐스팅과 예상 출연료를 확인할 수 있습니다</div>
+        <div id="char-relation-map" style="margin-bottom:24px"></div>
+        <!-- 인물 관계도 -->
+        <div id="relation-map-section" style="margin-bottom:28px;display:none">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:12px">인물 관계도</div>
+          <div id="relation-map-canvas" style="width:100%;min-height:260px;background:var(--paper2);border-radius:var(--r2);border:0.5px solid var(--border);overflow:auto;padding:16px"></div>
+        </div>
+        <div class="char-cards" id="char-cards-r"></div>
+        <div class="cast-panel-r"><div class="cast-panel-header"><span class="cast-panel-title" id="cast-title-r">캐릭터</span><span class="cast-panel-role-label" id="cast-role-r">추천 캐스팅</span></div><div class="cast-list" id="cast-list-r"></div></div>
+        <!-- 전체 출연진 리스트 -->
+        <div class="full-cast-section">
+          <div class="full-cast-section-title">전체 출연진 리스트</div>
+          <table class="full-cast-table" id="full-cast-table">
+            <thead><tr><th>역할</th><th>인물명</th><th>출연 배우 (추천)</th><th>출연 화수</th><th>출연료 합계</th></tr></thead>
+            <tbody id="full-cast-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <!-- 회차 -->
+      <div class="result-panel" id="panel-episodes">
+        <div class="panel-title">회차별 줄거리</div>
+        <div class="panel-sub">회차를 클릭하면 씬 목록을 펼칠 수 있습니다</div>
+        <div class="ep-list-r" id="ep-list-r"></div>
+      </div>
+      <!-- 제작비 -->
+      <div class="result-panel" id="panel-budget">
+        <div class="panel-title">제작비</div>
+        <div class="panel-sub">항목별 상세 내역 및 회차별 비교</div>
+        <div class="budget-sum" id="budget-sum-wrap"></div>
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin-bottom:10px">회차별 제작비 <span class="verify-badge">검증 완료</span></div>
+        <div class="ep-bar-wrap-r" id="ep-bars-r"></div>
+        <div class="btabs" id="btabs"></div>
+        <div id="btable-wrap"></div>
+      </div>
+      <!-- PPL -->
+      <div class="result-panel" id="panel-ppl">
+        <div class="panel-title">PPL 제안서</div>
+        <div class="panel-sub">씬에 자연스럽게 녹아드는 브랜드 협찬 제안 ? 총 <span id="ppl-count">18</span>건</div>
+
+        <!-- 뷰 전환 탭 -->
+        <div class="ppl-view-tabs" style="margin-bottom:20px">
+          <button class="ppl-view-tab active" id="ppl-tab-industry" onclick="switchPplView('industry')">?? 산업군별</button>
+          <button class="ppl-view-tab" id="ppl-tab-scene" onclick="switchPplView('scene')">?? 씬별</button>
+          <button class="ppl-view-tab" id="ppl-tab-ep" onclick="switchPplView('ep')">?? 회차별</button>
+        </div>
+
+        <!-- 산업군 뷰 -->
+        <div id="ppl-view-industry"></div>
+
+        <!-- 씬별 뷰 -->
+        <div id="ppl-view-scene" style="display:none"></div>
+
+        <!-- 회차별 뷰 -->
+        <div id="ppl-view-ep" style="display:none"></div>
+
+        <!-- 씬 상세 카드 모달 -->
+        <div id="ppl-scene-modal" style="display:none;position:fixed;inset:0;background:rgba(26,20,16,.55);backdrop-filter:blur(6px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px">
+          <div class="ppl-scene-modal-box" id="ppl-scene-modal-box"></div>
+        </div>
+
+        <!-- 총액 -->
+        <div style="background:#fdf6ea;border-radius:var(--r);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border:0.5px solid var(--gold);margin-top:24px">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--gold);margin-bottom:2px">PPL 총 예상 수익</div>
+            <div style="font-size:12px;color:var(--ink3)">전 회차 전 산업군 합산 기준</div>
+          </div>
+          <div style="font-size:26px;font-weight:700;color:var(--gold);font-family:var(--serif)" id="ppl-total-val">12억 8,500만원</div>
+        </div>
+      </div>
+      <!-- 유사 컨텐츠 패널 -->
+      <div class="result-panel" id="panel-similar">
+        <div style="margin-bottom:24px">
+          <div style="font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:6px">유사 컨텐츠 분석</div>
+          <div style="font-size:13px;color:var(--ink3)">장르·소재가 비슷한 레퍼런스 드라마와 흥행 지표를 비교합니다</div>
+        </div>
+        <!-- 플랫폼 필터 -->
+        <div class="sim-ott-row" id="sim-platform-filter">
+          <button class="sim-ott-badge active" onclick="filterSimilar('전체',this)">전체</button>
+          <button class="sim-ott-badge" onclick="filterSimilar('tvN',this)">tvN</button>
+          <button class="sim-ott-badge" onclick="filterSimilar('JTBC',this)">JTBC</button>
+          <button class="sim-ott-badge" onclick="filterSimilar('넷플릭스',this)">넷플릭스</button>
+          <button class="sim-ott-badge" onclick="filterSimilar('KBS',this)">KBS</button>
+          <button class="sim-ott-badge" onclick="filterSimilar('SBS',this)">SBS</button>
+          <button class="sim-ott-badge" onclick="filterSimilar('MBC',this)">MBC</button>
+        </div>
+        <!-- 유사도 요약 카드 -->
+        <div id="similar-summary-wrap" style="margin-bottom:28px"></div>
+        <!-- 레퍼런스 카드 그리드 -->
+        <div id="similar-cards-wrap"></div>
+        <!-- 흥행 지표 비교 차트 -->
+        <div id="similar-chart-wrap" style="margin-top:32px"></div>
+        <!-- 차별화 포인트 -->
+        <div id="similar-diff-wrap" style="margin-top:32px"></div>
+      </div>
+      <!-- 대본 인라인 패널 -->
+      <div class="result-panel" id="panel-script">
+
+        <!-- 상단: 화 탭 가로 나열 -->
+        <div class="script-ep-tab-bar">
+          <div class="script-ep-tab-track" id="script-ep-tab-track">
+            <!-- JS로 채워짐 -->
+          </div>
+        </div>
+
+        <!-- 씬 카드 가로 스크롤 영역 -->
+        <div class="script-scene-row-wrap" id="script-scene-row-wrap">
+          <button class="scene-row-scroll-btn" id="scene-scroll-left" onclick="scrollSceneRow(-1)">?</button>
+          <div class="script-scene-row" id="script-scene-row">
+            <!-- JS로 씬 카드 채워짐 -->
+          </div>
+          <button class="scene-row-scroll-btn" id="scene-scroll-right" onclick="scrollSceneRow(1)">?</button>
+        </div>
+
+        <!-- 선택된 씬 상세 대본 ? 스크롤 영역 -->
+        <div id="script-body-wrap">
+          <div class="script-scene-detail" id="script-scene-detail">
+            <div style="text-align:center;padding:60px 0;color:var(--ink3);font-size:13px">
+              위에서 씬을 선택하면 대본이 표시됩니다
+            </div>
+          </div>
+        </div>
+
+        <!-- 하단 고정 agent-box ? panel-script 맨 아래에 위치 -->
+        <div id="script-agent-fixed" style="
+          background:var(--paper);
+          border-top:1.5px solid rgba(201,147,58,.35);
+          padding:12px 40px 16px;
+          box-shadow:0 -6px 24px rgba(0,0,0,.09);
+          display:none;
+          flex-shrink:0;
+        ">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <div class="agent-dot"></div>
+            <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)" id="script-agent-fixed-label">AGENT ? 씬 수정 요청</span>
+          </div>
+          <div class="agent-input-row">
+            <textarea class="agent-textarea" id="script-agent-fixed-input"
+              placeholder="예: 재헌이 먼저 말을 걸게 / 지문을 더 영화적으로 / 대사 톤을 가볍게"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendFixedAgentScene()}"></textarea>
+            <button class="agent-send-btn" onclick="sendFixedAgentScene()" title="전송 (Enter)">↑</button>
+          </div>
+          <div class="agent-response" id="script-agent-fixed-resp"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 전체 대본 모달 ============ -->
+<div id="fullscript-modal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.7);overflow:auto;padding:32px 16px">
+  <div style="max-width:760px;margin:0 auto;background:var(--paper);border-radius:20px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.4)">
+    <!-- 헤더 -->
+    <div style="position:sticky;top:0;background:var(--paper);z-index:10;display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-bottom:0.5px solid var(--border)">
+      <div>
+        <div style="font-family:var(--serif);font-size:18px;font-weight:700" id="fullscript-title">1화 대본</div>
+        <div style="font-size:12px;color:var(--ink3);margin-top:2px" id="fullscript-subtitle"></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div style="display:flex;gap:6px" id="fullscript-ep-btns"></div>
+        <button onclick="closeFullScript()" style="width:32px;height:32px;border-radius:50%;border:0.5px solid var(--border);background:var(--paper2);cursor:pointer;font-size:16px;color:var(--ink2);font-family:var(--sans)">?</button>
+      </div>
+    </div>
+    <!-- 본문 -->
+    <div id="fullscript-body" style="padding:40px 48px;font-family:var(--serif)"></div>
+  </div>
+</div>
+
+<!-- ================ SETTINGS ================ -->
+<div id="page-settings" class="page">
+  <div class="settings-wrap">
+    <div class="settings-title">설정</div>
+    <div class="settings-sub">계정, 요금제, 크레딧 및 생성 환경을 관리합니다</div>
+
+    <!-- 계정 정보 -->
+    <div class="settings-section">
+      <div class="settings-section-header"><div class="settings-section-icon">??</div><div><div class="settings-section-title">계정 정보</div><div class="settings-section-desc">프로필 및 로그인 정보</div></div></div>
+      <div class="settings-body">
+        <div class="profile-row">
+          <div class="profile-avatar-lg"><div class="profile-avatar-placeholder" id="settings-avatar">K</div></div>
+          <div class="profile-info">
+            <div class="profile-name" id="settings-username">김드라마</div>
+            <div class="profile-email" id="settings-email">drama@example.com</div>
+          </div>
+          <button class="btn btn-ghost" onclick="showToast('프로필 편집은 준비 중입니다.','info','??')">편집</button>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">로그인 상태</div></div>
+          <div><div class="api-status"><div class="api-status-dot dot-ok"></div><span>로그인됨</span></div></div>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">로그아웃</div></div>
+          <div><button class="btn btn-ghost" onclick="handleLogout()">로그아웃</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 현재 요금제 -->
+    <div class="settings-section">
+      <div class="settings-section-header"><div class="settings-section-icon">??</div><div><div class="settings-section-title">요금제</div><div class="settings-section-desc">현재 구독 플랜 및 결제 정보</div></div></div>
+      <div class="settings-body">
+        <div class="plan-card current">
+          <div class="plan-card-top">
+            <div class="plan-name">스타터 플랜</div>
+            <span class="plan-badge-current">현재 플랜</span>
+          </div>
+          <div class="plan-price">\0<span class="plan-period"> / 영구 무료</span></div>
+        </div>
+        <div class="plan-card">
+          <div class="plan-card-top">
+            <div class="plan-name">프로 플랜</div>
+            <span class="plan-badge-upgrade">업그레이드</span>
+          </div>
+          <div class="plan-price">\29,000<span class="plan-period"> / 월</span></div>
+          <div style="font-size:12px;color:var(--ink3);margin-top:6px">무제한 프로젝트 · 최대 16부작 · PDF 내보내기 · PPL 제안서</div>
+          <br>
+          <button class="btn btn-primary" onclick="showPlanModal('pro')">14일 무료 체험 시작</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 크레딧 -->
+    <div class="settings-section">
+      <div class="settings-section-header"><div class="settings-section-icon">?</div><div><div class="settings-section-title">남은 크레딧</div><div class="settings-section-desc">이번 달 생성 가능 횟수</div></div></div>
+      <div class="settings-body">
+        <div class="settings-row">
+          <div><div class="settings-row-label">프로젝트 생성</div><div class="settings-row-desc">이번 달 사용: 1 / 3회</div></div>
+          <div style="font-size:14px;font-weight:700;color:var(--gold)">2회 남음</div>
+        </div>
+        <div class="credit-bar-wrap" style="padding:8px 0 4px">
+          <div class="credit-label-row"><span style="font-size:11px;color:var(--ink3)">월간 프로젝트</span><span style="font-size:11px;font-weight:600">1 / 3</span></div>
+          <div class="credit-bar"><div class="credit-fill" style="width:33%"></div></div>
+        </div>
+        <div class="settings-row" style="margin-top:8px">
+          <div><div class="settings-row-label">대본 생성 (화수)</div><div class="settings-row-desc">이번 달 사용: 2 / 10화</div></div>
+          <div style="font-size:14px;font-weight:700;color:var(--gold)">8화 남음</div>
+        </div>
+        <div class="credit-bar-wrap" style="padding:8px 0">
+          <div class="credit-label-row"><span style="font-size:11px;color:var(--ink3)">대본 생성</span><span style="font-size:11px;font-weight:600">2 / 10</span></div>
+          <div class="credit-bar"><div class="credit-fill" style="width:20%"></div></div>
+        </div>
+        <div style="margin-top:8px">
+          <button class="btn btn-ghost" onclick="showToast('크레딧 구매는 준비 중입니다.','info','?')">크레딧 추가 구매</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- API 키 설정 -->
+    <div class="settings-section">
+      <div class="settings-section-header"><div class="settings-section-icon">??</div><div><div class="settings-section-title">Anthropic API 키</div><div class="settings-section-desc">실제 AI 생성을 사용하려면 API 키를 입력하세요</div></div></div>
+      <div class="settings-body">
+        <div style="background:var(--paper2);border-radius:var(--r);padding:12px 14px;font-size:12px;color:var(--ink3);line-height:1.7;margin-bottom:16px;border:0.5px solid var(--border)">
+          <strong style="color:var(--ink2)">?? 보안 안내</strong><br>
+          API 키는 이 브라우저의 로컬 스토리지에만 저장되며 서버로 전송되지 않습니다.<br>
+          <a href="https://console.anthropic.com/" target="_blank" style="color:var(--gold)">console.anthropic.com</a>에서 발급받을 수 있습니다.
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:10px">
+          <div style="display:flex;gap:8px;align-items:center">
+            <div style="position:relative;flex:1">
+              <input type="password" id="settings-api-key" class="form-input"
+                placeholder="sk-ant-api03-..."
+                style="padding-right:44px;font-family:monospace;font-size:12px"
+                oninput="onApiKeyInput()">
+              <button onclick="toggleApiKeyVisibility()"
+                style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--ink3);font-size:14px;padding:2px"
+                id="api-key-eye-btn">??</button>
+            </div>
+            <button class="btn btn-primary" onclick="saveApiKey()">저장</button>
+            <button class="btn btn-ghost" onclick="deleteApiKey()">삭제</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="api-status">
+              <div class="api-status-dot" id="api-key-status-dot" style="background:var(--border2)"></div>
+              <span id="api-key-status-text" style="font-size:12px;color:var(--ink3)">API 키 없음 ? 데모 모드</span>
+            </div>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="testApiKey()">연결 테스트</button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div><div class="settings-row-label">모델</div><div class="settings-row-desc">대본 생성에 사용할 Claude 모델</div></div>
+          <div>
+            <select class="char-role-select" id="settings-model" style="font-size:12px;padding:6px 10px">
+              <option value="claude-sonnet-4-6" selected>claude-sonnet-4-6 (권장)</option>
+              <option value="claude-opus-4-6">claude-opus-4-6 (고품질·느림)</option>
+              <option value="claude-haiku-4-5-20251001">claude-haiku-4-5 (빠름·저비용)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 생성 설정 -->
+    <div class="settings-section">
+      <div class="settings-section-header"><div class="settings-section-icon">??</div><div><div class="settings-section-title">생성 설정</div><div class="settings-section-desc">AI 생성 환경 설정</div></div></div>
+      <div class="settings-body">
+        <div class="settings-row"><div><div class="settings-row-label">자동 저장</div><div class="settings-row-desc">생성 결과를 브라우저에 자동 저장</div></div><div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+        <div class="settings-row"><div><div class="settings-row-label">AI 생성 상태</div></div><div><div class="api-status" id="gen-status-row"><div class="api-status-dot" id="gen-status-dot" style="background:var(--border2)"></div><span id="gen-status-text">데모 모드 ? API 키 없음</span></div></div></div>
+      </div>
+    </div>
+
+    <!-- 알림 -->
+    <div class="settings-section">
+      <div class="settings-section-header"><div class="settings-section-icon">??</div><div><div class="settings-section-title">알림 설정</div></div></div>
+      <div class="settings-body">
+        <div class="settings-row"><div><div class="settings-row-label">이메일 알림</div><div class="settings-row-desc">생성 완료 시 이메일 발송</div></div><div><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></div></div>
+        <div class="settings-row"><div><div class="settings-row-label">업데이트 소식</div><div class="settings-row-desc">새 기능 및 프로모션 알림</div></div><div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+      </div>
+    </div>
+
+    <!-- 데이터 관리 -->
+    <div class="settings-section">
+      <div class="settings-section-header"><div class="settings-section-icon">???</div><div><div class="settings-section-title">데이터 관리</div></div></div>
+      <div class="settings-body">
+        <div class="settings-row"><div><div class="settings-row-label">저장된 프로젝트 전체 삭제</div><div class="settings-row-desc">삭제 후 복구 불가</div></div><div><button class="btn btn-ghost" onclick="clearAllProjects()">전체 삭제</button></div></div>
+        <div class="settings-row"><div><div class="settings-row-label" style="color:var(--red)">계정 삭제</div><div class="settings-row-desc">계정과 모든 데이터를 영구 삭제합니다</div></div><div><button class="btn btn-danger" onclick="showDeleteAccountModal()">계정 삭제</button></div></div>
+      </div>
+    </div>
+
+    <div class="save-bar"><button class="btn btn-primary" onclick="showToast('설정이 저장되었습니다.','success','?')">설정 저장</button></div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/main.js" defer></script>
+
+
+</body>
+</html>
+

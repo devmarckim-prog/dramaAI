@@ -1,0 +1,7 @@
+node_modules/
+server/node_modules/
+server/data.db
+server/.env
+*.txt
+split.js
+.DS_Store
