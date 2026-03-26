@@ -53,7 +53,11 @@ function renderNav(){
 }
 
 function handleStartBtn(){
-  if(!isLoggedIn){ showLoginModal(); return; }
+  // 항상 로그인 모달을 먼저 띄워 DB 저장을 유도합니다.
+  if(!isLoggedIn){ 
+    showLoginModal(); 
+    return; 
+  }
   showPage('projects');
 }
 
@@ -69,18 +73,15 @@ function showLoginModal(){
         </div>
         <div class="login-body">
           <div class="login-title">시작하기</div>
-          <div class="login-sub">구글 계정으로 간편하게 시작해보세요</div>
+          <div class="login-sub">클라우드 저장을 위해 구글 계정이 필요합니다</div>
           <button class="login-social-btn" onclick="doLogin('google')">
             <div class="login-social-icon" style="background:#EA4335;color:#fff">G</div>
             Google로 계속하기
           </button>
           
           <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border)">
-            <button class="btn btn-ghost" style="width:100%; border:1px solid var(--border)" onclick="enterGuestMode()">
-              로그인 없이 체험하기 (Test)
-            </button>
-            <div style="font-size:11px; color:var(--ink3); margin-top:8px; text-align:center">
-              * 게스트 모드는 데이터가 로컬 스토리지에 저장됩니다.
+            <div style="font-size:11px; color:var(--ink3); text-align:center; line-height:1.6">
+               현재 시스템은 <strong>데이터베이스 저장</strong>을 원칙으로 합니다.<br>로그인 시 모든 프로젝트가 안전하게 보호됩니다.
             </div>
           </div>
 
