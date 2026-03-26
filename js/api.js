@@ -58,7 +58,7 @@ window.toggleDebugLog = function() {
 (function injectUIEnhancements() {
   const checkInterval = setInterval(() => {
     // 1. 디버그 로그 콘솔 주입
-    const genWrap = document.querySelector('.page-generating .generating-wrap');
+    const genWrap = document.querySelector('#page-generating .generating-wrap');
     if (genWrap && !document.getElementById('debug-log-console')) {
       const div = document.createElement('div');
       div.innerHTML = `
