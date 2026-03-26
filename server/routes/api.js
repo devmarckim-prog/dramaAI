@@ -76,9 +76,18 @@ router.delete('/projects/:id', authMiddleware, async (req, res) => {
 });
 
 /* --- AI PROXY API --- */
-router.post('/generate', authMiddleware, async (req, res) => {
+router.post('/generate', async (req, res) => {
   try {
-    // 사용자 API 키 우선, 없으면 서버 기본 키 사용
+    // 1. JWT 토큰이 있으면 사용자 확인 (옵션)
+    const authHeader = req.headers['authorization'];
+    let supabaseUser = null;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      const { data: { user }, error } = await supabase.auth.getUser(token);
+      if (!error && user) supabaseUser = user;
+    }
+
+    // 2. 사용할 API 키 결정: 헤더 우선 -> env
     const userApiKey = req.headers['x-user-api-key'];
     const apiKey = userApiKey || process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
@@ -88,10 +97,10 @@ router.post('/generate', authMiddleware, async (req, res) => {
     const { type, content } = req.body;
     const anthropic = new Anthropic({ apiKey });
     
-    // MVP 비용 최적화: 대본 외에는 저렴한 Haiku 모델 사용
+    // 2026년 기준 최신 모델 적용: Claude 4.6 Sonnet & 4.5 Haiku
     const modelId = (type === 'script') 
-      ? "claude-3-5-sonnet-20241022" 
-      : "claude-3-5-haiku-20241022";
+      ? "claude-sonnet-4-6" 
+      : "claude-haiku-4-5-20251001";
 
     const msg = await anthropic.messages.create({
       model: modelId,
