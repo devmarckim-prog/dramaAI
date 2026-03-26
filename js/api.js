@@ -1,9 +1,9 @@
 // api.js
 // 프론트엔드와 백엔드 통신 담당 레이어 (MVP → 프로덕션)
 
-const API_BASE_URL = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
+const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:3000/api' 
-  : 'https://api.yourdomain.com';
+  : '/.netlify/functions/api';
 
 function getAuthToken() {
   return localStorage.getItem('ds_auth_token') || '';

@@ -1,0 +1,12 @@
+[build]
+  publish = "."
+  command = "npm install --prefix server && npm install"
+
+[functions]
+  directory = "netlify/functions"
+  external_node_modules = ["@anthropic-ai/sdk", "@supabase/supabase-js", "better-sqlite3"]
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api"
+  status = 200
