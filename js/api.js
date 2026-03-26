@@ -33,11 +33,12 @@ window.toggleDebugLog = function() {
   el.style.display = el.style.display === 'none' ? 'block' : 'none';
 };
 
-// 페이지 로드 시 디버그 UI 동적 주입 (index.html 수 정 어려움 대비)
-(function injectDebugUI() {
+// 페이지 로드 시 디버그 UI 및 버전 정보 동적 주입
+(function injectUIEnhancements() {
   const checkInterval = setInterval(() => {
-    const target = document.querySelector('.page-generating .generating-wrap');
-    if (target && !document.getElementById('debug-log-console')) {
+    // 1. 디버그 로그 콘솔 주입
+    const genWrap = document.querySelector('.page-generating .generating-wrap');
+    if (genWrap && !document.getElementById('debug-log-console')) {
       const div = document.createElement('div');
       div.innerHTML = `
         <div style="margin-top:40px;text-align:center">
@@ -51,8 +52,27 @@ window.toggleDebugLog = function() {
           <div id="debug-log-content"></div>
         </div>
       `;
-      target.appendChild(div);
-      clearInterval(checkInterval);
+      genWrap.appendChild(div);
+    }
+
+    // 2. 로고 버전 정보 주입
+    const logo = document.querySelector('.nav-logo');
+    if (logo && !document.querySelector('.logo-version')) {
+      const vSpan = document.createElement('span');
+      vSpan.className = 'logo-version';
+      vSpan.textContent = 'v1.2.0-debug';
+      vSpan.style.fontSize = '10px';
+      vSpan.style.color = 'var(--ink3)';
+      vSpan.style.marginLeft = '6px';
+      vSpan.style.fontWeight = '400';
+      vSpan.style.verticalAlign = 'bottom';
+      vSpan.style.opacity = '0.7';
+      logo.appendChild(vSpan);
+    }
+
+    // 둘 다 주입되었으면 인터벌 종료 (또는 계속 체크해서 페이지 전환 대응)
+    if (document.getElementById('debug-log-console') && document.querySelector('.logo-version')) {
+      // clearInterval(checkInterval); // SPA 성격상 계속 둬도 무방 (초기 로딩 보장용)
     }
   }, 1000);
 })();
