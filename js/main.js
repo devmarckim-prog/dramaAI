@@ -371,33 +371,11 @@ async function renderProjectCards(){
   if(sub) sub.textContent=projects.length?`${projects.length}개의 프로젝트`:'아직 생성한 프로젝트가 없습니다';
 }
 
-async function saveProject(input){
-  const projectData = {
-    id: input.id || Date.now().toString(),
-    title: input.title || '무제',
-    genre: input.genre,
-    platform: input.platform,
-    episodes: input.episodes,
-    logline: input.logline,
-    input: input
-  };
-  await window.saveProject(projectData);
-}
 
-async function loadProjects(){
-  return await window.fetchProjects();
-}
 
-async function deleteProject(id){
-  if(!confirm('이 프로젝트를 삭제할까요?')) return;
-  const res = await window.deleteProject(id);
-  if(res.success){
-    renderProjectCards();
-    showToast('삭제되었습니다.', 'success');
-  } else {
-    showToast('삭제 실패', 'warn');
-  }
-}
+
+
+
 
 function clearAllProjects(){
   showToast('전체 삭제 기능은 계정 설정에서 이용할 수 있습니다.', 'info');
@@ -4400,7 +4378,8 @@ async function startGenerate(projectData) {
 
 
 
-/** [AGENTIC PATCH] Connectivity Test & Proceed Gate (Diag Version) */
+
+/** [AGENTIC PATCH] Connectivity Test & Proceed Gate (Fixed Version) */
 async function startGenerate() {
   let projectData = {};
   if (typeof collectWizardInput === 'function') {
