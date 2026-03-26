@@ -1183,6 +1183,11 @@ function switchApiBTab(idx){
 =================================== */
 async function _startGenerateOriginal(){
   currentInput = collectWizardInput();
+  if(typeof addDebugLog==='function') {
+    addDebugLog("JS 함수 점검: typeof window.saveProject = " + (typeof window.saveProject), "info");
+    const funcStr = window.saveProject ? window.saveProject.toString().substring(0, 100) : "null";
+    addDebugLog("함수 소스 코드: " + funcStr + "...", "info");
+  }
   if(typeof addDebugLog==='function') addDebugLog("데이터 수집 완료, 프로젝트 저장 시도 중...", "info");
   window._planData = null;
   window._scripts = {};
@@ -4394,16 +4399,13 @@ async function startGenerate(projectData) {
 }
 
 
-/** [AGENTIC PATCH] Connectivity Test & Proceed Gate (Master Version)
- * 이 함수는 중복 없이 최상위 startGenerate 역할을 수행합니다.
- */
+
+/** [AGENTIC PATCH] Connectivity Test & Proceed Gate (Diag Version) */
 async function startGenerate() {
   let projectData = {};
   if (typeof collectWizardInput === 'function') {
     projectData = collectWizardInput();
   }
-  
-  // UI 전환
   if (typeof showPage === 'function') {
     showPage('generating');
   }
@@ -4412,35 +4414,26 @@ async function startGenerate() {
     if (typeof addDebugLog === 'function') {
       addDebugLog("진단 모드: 연결 테스트 시작... (Claude Haiku)", "info");
     }
-    
-    // Phase 0: Connectivity Test
     const testResult = await callBackendAI('test', projectData);
-    
     if (typeof addDebugLog === 'function') {
       addDebugLog("연결 테스트 완료: " + (testResult.reply || "READY"), "success");
       addDebugLog("본격적인 생성을 시작하려면 아래 버튼을 눌러주세요.", "info");
     }
-
     if (typeof showProceedButton === 'function') {
       showProceedButton(async () => {
         if (typeof addDebugLog === 'function') {
-          addDebugLog("사용자 승인: 본격적인 AI 단계(기획/구성/PPL/대본)를 시작합니다.", "info");
+          addDebugLog("사용자 승인: 본격적인 AI 생성을 시작합니다.", "info");
         }
-        // 원본 함수 호출
         await _startGenerateOriginal();
       });
     }
-
   } catch (error) {
     console.error("연결 테스트 실패:", error);
     if (typeof addDebugLog === 'function') {
       addDebugLog("연결 테스트 실패: " + error.message, "error");
-      addDebugLog("오류가 있어도 생성을 강제 시도하시겠습니까?", "warn");
     }
     if (typeof showProceedButton === 'function') {
-      showProceedButton(async () => {
-        await _startGenerateOriginal();
-      });
+      showProceedButton(async () => { await _startGenerateOriginal(); });
     }
   }
 }
