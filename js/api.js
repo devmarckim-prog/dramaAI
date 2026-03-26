@@ -59,18 +59,20 @@ window.toggleDebugLog = function() {
   const checkInterval = setInterval(() => {
     // 1. 디버그 로그 콘솔 주입
     const genWrap = document.querySelector('#page-generating .generating-wrap');
-    const resWrap = document.querySelector('#page-result .projects-page-wrap'); // 결과 페이지용 컨테이너
+    const resWrap = document.querySelector('#page-result .result-wrap'); // 수정됨: result-wrap이 실제 컨테이너
     
     const targetWrap = genWrap || resWrap;
 
     if (targetWrap && !document.getElementById('debug-log-console')) {
       const div = document.createElement('div');
       div.id = 'debug-console-container';
+      div.style.padding = '20px';
+      div.style.width = '100%';
       div.innerHTML = `
-        <div style="margin-top:40px;text-align:center">
-          <button onclick="toggleDebugLog()" style="background:none;border:none;color:var(--ink3);font-size:11px;text-decoration:underline;cursor:pointer">기술 로그 보기 (개발자용)</button>
+        <div style="margin-top:20px;text-align:center">
+          <button onclick="toggleDebugLog()" style="background:#333;border:1px solid #555;color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,0.3)">🛠️ 기술 로그 보기 (개발자용)</button>
         </div>
-        <div id="debug-log-console" style="display:none;margin-top:16px;background:#1a1410;color:#00ff00;font-family:monospace;font-size:11px;padding:15px;border-radius:8px;max-height:200px;overflow-y:auto;text-align:left;line-height:1.5;box-shadow:inset 0 2px 10px rgba(0,0,0,0.5)">
+        <div id="debug-log-console" style="display:none;margin-top:16px;background:#1a1410;color:#00ff00;font-family:monospace;font-size:11px;padding:15px;border-radius:8px;max-height:300px;overflow-y:auto;text-align:left;line-height:1.5;box-shadow:inset 0 2px 10px rgba(0,0,0,0.5)">
           <div style="color:#aaa;border-bottom:0.5px solid #333;margin-bottom:8px;padding-bottom:4px;display:flex;justify-content:space-between">
             <span>TECHNICAL DEBUG CONSOLE</span>
             <button onclick="document.getElementById('debug-log-content').innerHTML=''" style="background:none;border:none;color:#666;cursor:pointer;font-size:10px">[Clear]</button>
@@ -86,7 +88,7 @@ window.toggleDebugLog = function() {
     if (logo && !document.querySelector('.logo-version')) {
       const vSpan = document.createElement('span');
       vSpan.className = 'logo-version';
-      vSpan.textContent = 'v1.2.2-debug';
+      vSpan.textContent = 'v1.2.3-debug';
       vSpan.style.fontSize = '10px';
       vSpan.style.color = 'var(--ink3)';
       vSpan.style.marginLeft = '6px';
