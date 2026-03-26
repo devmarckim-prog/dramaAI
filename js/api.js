@@ -164,10 +164,35 @@ window.fetchProjects = async function() {
 
 // 프로젝트 저장
 window.saveProject = async function(projectData) {
-  if(typeof addDebugLog === 'function') addDebugLog("[saveProject] 호출됨 (GuestMode: " + isGuest() + ")", "info");
-  console.log("[DEBUG] saveProject called", projectData);
   try {
-    if(isGuest()){
+    if(typeof addDebugLog === 'function') addDebugLog("[DEBUG] saveProject 시작...", "info");
+    
+    // 이 선언 자체가 문제일 수 있으므로 로컬 변수로 확인
+    const guestState = localStorage.getItem('ds_guest_mode') === 'true';
+    if(typeof addDebugLog === 'function') addDebugLog("[DEBUG] 게스트 모드 판정: " + guestState, "info");
+
+    if (guestState) {
+      if(typeof addDebugLog === 'function') addDebugLog("[DEBUG] 게스트 모드 세션 데이터 로드 중...", "info");
+      const localData = localStorage.getItem('ds_guest_projects');
+      const projects = localData ? JSON.parse(localData) : [];
+      
+      if(projectData.id){
+        const idx = projects.findIndex(p => p.id === projectData.id);
+        if(idx !== -1) projects[idx] = { ...projects[idx], ...projectData, updated_at: new Date().toISOString() };
+        else projects.push({ ...projectData, id: Date.now(), created_at: new Date().toISOString() });
+      } else {
+        projectData.id = Date.now();
+        projectData.created_at = new Date().toISOString();
+        projects.push(projectData);
+      }
+      
+      if(typeof addDebugLog === 'function') addDebugLog("[DEBUG] 로컬 저장 실행 (항목: " + projects.length + "개)", "info");
+      localStorage.setItem('ds_guest_projects', JSON.stringify(projects));
+      if(typeof addDebugLog === 'function') addDebugLog("[DEBUG] 로컬 저장 성공", "success");
+      
+      return { success: true, id: projectData.id, project: projectData };
+    }
+
       const localData = localStorage.getItem('ds_guest_projects');
       const projects = localData ? JSON.parse(localData) : [];
       
