@@ -164,6 +164,8 @@ window.fetchProjects = async function() {
 
 // 프로젝트 저장
 window.saveProject = async function(projectData) {
+  if(typeof addDebugLog === 'function') addDebugLog("[saveProject] 호출됨 (GuestMode: " + isGuest() + ")", "info");
+  console.log("[DEBUG] saveProject called", projectData);
   try {
     if(isGuest()){
       const localData = localStorage.getItem('ds_guest_projects');
@@ -181,7 +183,9 @@ window.saveProject = async function(projectData) {
         projects.push(projectData);
       }
       
-      localStorage.setItem('ds_guest_projects', JSON.stringify(projects));
+      if(typeof addDebugLog === 'function') addDebugLog("[saveProject] 로컬 저장 시도 (항목수: " + projects.length + ")", "info");
+    localStorage.setItem('ds_guest_projects', JSON.stringify(projects));
+    if(typeof addDebugLog === 'function') addDebugLog("[saveProject] 로컬 저장 완료", "success");
       return { success: true, id: projectData.id, project: projectData };
     }
 
@@ -209,7 +213,9 @@ window.deleteProject = async function(projectId) {
     const localData = localStorage.getItem('ds_guest_projects');
     if(!localData) return;
     const projects = JSON.parse(localData).filter(p => p.id != projectId);
+    if(typeof addDebugLog === 'function') addDebugLog("[saveProject] 로컬 저장 시도 (항목수: " + projects.length + ")", "info");
     localStorage.setItem('ds_guest_projects', JSON.stringify(projects));
+    if(typeof addDebugLog === 'function') addDebugLog("[saveProject] 로컬 저장 완료", "success");
     return;
   }
   
