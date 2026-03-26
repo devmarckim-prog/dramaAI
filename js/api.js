@@ -57,30 +57,22 @@ window.toggleDebugLog = function() {
 // 페이지 로드 시 디버그 UI 및 버전 정보 동적 주입
 (function injectUIEnhancements() {
   const checkInterval = setInterval(() => {
-    // 1. 디버그 로그 콘솔 주입
-    const genWrap = document.querySelector('#page-generating .generating-wrap');
-    const resWrap = document.querySelector('#page-result .result-wrap'); // 수정됨: result-wrap이 실제 컨테이너
-    
-    const targetWrap = genWrap || resWrap;
-
-    if (targetWrap && !document.getElementById('debug-log-console')) {
-      const div = document.createElement('div');
-      div.id = 'debug-console-container';
-      div.style.padding = '20px';
-      div.style.width = '100%';
-      div.innerHTML = `
-        <div style="margin-top:20px;text-align:center">
-          <button onclick="toggleDebugLog()" style="background:#333;border:1px solid #555;color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,0.3)">🛠️ 기술 로그 보기 (개발자용)</button>
-        </div>
-        <div id="debug-log-console" style="display:none;margin-top:16px;background:#1a1410;color:#00ff00;font-family:monospace;font-size:11px;padding:15px;border-radius:8px;max-height:300px;overflow-y:auto;text-align:left;line-height:1.5;box-shadow:inset 0 2px 10px rgba(0,0,0,0.5)">
-          <div style="color:#aaa;border-bottom:0.5px solid #333;margin-bottom:8px;padding-bottom:4px;display:flex;justify-content:space-between">
-            <span>TECHNICAL DEBUG CONSOLE</span>
+    // 1. 디버그 로그 콘솔 주입 (Body 직속으로 이동하여 영속성 확보)
+    if (!document.getElementById('debug-log-console')) {
+      const container = document.createElement('div');
+      container.id = 'debug-console-container';
+      container.style.cssText = 'position:fixed; bottom:20px; right:20px; z-index:10000; text-align:right;';
+      container.innerHTML = `
+        <button id="toggle-debug-btn" onclick="toggleDebugLog()" style="background:#333;border:1px solid #555;color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,0.3); white-space:nowrap;">🛠️ 기술 로그 보기</button>
+        <div id="debug-log-console" style="display:none;margin-top:10px;background:#1a1410;color:#00ff00;font-family:monospace;font-size:11px;padding:15px;border-radius:8px;width:400px;max-height:400px;overflow-y:auto;text-align:left;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,0.5); border:1px solid #333;">
+          <div style="color:#aaa;border-bottom:0.5px solid #333;margin-bottom:8px;padding-bottom:4px;display:flex;justify-content:space-between; font-weight:bold;">
+            <span>TECHNICAL LOG CONSOLE (v1.2.4)</span>
             <button onclick="document.getElementById('debug-log-content').innerHTML=''" style="background:none;border:none;color:#666;cursor:pointer;font-size:10px">[Clear]</button>
           </div>
           <div id="debug-log-content"></div>
         </div>
       `;
-      targetWrap.appendChild(div);
+      document.body.appendChild(container);
     }
 
     // 2. 로고 버전 정보 주입
@@ -88,19 +80,12 @@ window.toggleDebugLog = function() {
     if (logo && !document.querySelector('.logo-version')) {
       const vSpan = document.createElement('span');
       vSpan.className = 'logo-version';
-      vSpan.textContent = 'v1.2.3-debug';
+      vSpan.textContent = 'v1.2.4-debug';
       vSpan.style.fontSize = '10px';
       vSpan.style.color = 'var(--ink3)';
       vSpan.style.marginLeft = '6px';
-      vSpan.style.fontWeight = '400';
-      vSpan.style.verticalAlign = 'bottom';
       vSpan.style.opacity = '0.7';
       logo.appendChild(vSpan);
-    }
-
-    // 둘 다 주입되었으면 인터벌 종료 (또는 계속 체크해서 페이지 전환 대응)
-    if (document.getElementById('debug-log-console') && document.querySelector('.logo-version')) {
-      // clearInterval(checkInterval); // SPA 성격상 계속 둬도 무방 (초기 로딩 보장용)
     }
   }, 1000);
 })();

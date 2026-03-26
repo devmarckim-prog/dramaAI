@@ -1100,22 +1100,6 @@ function applyApiResult(data, input){
 function applyApiBudget(breakdown, epCount, stats){
   // 요약 카드
   if(stats){
-    const tv = parseInt(stats.budgetRaw||0);
-    const av = parseInt(stats.avgEpRaw||0);
-    document.getElementById('budget-sum-wrap').innerHTML=`
-      <div class="bcard"><div class="bcard-label">총 제작비</div><div class="bcard-value">${stats.budget||bL(epCount)}</div><div class="bcard-unit">${tv?tv.toLocaleString()+'만원':''}</div></div>
-      <div class="bcard"><div class="bcard-label">회당 평균</div><div class="bcard-value">${stats.avgEpBudget||aL(epCount)}</div><div class="bcard-unit">${av?av.toLocaleString()+'만원':''}</div></div>
-      <div class="bcard"><div class="bcard-label">PPL 수익</div><div class="bcard-value">${stats.ppl||pL(epCount)}</div><div class="bcard-unit">차감 가능</div></div>
-      <div class="bcard"><div class="bcard-label">순 제작비</div><div class="bcard-value">${stats.netBudget||nL(epCount)}</div><div class="bcard-unit">PPL 차감 후</div></div>`;
-  }
-  // 바 차트
-  const bars = document.getElementById('ep-bars-r'); if(!bars) return;
-  const tots = breakdown.map(ep=>{
-    const items = ep.items||{};
-    const sub = Object.values(items).reduce((s,v)=>s+parseInt(v||0),0);
-    return sub + Math.round(sub*0.1);
-  });
-  const max = Math.max(...tots,1);
   bars.innerHTML = tots.map((v,i)=>`
     <div class="ep-bar-row-r">
       <span class="ep-bar-label-r">${i+1}화</span>
