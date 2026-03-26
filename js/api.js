@@ -162,39 +162,24 @@ window.fetchProjects = async function() {
   return await res.json();
 }
 
-// 프로젝트 저장
+// 프로젝트 저장 (안전한 디버그 버전)
 window.saveProject = async function(projectData) {
   try {
-    if(typeof addDebugLog === 'function') addDebugLog("[DEBUG] saveProject 시작...", "info");
+    if(typeof window.addDebugLog === 'function') window.addDebugLog("[DEBUG] saveProject 시작", "info");
     
-    // 이 선언 자체가 문제일 수 있으므로 로컬 변수로 확인
-    const guestState = localStorage.getItem('ds_guest_mode') === 'true';
-    if(typeof addDebugLog === 'function') addDebugLog("[DEBUG] 게스트 모드 판정: " + guestState, "info");
+    // 게스트 모드 체크
+    const isGuestSession = localStorage.getItem('ds_guest_mode') === 'true';
+    if(typeof window.addDebugLog === 'function') window.addDebugLog("[DEBUG] 게스트 여부: " + isGuestSession, "info");
 
-    if (guestState) {
-      if(typeof addDebugLog === 'function') addDebugLog("[DEBUG] 게스트 모드 세션 데이터 로드 중...", "info");
+    if (isGuestSession) {
       const localData = localStorage.getItem('ds_guest_projects');
-      const projects = localData ? JSON.parse(localData) : [];
-      
-      if(projectData.id){
-        const idx = projects.findIndex(p => p.id === projectData.id);
-        if(idx !== -1) projects[idx] = { ...projects[idx], ...projectData, updated_at: new Date().toISOString() };
-        else projects.push({ ...projectData, id: Date.now(), created_at: new Date().toISOString() });
-      } else {
-        projectData.id = Date.now();
-        projectData.created_at = new Date().toISOString();
-        projects.push(projectData);
+      let projects = [];
+      try {
+        projects = localData ? JSON.parse(localData) : [];
+      } catch(ex) {
+        if(typeof window.addDebugLog === 'function') window.addDebugLog("[DEBUG] 로컬 데이터 파싱 에러 - 초기화 진행", "warn");
+        projects = [];
       }
-      
-      if(typeof addDebugLog === 'function') addDebugLog("[DEBUG] 로컬 저장 실행 (항목: " + projects.length + "개)", "info");
-      localStorage.setItem('ds_guest_projects', JSON.stringify(projects));
-      if(typeof addDebugLog === 'function') addDebugLog("[DEBUG] 로컬 저장 성공", "success");
-      
-      return { success: true, id: projectData.id, project: projectData };
-    }
-
-      const localData = localStorage.getItem('ds_guest_projects');
-      const projects = localData ? JSON.parse(localData) : [];
       
       if(projectData.id){
         // 업데이트
@@ -208,12 +193,14 @@ window.saveProject = async function(projectData) {
         projects.push(projectData);
       }
       
-      if(typeof addDebugLog === 'function') addDebugLog("[saveProject] 로컬 저장 시도 (항목수: " + projects.length + ")", "info");
-    localStorage.setItem('ds_guest_projects', JSON.stringify(projects));
-    if(typeof addDebugLog === 'function') addDebugLog("[saveProject] 로컬 저장 완료", "success");
+      if(typeof window.addDebugLog === 'function') window.addDebugLog("[DEBUG] LocalStorage 저장 시도 (항목: " + projects.length + ")", "info");
+      localStorage.setItem('ds_guest_projects', JSON.stringify(projects));
+      if(typeof window.addDebugLog === 'function') window.addDebugLog("[DEBUG] LocalStorage 저장 성공", "success");
+      
       return { success: true, id: projectData.id, project: projectData };
     }
 
+    // 회원 모드 (백엔드 통신)
     if(!getAuthToken()) return { success: true, id: projectData.id || Date.now(), project: projectData }; 
     
     const res = await fetch(`${API_BASE_URL}/projects`, {
@@ -228,6 +215,8 @@ window.saveProject = async function(projectData) {
     const data = await res.json();
     return { success: true, id: data.project.id, project: data.project };
   } catch (err) {
+    console.error("saveProject error:", err);
+    if(typeof window.addDebugLog === 'function') window.addDebugLog("[DEBUG] saveProject 치명적 오류: " + err.message, "error");
     return { success: false, error: err.message };
   }
 }
