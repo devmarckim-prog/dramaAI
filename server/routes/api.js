@@ -148,4 +148,16 @@ router.post('/payment', authMiddleware, async (req, res) => {
   res.json({ success: true, message: 'Payment recorded' });
 });
 
+router.get('/test', (req, res) => {
+  res.json({ 
+    success: true, 
+    message: 'DramaScript AI API is working on Vercel!',
+    env_check: {
+      has_anthropic: !!process.env.ANTHROPIC_API_KEY,
+      node_env: process.env.NODE_ENV
+    }
+  });
+});
+
 module.exports = router;
+
