@@ -59,8 +59,13 @@ window.toggleDebugLog = function() {
   const checkInterval = setInterval(() => {
     // 1. 디버그 로그 콘솔 주입
     const genWrap = document.querySelector('#page-generating .generating-wrap');
-    if (genWrap && !document.getElementById('debug-log-console')) {
+    const resWrap = document.querySelector('#page-result .projects-page-wrap'); // 결과 페이지용 컨테이너
+    
+    const targetWrap = genWrap || resWrap;
+
+    if (targetWrap && !document.getElementById('debug-log-console')) {
       const div = document.createElement('div');
+      div.id = 'debug-console-container';
       div.innerHTML = `
         <div style="margin-top:40px;text-align:center">
           <button onclick="toggleDebugLog()" style="background:none;border:none;color:var(--ink3);font-size:11px;text-decoration:underline;cursor:pointer">기술 로그 보기 (개발자용)</button>
@@ -73,7 +78,7 @@ window.toggleDebugLog = function() {
           <div id="debug-log-content"></div>
         </div>
       `;
-      genWrap.appendChild(div);
+      targetWrap.appendChild(div);
     }
 
     // 2. 로고 버전 정보 주입
