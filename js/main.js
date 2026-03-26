@@ -1183,6 +1183,7 @@ function switchApiBTab(idx){
 =================================== */
 async function _startGenerateOriginal(){
   currentInput = collectWizardInput();
+  if(typeof addDebugLog==='function') addDebugLog("데이터 수집 완료, 프로젝트 저장 시도 중...", "info");
   window._planData = null;
   window._scripts = {};
 
@@ -1207,6 +1208,7 @@ async function _startGenerateOriginal(){
   };
 
   const saveRes = await window.saveProject(initialProject);
+  if(typeof addDebugLog==='function') addDebugLog("프로젝트 저장 결과: " + (saveRes.success ? "성공 (ID:"+saveRes.id+")" : "실패"), saveRes.success?"success":"error");
   if(!saveRes.success){
     showToast('프로젝트 생성 실패: ' + saveRes.error, 'warn');
     return;
@@ -4391,28 +4393,27 @@ async function startGenerate(projectData) {
   }
 }
 
-/** [AGENTIC PATCH] Connectivity Test & Proceed Gate 
- * 이 함수는 showPage('generating')을 호출하고 연결 테스트를 수행합니다.
+
+/** [AGENTIC PATCH] Connectivity Test & Proceed Gate (Master Version)
+ * 이 함수는 중복 없이 최상위 startGenerate 역할을 수행합니다.
  */
 async function startGenerate() {
-  // 1. 입력 데이터 수집
   let projectData = {};
   if (typeof collectWizardInput === 'function') {
     projectData = collectWizardInput();
   }
   
-  // 2. 생성 중 페이지로 전환 (이게 빠져서 아무 변화가 없던 것임)
+  // UI 전환
   if (typeof showPage === 'function') {
     showPage('generating');
   }
 
   try {
-    // Phase 0: Connectivity Test
     if (typeof addDebugLog === 'function') {
       addDebugLog("진단 모드: 연결 테스트 시작... (Claude Haiku)", "info");
     }
     
-    // 연결 테스트 호출
+    // Phase 0: Connectivity Test
     const testResult = await callBackendAI('test', projectData);
     
     if (typeof addDebugLog === 'function') {
@@ -4423,9 +4424,9 @@ async function startGenerate() {
     if (typeof showProceedButton === 'function') {
       showProceedButton(async () => {
         if (typeof addDebugLog === 'function') {
-          addDebugLog("사용자 승인: 본격적인 AI 생성을 시작합니다.", "info");
+          addDebugLog("사용자 승인: 본격적인 AI 단계(기획/구성/PPL/대본)를 시작합니다.", "info");
         }
-        // 원본 함수 호출 (인자 없음)
+        // 원본 함수 호출
         await _startGenerateOriginal();
       });
     }
@@ -4434,9 +4435,8 @@ async function startGenerate() {
     console.error("연결 테스트 실패:", error);
     if (typeof addDebugLog === 'function') {
       addDebugLog("연결 테스트 실패: " + error.message, "error");
-      addDebugLog("네트워크 혹은 API 설정을 확인해 주세요.", "error");
+      addDebugLog("오류가 있어도 생성을 강제 시도하시겠습니까?", "warn");
     }
-    // 실패해도 시도해볼 수 있게 버튼은 노출
     if (typeof showProceedButton === 'function') {
       showProceedButton(async () => {
         await _startGenerateOriginal();
