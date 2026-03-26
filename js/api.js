@@ -7,6 +7,56 @@ const API_BASE_URL = (hostname === 'localhost' || hostname === '127.0.0.1' || pr
   ? 'http://localhost:3000/api' 
   : '/.netlify/functions/api';
 
+// 기술 로그 출력용 전역 함수
+window.addDebugLog = function(msg, type = 'info') {
+  console.log(`[DEBUG] ${msg}`);
+  const logContent = document.getElementById('debug-log-content');
+  if (!logContent) return;
+  
+  const div = document.createElement('div');
+  div.style.marginBottom = '4px';
+  const time = new Date().toLocaleTimeString();
+  
+  let color = '#00ff00'; // info
+  if (type === 'error') color = '#ff4444';
+  if (type === 'warn') color = '#ffbb33';
+  if (type === 'req') color = '#33bbff';
+  
+  div.innerHTML = `<span style="color:#888">[${time}]</span> <span style="color:${color}">${msg}</span>`;
+  logContent.appendChild(div);
+  logContent.parentElement.scrollTop = logContent.parentElement.scrollHeight;
+};
+
+window.toggleDebugLog = function() {
+  const el = document.getElementById('debug-log-console');
+  if(!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+};
+
+// 페이지 로드 시 디버그 UI 동적 주입 (index.html 수 정 어려움 대비)
+(function injectDebugUI() {
+  const checkInterval = setInterval(() => {
+    const target = document.querySelector('.page-generating .generating-wrap');
+    if (target && !document.getElementById('debug-log-console')) {
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <div style="margin-top:40px;text-align:center">
+          <button onclick="toggleDebugLog()" style="background:none;border:none;color:var(--ink3);font-size:11px;text-decoration:underline;cursor:pointer">기술 로그 보기 (개발자용)</button>
+        </div>
+        <div id="debug-log-console" style="display:none;margin-top:16px;background:#1a1410;color:#00ff00;font-family:monospace;font-size:11px;padding:15px;border-radius:8px;max-height:200px;overflow-y:auto;text-align:left;line-height:1.5;box-shadow:inset 0 2px 10px rgba(0,0,0,0.5)">
+          <div style="color:#aaa;border-bottom:0.5px solid #333;margin-bottom:8px;padding-bottom:4px;display:flex;justify-content:space-between">
+            <span>TECHNICAL DEBUG CONSOLE</span>
+            <button onclick="document.getElementById('debug-log-content').innerHTML=''" style="background:none;border:none;color:#666;cursor:pointer;font-size:10px">[Clear]</button>
+          </div>
+          <div id="debug-log-content"></div>
+        </div>
+      `;
+      target.appendChild(div);
+      clearInterval(checkInterval);
+    }
+  }, 1000);
+})();
+
 function getAuthToken() {
   return localStorage.getItem('ds_auth_token') || '';
 }
@@ -179,14 +229,28 @@ window.callBackendAI = async function(promptType, promptData) {
   const userKey = localStorage.getItem('ds_user_api_key');
   if(userKey) headers['X-User-Api-Key'] = userKey;
 
-  const res = await fetch(`${API_BASE_URL}/generate`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({ type: promptType, content: promptData })
-  });
-  if(!res.ok) {
-    const err = await res.json().catch(()=>({}));
-    throw new Error(err.error || 'AI 생성 실패');
+  addDebugLog(`API 요청 준비 (유형: ${promptType})`, 'req');
+  addDebugLog(`URL: ${API_BASE_URL}/generate`, 'req');
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/generate`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ type: promptType, content: promptData })
+    });
+    
+    addDebugLog(`API 응답 수신: ${res.status} ${res.statusText}`, res.ok ? 'info' : 'error');
+
+    if(!res.ok) {
+      const err = await res.json().catch(()=>({}));
+      addDebugLog(`API 오류 상세: ${JSON.stringify(err)}`, 'error');
+      throw new Error(err.error || 'AI 생성 실패');
+    }
+    const data = await res.json();
+    addDebugLog(`API 데이터 파싱 완료: ${Object.keys(data).join(', ')}`);
+    return data;
+  } catch (err) {
+    addDebugLog(`통신 오류 발생: ${err.message}`, 'error');
+    throw err;
   }
-  return await res.json();
 }

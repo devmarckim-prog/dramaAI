@@ -1286,23 +1286,29 @@ async function startGenerate(){
     const timeout = (ms)=>new Promise((_,rej)=>setTimeout(()=>rej(new Error('응답 시간 초과')),ms));
     try{
       // 1단계: 기획·줄거리
+      addDebugLog('--- 1단계: 기획 및 줄거리 생성 시작 ---', 'info');
       updateCard(5,0);
       const planData = await Promise.race([callAPI_Plan(currentInput), timeout(60000)]);
+      addDebugLog('1단계 데이터 수신 완료', 'info');
       window._planData = planData;
       currentInput.title = planData.title || currentInput.title;
       applyPlanResult(planData, currentInput);
       updateCard(20,0);
 
       // 2단계: 캐스팅·제작비
+      addDebugLog('--- 2단계: 캐스팅 및 제작비 산출 시작 ---', 'info');
       updateCard(25,1);
       const prodData = await Promise.race([callAPI_Production(currentInput), timeout(45000)]);
+      addDebugLog('2단계 데이터 수신 완료', 'info');
       applyProductionResult(prodData, currentInput);
       updateCard(45,1);
 
       // 3단계: PPL
+      addDebugLog('--- 3단계: PPL 제안서 생성 시작 ---', 'info');
       updateCard(50,2);
       const pplData = await Promise.race([callAPI_PPL(currentInput, planData), timeout(30000)]);
       if(pplData?.ppl?.length){
+        addDebugLog(`3단계 데이터 수신 완료 (${pplData.ppl.length}건)`, 'info');
         window._apiPplData=pplData.ppl;
         buildPplPanel(pplData.ppl);
         document.getElementById('ppl-total-val').textContent=window._planData?.stats?.ppl||pL(parseInt(currentInput.episodes)||8);
@@ -1310,22 +1316,27 @@ async function startGenerate(){
       updateCard(65,2);
 
       // 4단계: 1화 대본
+      addDebugLog('--- 4단계: 1화 대본 집필 시작 (Claude 4.6 Sonnet) ---', 'info');
       updateCard(70,3);
       const scriptData = await Promise.race([callAPI_Script(currentInput, planData, 0), timeout(60000)]);
       if(scriptData?.script?.length){
+        addDebugLog(`4단계 데이터 수신 완료 (${scriptData.script.length}씬)`, 'info');
         window._scripts[0]=scriptData.script;
         aiScript=scriptData.script;
       } else {
+        addDebugLog('4단계 결과에 스크립트가 없어 데모 데이터로 대체합니다.', 'warn');
         aiScript=buildDemoScript(currentInput,0);
       }
       updateCard(90,3);
 
       // 사이드바 대본 목록 업데이트
       updateScriptSidebar();
+      addDebugLog('전체 생성 프로세스 성공적으로 완료!', 'info');
       showToast('AI 생성 완료! 2화부터는 대본 패널에서 생성하세요.','success','?',4000);
       finishGenerate(false,null);
 
     } catch(e){
+      addDebugLog(`프로세스 중 치명적 오류: ${e.message}`, 'error');
       console.error('생성 오류:', e);
       // 오류 난 단계 이후는 데모로 폴백
       if(!window._planData) applyDemoResult(currentInput);

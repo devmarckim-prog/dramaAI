@@ -95,26 +95,42 @@ router.post('/generate', async (req, res) => {
     }
 
     const { type, content } = req.body;
+    console.log(`[AI Proxy] Type: ${type}, Tokens: ${content.maxTokens || 'default'}`);
+
     const anthropic = new Anthropic({ apiKey });
     
     // 2026년 기준 최신 모델 적용: Claude 4.6 Sonnet & 4.5 Haiku
     const modelId = (type === 'script') 
       ? "claude-sonnet-4-6" 
       : "claude-haiku-4-5-20251001";
+    
+    console.log(`[AI Proxy] Calling Claude Model: ${modelId}`);
+    const startTime = Date.now();
 
     const msg = await anthropic.messages.create({
       model: modelId,
-      max_tokens: content.maxTokens || 8000,
+      max_tokens: content.maxTokens || 8192,
       system: content.systemPrompt,
       messages: [{ role: "user", content: content.userPrompt }],
     });
     
-    const raw = msg.content[0].text;
+    const duration = ((Date.now() - startTime)/1000).toFixed(1);
+    console.log(`[AI Proxy] Response received in ${duration}s`);
+    
+    let raw = msg.content[0].text;
+    console.log(`[AI Proxy] Raw response length: ${raw.length} chars`);
+    
     const clean = raw.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
     
-    res.json(JSON.parse(clean));
+    try {
+      const parsed = JSON.parse(clean);
+      res.json(parsed);
+    } catch (parseError) {
+      console.error('[AI Proxy] JSON Parse Error:', parseError.message);
+      res.status(500).json({ error: 'AI 응답 파싱 실패 (JSON 포맷 오류)', raw: raw });
+    }
   } catch (error) {
-    console.error('Claude API Error:', error);
+    console.error('[AI Proxy] Execution Error:', error);
     res.status(500).json({ error: error.message || 'Error generating script' });
   }
 });
