@@ -1181,7 +1181,7 @@ function switchApiBTab(idx){
 /* ===================================
    GENERATE ? API 호출 + 폴백
 =================================== */
-async function startGenerate(){
+async function _startGenerateOriginal(){
   currentInput = collectWizardInput();
   window._planData = null;
   window._scripts = {};
@@ -4349,3 +4349,44 @@ function initApp(){
 
 // 스크립트 로드 시 실행
 initApp();
+/** 
+ * [AGENTIC PATCH] Connectivity Test & Proceed Gate 
+ * 기존 startGenerate를 _startGenerateOriginal로 리다이렉트합니다.
+ */
+async function startGenerate(projectData) {
+  const results = {};
+  
+  try {
+    // Phase 0: Connectivity Test
+    if (typeof addDebugLog === 'function') {
+      addDebugLog("연결 테스트 시작... (Claude Haiku 사용)", "info");
+    }
+    
+    const testResult = await callBackendAI('test', projectData);
+    
+    if (typeof addDebugLog === 'function') {
+      addDebugLog("연결 테스트 완료: " + (testResult.reply || "READY"), "success");
+      addDebugLog("본격적인 생성을 보려면 로그창의 버튼을 눌러주세요.", "info");
+    }
+
+    if (typeof showProceedButton === 'function') {
+      showProceedButton(async () => {
+        if (typeof addDebugLog === 'function') {
+          addDebugLog("사용자 요청에 의해 본격적인 생성을 시작합니다.", "info");
+        }
+        await _startGenerateOriginal(projectData);
+      });
+    }
+
+  } catch (error) {
+    console.error("연결 테스트 중 오류:", error);
+    if (typeof addDebugLog === 'function') {
+      addDebugLog("연결 테스트 실패: " + error.message, "error");
+      addDebugLog("네트워크 혹은 API 키 설정을 확인해 주세요.", "error");
+    }
+    // 실패해도 일단 진행 버튼은 보여줌 (사용자 선택)
+    showProceedButton(async () => {
+       await _startGenerateOriginal(projectData);
+    });
+  }
+}

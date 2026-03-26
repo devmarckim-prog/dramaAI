@@ -9,22 +9,43 @@ const API_BASE_URL = (hostname === 'localhost' || hostname === '127.0.0.1' || pr
 
 // 기술 로그 출력용 전역 함수
 window.addDebugLog = function(msg, type = 'info') {
-  console.log(`[DEBUG] ${msg}`);
-  const logContent = document.getElementById('debug-log-content');
-  if (!logContent) return;
+  const content = document.getElementById('debug-log-content');
+  if(!content) return;
   
+  const time = new Date().toLocaleTimeString();
+  const color = type === 'error' ? '#ff4444' : (type === 'success' ? '#00ff00' : '#00ffff');
   const div = document.createElement('div');
   div.style.marginBottom = '4px';
-  const time = new Date().toLocaleTimeString();
+  div.innerHTML = `<span style="color:#666">[${time}]</span> <span style="color:${color}">${msg}</span>`;
+  content.appendChild(div);
   
-  let color = '#00ff00'; // info
-  if (type === 'error') color = '#ff4444';
-  if (type === 'warn') color = '#ffbb33';
-  if (type === 'req') color = '#33bbff';
+  // 자동 스크롤
+  const consoleEl = document.getElementById('debug-log-console');
+  if(consoleEl) consoleEl.scrollTop = consoleEl.scrollHeight;
+};
+
+window.showProceedButton = function(callback) {
+  const content = document.getElementById('debug-log-content');
+  if(!content) return;
   
-  div.innerHTML = `<span style="color:#888">[${time}]</span> <span style="color:${color}">${msg}</span>`;
-  logContent.appendChild(div);
-  logContent.parentElement.scrollTop = logContent.parentElement.scrollHeight;
+  const btn = document.createElement('button');
+  btn.textContent = '▶ 테스트 통과! 본격적인 생성 시작하기 (클릭)';
+  btn.style.cssText = 'margin-top:10px;padding:8px 16px;background:#00ff00;color:#000;border:none;border-radius:4px;cursor:pointer;font-weight:bold;animation:pulse 2s infinite';
+  btn.onclick = () => {
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    btn.textContent = '생성 중...';
+    callback();
+  };
+  content.appendChild(btn);
+  
+  // 펄스 애니메이션 추가용 스타일
+  if (!document.getElementById('debug-btn-style')) {
+    const s = document.createElement('style');
+    s.id = 'debug-btn-style';
+    s.innerHTML = '@keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; } 100% { opacity: 0.8; } }';
+    document.head.appendChild(s);
+  }
 };
 
 window.toggleDebugLog = function() {
