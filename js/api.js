@@ -9,6 +9,10 @@ function getAuthToken() {
   return localStorage.getItem('ds_auth_token') || '';
 }
 
+function isGuest() {
+  return localStorage.getItem('ds_guest_mode') === 'true';
+}
+
 /**
  * [인증 API]
  */
@@ -18,6 +22,12 @@ window.loginWithGoogle = async function() {
   if(data.url) {
     window.location.href = data.url;
   }
+}
+
+window.logoutUser = function() {
+  localStorage.removeItem('ds_auth_token');
+  localStorage.removeItem('ds_user_email');
+  localStorage.removeItem('ds_guest_mode');
 }
 
 window.processPayment = async function(paymentInfo) {
@@ -37,9 +47,14 @@ window.processPayment = async function(paymentInfo) {
  * [프로젝트 관리 API]
  */
 
-// 프로젝트 목록 불러오기 (SQLite 백엔드 연동)
+// 프로젝트 목록 불러오기 (SQLite 백엔드 연동 또는 게스트 로컬 저장소)
 window.fetchProjects = async function() {
-  if(!getAuthToken()) return []; // 로그인이 안되어 있으면 빈 배열
+  if(isGuest()){
+    const localData = localStorage.getItem('ds_guest_projects');
+    return localData ? JSON.parse(localData) : [];
+  }
+  
+  if(!getAuthToken()) return []; 
   
   const res = await fetch(`${API_BASE_URL}/projects`, {
     headers: { 'Authorization': `Bearer ${getAuthToken()}` }
@@ -47,7 +62,6 @@ window.fetchProjects = async function() {
   
   if (!res.ok) {
     if(res.status === 401) {
-      // 인증 만료
       localStorage.removeItem('ds_auth_token');
     }
     return [];
@@ -57,6 +71,26 @@ window.fetchProjects = async function() {
 
 // 프로젝트 저장
 window.saveProject = async function(projectData) {
+  if(isGuest()){
+    const localData = localStorage.getItem('ds_guest_projects');
+    const projects = localData ? JSON.parse(localData) : [];
+    
+    if(projectData.id){
+      // 업데이트
+      const idx = projects.findIndex(p => p.id === projectData.id);
+      if(idx !== -1) projects[idx] = { ...projects[idx], ...projectData, updated_at: new Date().toISOString() };
+      else projects.push({ ...projectData, id: Date.now(), created_at: new Date().toISOString() });
+    } else {
+      // 신규
+      projectData.id = Date.now();
+      projectData.created_at = new Date().toISOString();
+      projects.push(projectData);
+    }
+    
+    localStorage.setItem('ds_guest_projects', JSON.stringify(projects));
+    return projectData;
+  }
+
   if(!getAuthToken()) return projectData; 
   
   const res = await fetch(`${API_BASE_URL}/projects`, {
@@ -74,6 +108,14 @@ window.saveProject = async function(projectData) {
 
 // 프로젝트 삭제
 window.deleteProject = async function(projectId) {
+  if(isGuest()){
+    const localData = localStorage.getItem('ds_guest_projects');
+    if(!localData) return;
+    const projects = JSON.parse(localData).filter(p => p.id != projectId);
+    localStorage.setItem('ds_guest_projects', JSON.stringify(projects));
+    return;
+  }
+  
   if(!getAuthToken()) return;
   const res = await fetch(`${API_BASE_URL}/projects/${projectId}`, {
     method: 'DELETE',
@@ -88,13 +130,46 @@ window.deleteProject = async function(projectId) {
  * 프론트엔드는 백엔드(/api/generate)로 프롬프트와 토큰 수만 전달합니다.
  */
 window.callBackendAI = async function(promptType, promptData) {
-  if(!getAuthToken()) throw new Error('백엔드 연동 전 임시 폴백 처리'); // 데모 폴백 트리거
+  if(isGuest()){
+    // 게스트 모드에서는 3초 대기 후 모의 응답 반환 (전체 흐름 테스트용)
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // 상세 모의 데이터 반환
+    if(promptType === 'plan') {
+       return {
+         title: "게스트 모드 샘플 드라마",
+         logline: "카페에서 시작되는 운명적인 로맨스",
+         episodes: [
+           { num: 1, title: "시작되는 인연", scenes: [{ num: "S#1", loc: "카페", desc: "주인공이 커피를 마시는 중" }] }
+         ],
+         similar: { refs: ["도깨비", "태양의 후예"] }
+       };
+    }
+    if(promptType === 'prod') {
+       return {
+         casting: [{ role: "남주", name: "공유(가상)" }],
+         budget: { total: "10억", breakdown: [] }
+       };
+    }
+    if(promptType === 'ppl') {
+       return { items: [{ name: "가상 커피", scene: "S#1" }] };
+    }
+    if(promptType === 'script') {
+       return {
+         script: [
+           { heading: "S# 1. 카페 / 데이", lines: [{ type:"action", text:"주인공이 창밖을 본다." }, { type:"dialog", char:"인물", line:"날씨가 좋네." }] }
+         ]
+       };
+    }
+    return { success: true, mock: true };
+  }
+
+  if(!getAuthToken()) throw new Error('백엔드 연동 전 임시 폴백 처리'); 
   
   const headers = { 
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${getAuthToken()}`
   };
-  // 사용자가 직접 입력한 API 키가 있으면 헤더로 전달
   const userKey = localStorage.getItem('ds_user_api_key');
   if(userKey) headers['X-User-Api-Key'] = userKey;
 

@@ -9,7 +9,7 @@ router.get('/auth/google', async (req, res) => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: 'http://localhost:8080', // Replace with production URL if needed
+      redirectTo: 'http://localhost:8081', 
     },
   });
   if (error) return res.status(400).json({ error: error.message });
@@ -85,12 +85,16 @@ router.post('/generate', authMiddleware, async (req, res) => {
       return res.status(500).json({ error: 'API 키가 설정되지 않았습니다.' });
     }
 
+    const { type, content } = req.body;
     const anthropic = new Anthropic({ apiKey });
-    const { content } = req.body; // content is { systemPrompt, userPrompt, maxTokens }
     
-    // Call anthropic API using the backend key
+    // MVP 비용 최적화: 대본 외에는 저렴한 Haiku 모델 사용
+    const modelId = (type === 'script') 
+      ? "claude-3-5-sonnet-20241022" 
+      : "claude-3-5-haiku-20241022";
+
     const msg = await anthropic.messages.create({
-      model: "claude-3-5-sonnet-20241022",
+      model: modelId,
       max_tokens: content.maxTokens || 8000,
       system: content.systemPrompt,
       messages: [{ role: "user", content: content.userPrompt }],

@@ -2,6 +2,7 @@
    STATE
 =================================== */
 let isLoggedIn = false;
+let isGuestMode = localStorage.getItem('ds_guest_mode') === 'true';
 let currentUser = null;
 let currentStep = 0;
 const totalSteps = 5;
@@ -31,16 +32,18 @@ let currentEpIdx = 0;  // 현재 대본 회차
 function renderNav(){
   const nav=document.getElementById('nav-actions');
   const token = localStorage.getItem('ds_auth_token');
-  if(token){
-    // 간단한 프로필 표시 (추후 /api/me 연동 가능)
-    const userEmail = localStorage.getItem('ds_user_email') || 'User';
+  
+  if(token || isGuestMode){
+    const userEmail = isGuestMode ? 'Guest Mode (Test)' : (localStorage.getItem('ds_user_email') || 'User');
+    const avatarChar = isGuestMode ? 'G' : userEmail[0].toUpperCase();
+    
     nav.innerHTML=`
       <div class="nav-user-info" style="display:flex; align-items:center; gap:12px">
-        <span style="font-size:13px; color:var(--ink3)">${userEmail}</span>
+        <span style="font-size:13px; color:var(--ink3); font-weight:500">${userEmail}</span>
         <div class="nav-avatar" onclick="showPage('settings')" title="설정">
-          <div class="nav-avatar-placeholder">${userEmail[0].toUpperCase()}</div>
+          <div class="nav-avatar-placeholder" style="${isGuestMode ? 'background:var(--accent)' : ''}">${avatarChar}</div>
         </div>
-        <button class="btn btn-ghost" style="font-size:12px" onclick="handleLogout()">로그아웃</button>
+        <button class="btn btn-ghost" style="font-size:12px; color:var(--ink3)" onclick="handleLogout()">로그아웃</button>
       </div>`;
     isLoggedIn = true;
   } else {
@@ -71,10 +74,29 @@ function showLoginModal(){
             <div class="login-social-icon" style="background:#EA4335;color:#fff">G</div>
             Google로 계속하기
           </button>
+          
+          <div style="margin-top:20px; padding-top:20px; border-top:1px solid var(--border)">
+            <button class="btn btn-ghost" style="width:100%; border:1px solid var(--border)" onclick="enterGuestMode()">
+              로그인 없이 체험하기 (Test)
+            </button>
+            <div style="font-size:11px; color:var(--ink3); margin-top:8px; text-align:center">
+              * 게스트 모드는 데이터가 로컬 스토리지에 저장됩니다.
+            </div>
+          </div>
+
           <div class="login-agree">가입 시 <a href="#">이용약관</a> 및 <a href="#">개인정보처리방침</a>에 동의합니다</div>
         </div>
       </div>
     </div>`;
+}
+
+function enterGuestMode() {
+  isGuestMode = true;
+  localStorage.setItem('ds_guest_mode', 'true');
+  closeLoginModal();
+  renderNav();
+  showPage('projects');
+  showToast('게스트 모드로 시작합니다. 브라우저 종료 시 데이터가 유실될 수 있습니다.', 'info');
 }
 
 function closeLoginModal(e){
@@ -97,11 +119,13 @@ async function doLogin(method){
 }
 
 function handleLogout(){
-  window.logoutUser();
+  isGuestMode = false;
+  localStorage.removeItem('ds_guest_mode');
+  if(window.logoutUser) window.logoutUser();
   isLoggedIn=false; currentUser=null;
   renderNav();
   showPage('home');
-  showToast('로그아웃되었습니다.', 'info', '??', 2000);
+  showToast('로그아웃되었습니다.', 'info', '👋', 2000);
 }
 
 function toggleApiKeyInput(){
@@ -807,12 +831,27 @@ const PROMPT_SCRIPT = DRAMA_BASE_ROLE + `
 /* ===================================
    API 헬퍼 & 4단계 분리 호출
 =================================== */
-async function _callAPI(systemPrompt, userPrompt, maxTokens){
-  // 기존 브라우저 직접 호출 대신, api.js에 정의된 백엔드 호출 함수를 거치게 설계
+async function _callAPI(type, systemPrompt, userPrompt, maxTokens){
+  updateApiStatus('Claude와 교신 중...', type === 'script' ? '대본 집필 중' : '기계안/제작비 산출 중');
   const promptData = { systemPrompt, userPrompt, maxTokens };
-  const data = await window.callBackendAI('generation', promptData);
-  if (!data) throw new Error('백엔드 연동 전 임시 폴백 처리');
-  return data;
+  try {
+    const data = await window.callBackendAI(type, promptData);
+    if (!data) throw new Error('백엔드 연동 실패');
+    updateApiStatus('데이터 수신 완료', '처리 중...');
+    return data;
+  } catch (e) {
+    updateApiStatus('교신 오류 발생', '재시도 중...');
+    throw e;
+  }
+}
+
+function updateApiStatus(text, step){
+  const banner = document.getElementById('api-status-banner');
+  const textEl = document.getElementById('api-status-text');
+  const stepEl = document.getElementById('api-status-step');
+  if(banner) banner.style.display = 'flex';
+  if(textEl) textEl.textContent = text;
+  if(stepEl) stepEl.textContent = step;
 }
 
 function _buildBaseContext(input){
@@ -835,7 +874,7 @@ async function callAPI_Plan(input){
 각 화의 scenes는 8개씩, 각 씬의 desc는 반드시 2~3문장 이상 구체적으로.
 similar.refs는 실제 유사 한국 드라마 6편.
 순수 JSON만 반환.`;
-  return await _callAPI(PROMPT_PLAN, prompt, 12000);
+  return await _callAPI('plan', PROMPT_PLAN, prompt, 12000);
 }
 
 async function callAPI_Production(input){
@@ -845,7 +884,7 @@ async function callAPI_Production(input){
 budgetBreakdown은 ${input.episodes||8}화 전부 작성.
 배우 추천은 역할 적합성·플랫폼 궁합·2024~2025년 실제 시장 출연료 반영.
 순수 JSON만 반환.`;
-  return await _callAPI(PROMPT_PRODUCTION, prompt, 8000);
+  return await _callAPI('prod', PROMPT_PRODUCTION, prompt, 8000);
 }
 
 async function callAPI_PPL(input, planData){
@@ -860,7 +899,7 @@ ${sceneList}
 위 드라마에 자연스럽게 녹아드는 PPL 기획안 8개 이상 생성.
 각 PPL의 scene은 위 씬 목록과 연결.
 순수 JSON만 반환.`;
-  return await _callAPI(PROMPT_PPL, prompt, 4000);
+  return await _callAPI('ppl', PROMPT_PPL, prompt, 4000);
 }
 
 async function callAPI_Script(input, planData, epIdx){
@@ -891,7 +930,7 @@ ${scenesDetail}
 각 씬 최소 15줄 이상. 오프닝 20줄 이상.
 엔딩씬 마지막에 "(화면 암전)" 추가.
 순수 JSON만 반환.`;
-  return await _callAPI(PROMPT_SCRIPT, prompt, 16000);
+  return await _callAPI('script', PROMPT_SCRIPT, prompt, 16000);
 }
 
 /* 대본 저장소 ? 화차별 */
@@ -1175,7 +1214,10 @@ async function startGenerate(){
   
   const genId = saveRes.id;
   window._generatingId = genId;
-  showPage('projects');
+  
+  // 생성 즉시 결과 페이지(대시보드)로 이동하여 진행 상황 표시
+  showPage('result');
+  updateApiStatus('생성을 시작합니다...', '준비 중');
 
   async function updateCard(pct, stepIdx){
     const card=document.getElementById('gen-card-'+genId);
@@ -1222,12 +1264,18 @@ async function startGenerate(){
       input: currentInput
     });
 
-    setTimeout(()=>{renderProjectCards(); showPage('result');}, 800);
+
+    setTimeout(()=>{
+      renderProjectCards(); 
+      const banner = document.getElementById('api-status-banner');
+      if(banner) banner.style.display = 'none';
+      showPage('result');
+    }, 800);
   }
 
   // 백엔드 AI 모드 (항상 활성화, 인증 여부는 백엔드에서 체크)
   const token = localStorage.getItem('ds_auth_token');
-  if(!token){
+  if(!token && !isGuestMode){
     showToast('로그인이 필요합니다.', 'warn');
     showLoginModal();
     return;

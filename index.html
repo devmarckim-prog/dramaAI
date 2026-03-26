@@ -384,6 +384,16 @@
 
 <!-- ================ RESULT ================ -->
 <div id="page-result" class="page">
+  <!-- API 교신 상태 배너 (생성 중일 때만 표시) -->
+  <div id="api-status-banner" style="display:none;background:var(--ink);color:#fff;padding:12px 20px;font-size:13px;align-items:center;gap:12px;z-index:100;position:sticky;top:0">
+    <div class="api-status-icon" style="font-size:18px">📡</div>
+    <div style="flex:1;display:flex;align-items:center;gap:10px">
+      <span id="api-status-text" style="font-weight:600">Claude와 교신 중...</span>
+      <div class="typing-dots" style="display:inline-flex"><span></span><span></span><span></span></div>
+    </div>
+    <div id="api-status-step" style="font-size:11px;background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:20px;border:0.1px solid rgba(255,255,255,0.3)">기획안 생성 중</div>
+  </div>
+
   <div class="result-hero">
     <div class="result-hero-bg"></div>
     <div class="result-hero-sample" id="result-hero-sample"></div>
