@@ -1,7 +1,9 @@
 // api.js
 // 프론트엔드와 백엔드 통신 담당 레이어 (MVP → 프로덕션)
 
-const API_BASE_URL = window.location.hostname === 'localhost' 
+const hostname = window.location.hostname;
+const protocol = window.location.protocol;
+const API_BASE_URL = (hostname === 'localhost' || hostname === '127.0.0.1' || protocol === 'file:')
   ? 'http://localhost:3000/api' 
   : '/.netlify/functions/api';
 
@@ -71,39 +73,43 @@ window.fetchProjects = async function() {
 
 // 프로젝트 저장
 window.saveProject = async function(projectData) {
-  if(isGuest()){
-    const localData = localStorage.getItem('ds_guest_projects');
-    const projects = localData ? JSON.parse(localData) : [];
-    
-    if(projectData.id){
-      // 업데이트
-      const idx = projects.findIndex(p => p.id === projectData.id);
-      if(idx !== -1) projects[idx] = { ...projects[idx], ...projectData, updated_at: new Date().toISOString() };
-      else projects.push({ ...projectData, id: Date.now(), created_at: new Date().toISOString() });
-    } else {
-      // 신규
-      projectData.id = Date.now();
-      projectData.created_at = new Date().toISOString();
-      projects.push(projectData);
+  try {
+    if(isGuest()){
+      const localData = localStorage.getItem('ds_guest_projects');
+      const projects = localData ? JSON.parse(localData) : [];
+      
+      if(projectData.id){
+        // 업데이트
+        const idx = projects.findIndex(p => p.id === projectData.id);
+        if(idx !== -1) projects[idx] = { ...projects[idx], ...projectData, updated_at: new Date().toISOString() };
+        else projects.push({ ...projectData, id: Date.now(), created_at: new Date().toISOString() });
+      } else {
+        // 신규
+        projectData.id = Date.now();
+        projectData.created_at = new Date().toISOString();
+        projects.push(projectData);
+      }
+      
+      localStorage.setItem('ds_guest_projects', JSON.stringify(projects));
+      return { success: true, id: projectData.id, project: projectData };
     }
-    
-    localStorage.setItem('ds_guest_projects', JSON.stringify(projects));
-    return projectData;
-  }
 
-  if(!getAuthToken()) return projectData; 
-  
-  const res = await fetch(`${API_BASE_URL}/projects`, {
-    method: 'POST',
-    headers: { 
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getAuthToken()}` 
-    },
-    body: JSON.stringify(projectData)
-  });
-  if (!res.ok) throw new Error('프로젝트 저장 실패');
-  const data = await res.json();
-  return data.project;
+    if(!getAuthToken()) return { success: true, id: projectData.id || Date.now(), project: projectData }; 
+    
+    const res = await fetch(`${API_BASE_URL}/projects`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getAuthToken()}` 
+      },
+      body: JSON.stringify(projectData)
+    });
+    if (!res.ok) throw new Error('프로젝트 저장 실패');
+    const data = await res.json();
+    return { success: true, id: data.project.id, project: data.project };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
 }
 
 // 프로젝트 삭제
