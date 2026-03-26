@@ -81,7 +81,7 @@ window.toggleDebugLog = function() {
     if (logo && !document.querySelector('.logo-version')) {
       const vSpan = document.createElement('span');
       vSpan.className = 'logo-version';
-      vSpan.textContent = 'v1.2.0-debug';
+      vSpan.textContent = 'v1.2.1-debug';
       vSpan.style.fontSize = '10px';
       vSpan.style.color = 'var(--ink3)';
       vSpan.style.marginLeft = '6px';
