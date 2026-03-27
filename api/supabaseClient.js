@@ -6,19 +6,21 @@ if (process.env.NODE_ENV !== 'production') {
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('your_supabase_url_here')) {
+if (!supabaseUrl || !supabaseKey) {
   console.warn('⚠️ Supabase credentials are not set in .env. Database operations will fail.');
 }
 
-let supabase = null;
-if (supabaseUrl && supabaseKey && !supabaseUrl.includes('your_supabase_url_here')) {
-  try {
-    supabase = createClient(supabaseUrl, supabaseKey);
-  } catch (err) {
-    console.error('Failed to initialize Supabase client:', err);
-  }
-} else {
-  console.warn('⚠️ Supabase credentials are missing or invalid. Database operations will be disabled.');
+// Base admin client (for auth verification only)
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Factory: creates a user-scoped client so RLS auth.uid() works correctly
+function createUserClient(userJwt) {
+  return createClient(supabaseUrl, supabaseKey, {
+    global: {
+      headers: { Authorization: `Bearer ${userJwt}` }
+    }
+  });
 }
 
 module.exports = supabase;
+module.exports.createUserClient = createUserClient;

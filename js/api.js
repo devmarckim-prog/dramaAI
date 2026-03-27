@@ -4,7 +4,7 @@
 const hostname = window.location.hostname;
 const protocol = window.location.protocol;
 const API_BASE_URL = (hostname === 'localhost' || hostname === '127.0.0.1' || protocol === 'file:')
-  ? 'http://localhost:3000/api' 
+  ? 'http://localhost:8080/api' 
   : '/.netlify/functions/api';
 
 // 기술 로그 출력용 전역 함수
@@ -64,9 +64,9 @@ window.toggleDebugLog = function() {
       container.style.cssText = 'position:fixed; bottom:20px; right:20px; z-index:10000; text-align:right;';
       container.innerHTML = `
         <button id="toggle-debug-btn" onclick="toggleDebugLog()" style="background:#333;border:1px solid #555;color:#fff;padding:10px 20px;border-radius:20px;font-size:12px;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,0.3); white-space:nowrap;">🛠️ 기술 로그 보기</button>
-        <div id="debug-log-console" style="display:none;margin-top:10px;background:#1a1410;color:#00ff00;font-family:monospace;font-size:11px;padding:15px;border-radius:8px;width:400px;max-height:400px;overflow-y:auto;text-align:left;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,0.5); border:1px solid #333;">
+        <div id="debug-log-console" style="display:block;margin-top:10px;background:#1a1410;color:#00ff00;font-family:monospace;font-size:11px;padding:15px;border-radius:8px;width:400px;max-height:400px;overflow-y:auto;text-align:left;line-height:1.5;box-shadow:0 10px 30px rgba(0,0,0,0.5); border:1px solid #333;">
           <div style="color:#aaa;border-bottom:0.5px solid #333;margin-bottom:8px;padding-bottom:4px;display:flex;justify-content:space-between; font-weight:bold;">
-            <span>TECHNICAL LOG CONSOLE (v1.2.4)</span>
+            <span>TECHNICAL LOG CONSOLE (v1.3.0)</span>
             <button onclick="document.getElementById('debug-log-content').innerHTML=''" style="background:none;border:none;color:#666;cursor:pointer;font-size:10px">[Clear]</button>
           </div>
           <div id="debug-log-content"></div>
@@ -75,17 +75,29 @@ window.toggleDebugLog = function() {
       document.body.appendChild(container);
     }
 
-    // 2. 로고 버전 정보 주입
+    // 2. 로고 버전 정보 주입/업데이트
     const logo = document.querySelector('.nav-logo');
-    if (logo && !document.querySelector('.logo-version')) {
-      const vSpan = document.createElement('span');
-      vSpan.className = 'logo-version';
-      vSpan.textContent = 'v1.2.4-debug';
-      vSpan.style.fontSize = '10px';
-      vSpan.style.color = 'var(--ink3)';
-      vSpan.style.marginLeft = '6px';
-      vSpan.style.opacity = '0.7';
-      logo.appendChild(vSpan);
+    const existingVersion = document.querySelector('.logo-version');
+    if (logo) {
+      if (existingVersion) {
+        if (existingVersion.textContent !== 'v1.3.0') {
+          existingVersion.textContent = 'v1.3.0';
+          existingVersion.style.fontSize = '12px';
+          existingVersion.style.color = '#ffba08';
+          existingVersion.style.fontWeight = '900';
+          existingVersion.style.opacity = '1';
+        }
+      } else {
+        const vSpan = document.createElement('span');
+        vSpan.className = 'logo-version';
+        vSpan.textContent = 'v1.3.0';
+        vSpan.style.fontSize = '12px';
+        vSpan.style.color = '#ffba08';
+        vSpan.style.fontWeight = '900';
+        vSpan.style.marginLeft = '8px';
+        vSpan.style.opacity = '1';
+        logo.appendChild(vSpan);
+      }
     }
   }, 1000);
 })();
@@ -109,9 +121,20 @@ window.loginWithGoogle = async function() {
   }
 }
 
+window.fetchUserProfile = async function() {
+  const token = getAuthToken();
+  if(!token) return null;
+  const res = await fetch(`${API_BASE_URL}/user`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  if(!res.ok) return null;
+  return await res.json();
+}
+
 window.logoutUser = function() {
   localStorage.removeItem('ds_auth_token');
   localStorage.removeItem('ds_user_email');
+  localStorage.removeItem('ds_user_avatar');
   localStorage.removeItem('ds_guest_mode');
 }
 

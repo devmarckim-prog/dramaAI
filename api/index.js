@@ -49,7 +49,8 @@ if (apiRoutes) {
 module.exports = app;
 
 if (require.main === module) {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
+  server.timeout = 300000; // 5 minutes
 }
