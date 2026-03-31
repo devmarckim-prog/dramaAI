@@ -1,1 +1,1 @@
-v0.1.7 - AI Generation Stability & Data Integrity Patch
+v0.1.9 - UX & Data Integrity Patch (Toasts, Smooth Progress, Rendering Fix)

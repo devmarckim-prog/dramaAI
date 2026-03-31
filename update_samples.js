@@ -62,7 +62,7 @@ async function createSamplesWithRealUser() {
       platform: 'OTT',
       genre: '누아르',
       episodes: 8,
-      status: 'completed',
+      status: 'done',
       pct: 100,
       stepIdx: 6,
       chars: [
@@ -104,7 +104,7 @@ AI는 도진을 잠재적 위협 요소로 판단하고,
       platform: '극장 개봉',
       genre: '테크 스릴러',
       episodes: 1,
-      status: 'completed',
+      status: 'done',
       pct: 100,
       stepIdx: 6,
       chars: [

@@ -31,14 +31,20 @@ function renderOverview() {
   const p = state.planData || {};
   const input = state.currentInput || {};
   
+  const title = p.title || input.title || '새 프로젝트';
   const el = document.getElementById('result-hero-title-el');
-  if (el) el.textContent = p.title || input.title || '새 프로젝트';
+  if (el) el.textContent = title;
   
-  const logline = document.getElementById('result-logline');
-  if (logline) logline.textContent = p.logline || input.logline || '';
+  const loglineText = p.logline || input.logline || '';
+  const loglineEl = document.getElementById('result-logline');
+  if (loglineEl) loglineEl.textContent = loglineText;
   
+  // Also update the hidden/extra logline cards if they exist
+  const loglineCard = document.querySelector('.result-hero-logline');
+  if (loglineCard && !p.logline && input.logline) loglineCard.textContent = input.logline;
+
   const sideTitle = document.getElementById('sidebar-title-label');
-  if (sideTitle) sideTitle.textContent = p.title || input.title || '새 프로젝트';
+  if (sideTitle) sideTitle.textContent = title;
 
   const badge = document.getElementById('result-badge');
   if (badge) {

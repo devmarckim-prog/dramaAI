@@ -163,7 +163,8 @@ export async function openProject(id) {
       episodes: p.episodes,
       stats: p.stats,
       characters: p.characters || p.chars || [],
-      ppl: p.ppl || []
+      ppl: p.ppl || [],
+      budget: p.budget || (p.stats && p.stats.budget)
     };
     
     state.scripts = p.scripts || {};
@@ -251,6 +252,10 @@ window.confirmDeleteProject = confirmDeleteProject;
 
 function _getCleanEps(val) {
   if (!val) return 8;
+  
+  // If it's an array (episode list), preserve it! 
+  // Important: This fixes the "empty synopsis" issue where arrays were converted to numbers.
+  if (Array.isArray(val)) return val;
   
   // If it's already a number
   if (typeof val === 'number') return val;

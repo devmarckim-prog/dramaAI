@@ -92,9 +92,18 @@ export function showPanel(panelId) {
   });
 }
 
-export function showToast(msg, type = 'info', icon = '?', duration = 3000) {
+export function showToast(msg, type = 'info', icon = null, duration = 4000) {
   const container = document.getElementById('toast-container') || createToastContainer();
   const id = 'toast-' + Date.now();
+  
+  // Auto-icon mapping if not provided
+  if (!icon) {
+    if (type === 'success') icon = '✅';
+    else if (type === 'error') icon = '❌';
+    else if (type === 'warn') icon = '⚠️';
+    else icon = 'ℹ️';
+  }
+
   const html = `<div id="${id}" class="toast-item toast-${type}">
     <span class="toast-icon">${icon}</span>
     <span class="toast-msg">${msg}</span>

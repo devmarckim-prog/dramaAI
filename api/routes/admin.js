@@ -488,7 +488,7 @@ router.get('/projects', async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('projects')
-      .select('id, title, genre, created_at, status, user_id')
+      .select('id, title, genre, created_at, status, user_id, pct, step_idx')
       .order('created_at', { ascending: false })
       .limit(50);
 

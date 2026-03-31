@@ -53,8 +53,8 @@ export async function startGenerationFlow() {
   }
   state.isGenerating = true;
 
-  // 개발 로그 자동 오픈 (사용자 요청)
-  showDebugLog();
+  // 개발 로그 자동 오픈 중단 (사용자 요청으로 UI 카드로 대체)
+  // showDebugLog();
   
   addDebugLog('드라마 프로젝트 생성을 시작합니다...', 'success');
   addDebugLog(`타겟 플랫폼: ${input.platform}, 장르: ${input.genre}`);
@@ -99,6 +99,9 @@ export async function startGenerationFlow() {
     } else {
       renderProjectCards(); // fallback to imported one
     }
+
+    // 2.5 부드러운 진행률 애니메이션 시작
+    startProgressSmoother(state.generatingId);
 
     // 3. 2초 후 마스터피스 오버레이 제거
     setTimeout(() => {
@@ -179,11 +182,45 @@ export async function startGenerationFlow() {
   } finally {
     state.isGenerating = false;
     isGenerating = false;
+    stopProgressSmoother();
     const btn = document.getElementById('btn-next');
     if (btn) {
        btn.disabled = false;
        btn.innerHTML = '🎬 시나리오 마스터피스 생성하기';
     }
+  }
+}
+
+let progressInterval = null;
+function startProgressSmoother(projectId) {
+  if (progressInterval) clearInterval(progressInterval);
+  
+  progressInterval = setInterval(() => {
+    // 로컬 스토리지나 메모리상의 프로젝트 pct를 조금씩 올림
+    const cards = document.querySelectorAll(`[id^="gen-card-${projectId}"] .pcg-bar-fill-dynamic`);
+    const labels = document.querySelectorAll(`[id^="gen-card-${projectId}"] .pcg-progress-wrap span:last-child`);
+    
+    if (cards.length > 0) {
+      cards.forEach(card => {
+        let currentPct = parseFloat(card.style.width) || 0;
+        if (currentPct < 99) {
+          // 자연스러운 속도로 증가 (초당 약 0.3~0.5%)
+          let increment = 0.1 + (Math.random() * 0.2); 
+          let newPct = Math.min(currentPct + increment, 99);
+          card.style.width = newPct + '%';
+          labels.forEach(l => {
+             if (l.textContent.includes('%')) l.textContent = Math.floor(newPct) + '%';
+          });
+        }
+      });
+    }
+  }, 300);
+}
+
+function stopProgressSmoother() {
+  if (progressInterval) {
+    clearInterval(progressInterval);
+    progressInterval = null;
   }
 }
 
@@ -227,6 +264,7 @@ async function finishGenerate(isError, input, errMsg) {
   await saveProject(finalPayload);
 
   addDebugLog('마지막 단계 저장 완료 (100%)');
+  stopProgressSmoother();
   renderProjectCards();
 
   setTimeout(() => {
