@@ -464,9 +464,10 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height
 .sidebar-item.active .sidebar-dot{background:var(--gold)}
 .sidebar-meta{font-size:11px;color:var(--ink3);padding:4px 16px 0;display:flex;gap:6px;flex-wrap:wrap}
 .meta-tag{padding:2px 7px;border-radius:4px;background:var(--paper3);font-size:10px;font-weight:500}
-.result-main{overflow:hidden;padding:0;position:relative;display:flex;flex-direction:column}
-.result-panel{display:none;padding:32px 40px}.result-panel.active{display:block}
-/* 대본 패널 ? agent 고정을 위한 flex 구조 */
+.result-main{overflow:hidden;padding:0;position:relative;display:flex;flex-direction:column;flex:1;min-height:0}
+.result-panel{display:none;padding:32px 40px;flex:1;overflow-y:auto;min-height:0}
+.result-panel.active{display:block}
+/* Re-applying flex for specific script panel */
 #panel-script.active{display:flex;flex-direction:column;padding:0;flex:1;min-height:0}
 #script-body-wrap{flex:1;overflow-y:auto;min-height:0;position:relative}
 .panel-title{font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:4px}
@@ -529,8 +530,6 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height
   display: flex;
   flex-direction: column;
   gap: 16px;
-  height: 450px !important; /* Fixed height for reliable scrolling */
-  overflow-y: scroll !important;
   padding-right: 12px;
   padding-bottom: 60px;
   min-height: 0;

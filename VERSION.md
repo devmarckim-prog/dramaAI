@@ -1,1 +1,1 @@
-v0.1.97 - Conflict Restoration & Persistence Patch (Backend Support, Dashboard Rendering)
+v0.1.98 - Global Dashboard Layout & Scroll Stability Patch (Panel Scrolling Fix)
