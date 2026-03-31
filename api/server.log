@@ -2737,3 +2737,37 @@
 [2026-03-31T01:30:38.278Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
 [2026-03-31T01:30:38.280Z] [Auth] Google Login requested from: http://localhost:8081/
 [2026-03-31T01:30:38.281Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-03-31T01:36:26.181Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.206Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.210Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.225Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.226Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.227Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.229Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.230Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.231Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.233Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.234Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.237Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.238Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.239Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.243Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.478Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.536Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.595Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T01:36:26.597Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T01:37:01.218Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-03-31T01:37:01.219Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-03-31T01:37:01.220Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-03-31T01:37:25.003Z] SERVER STARTING...
+[2026-03-31T01:37:25.128Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T01:37:25.128Z] [Mount] User API Routes -> /api
+[2026-03-31T01:37:25.223Z] SERVER STARTING...
+[2026-03-31T01:37:25.336Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T01:37:25.337Z] [Mount] User API Routes -> /api
+[2026-03-31T01:37:33.258Z] SERVER STARTING...
+[2026-03-31T01:37:33.380Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T01:37:33.381Z] [Mount] User API Routes -> /api
+[2026-03-31T01:37:33.511Z] SERVER STARTING...
+[2026-03-31T01:37:33.632Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T01:37:33.632Z] [Mount] User API Routes -> /api

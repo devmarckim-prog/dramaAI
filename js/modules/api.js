@@ -405,7 +405,26 @@ async function _saveLocal(projectData) {
 
 export async function fetchProjects() {
   const token = localStorage.getItem('ds_auth_token');
-  const samples = [DIRECTORS_ARENA_SAMPLE, SEOUL_NIGHT_SAMPLE];
+  
+  // 1. Fetch public samples from server (respects Admin visibility settings)
+  let activeSamples = [];
+  try {
+    const sRes = await fetch('/api/samples');
+    if (sRes.ok) {
+      const sData = await sRes.json();
+      activeSamples = sData.map(s => ({
+        ...(s.data || {}),
+        id: s.id,
+        title: s.title || (s.data && s.data.title),
+        is_sample: true
+      }));
+    }
+  } catch (err) {
+    console.warn('[API] Public samples fetch failed, using fallbacks.', err);
+    // Use hardcoded defaults only if server is unreachable
+    activeSamples = [DIRECTORS_ARENA_SAMPLE, SEOUL_NIGHT_SAMPLE]
+      .filter(s => s && s.id);
+  }
   
   // 로컬 저장소 데이터 (Guest 용 또는 백업)
   let localData = [];
@@ -413,10 +432,9 @@ export async function fetchProjects() {
     const rawLocal = localStorage.getItem('ds_projects_local');
     const rawGuest = localStorage.getItem('ds_guest_projects');
     
-    // Clear hidden samples as requested by user
+    // Clear legacy hidden samples as visibility is now server-controlled
     localStorage.removeItem('ds_hidden_samples');
     
-    // 두 키를 모두 로드하여 병합 (중복 제거)
     const set1 = rawLocal ? JSON.parse(rawLocal) : [];
     const set2 = rawGuest ? JSON.parse(rawGuest) : [];
     const merged = [...set1];
@@ -430,12 +448,10 @@ export async function fetchProjects() {
     console.warn('[API] Local data parse error:', e);
   }
 
-  const activeSamples = samples.filter(s => s && s.id);
-
   const hasToken = token && token !== 'mock_token';
   const gid = getGuestFingerprint();
 
-  // If no token AND no fingerprint we have nothing to identify the user - return local only
+  // If no token AND no fingerprint we have nothing to identify the user
   if (!hasToken && !gid) {
     return [...activeSamples, ...localData].map(p => _sanitizeProject(p));
   }

@@ -57,15 +57,29 @@ export let SEOUL_NIGHT_SAMPLE = {
 
 export async function syncSamplesFromServer() {
   try {
-    const res = await fetch('/api/samples'); // Corrected to public endpoint
+    const res = await fetch('/api/samples'); 
     if (!res.ok) return;
     
     const samples = await res.json();
+    
+    // Server data is always preferred if available
     const arena = samples.find(s => s.id === 'sample-arena');
     const seoul = samples.find(s => s.id === 'sample-seoul');
     
-    if (arena) DIRECTORS_ARENA_SAMPLE = { ...arena.data, id: arena.id, title: arena.title };
-    if (seoul) SEOUL_NIGHT_SAMPLE = { ...seoul.data, id: seoul.id, title: seoul.title };
+    if (arena) {
+      DIRECTORS_ARENA_SAMPLE = { 
+        ...(arena.data || {}), 
+        id: arena.id, 
+        title: arena.title || (arena.data && arena.data.title) 
+      };
+    }
+    if (seoul) {
+      SEOUL_NIGHT_SAMPLE = { 
+        ...(seoul.data || {}), 
+        id: seoul.id, 
+        title: seoul.title || (seoul.data && seoul.data.title) 
+      };
+    }
     
     console.log('[Samples] Synced from database successfully.');
   } catch (err) {
