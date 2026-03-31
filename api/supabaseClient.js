@@ -10,8 +10,11 @@ if (!supabaseUrl || !supabaseKey) {
   console.warn('⚠️ Supabase credentials are not set in .env. Database operations will fail.');
 }
 
-// Base admin client (for auth verification only)
+// Base client (limited by ANON key/RLS)
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+// privileged client (bypasses RLS)
+const serviceSupabase = createClient(supabaseUrl, process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseKey);
 
 // Factory: creates a user-scoped client so RLS auth.uid() works correctly
 function createUserClient(userJwt) {
@@ -22,5 +25,9 @@ function createUserClient(userJwt) {
   });
 }
 
-module.exports = supabase;
-module.exports.createUserClient = createUserClient;
+// Clean, structured exports for the entire backend
+module.exports = {
+  supabase,
+  serviceSupabase,
+  createUserClient
+};

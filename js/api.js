@@ -4,7 +4,7 @@
 const hostname = window.location.hostname;
 const protocol = window.location.protocol;
 const API_BASE_URL = (hostname === 'localhost' || hostname === '127.0.0.1' || protocol === 'file:')
-  ? 'http://localhost:8080/api' 
+  ? '/api' 
   : '/.netlify/functions/api';
 
 // 기술 로그 출력용 전역 함수
@@ -55,6 +55,7 @@ window.toggleDebugLog = function() {
 };
 
 // 페이지 로드 시 디버그 UI 및 버전 정보 동적 주입
+/* 
 (function injectUIEnhancements() {
   const checkInterval = setInterval(() => {
     // 1. 디버그 로그 콘솔 주입 (Body 직속으로 이동하여 영속성 확보)
@@ -74,33 +75,10 @@ window.toggleDebugLog = function() {
       `;
       document.body.appendChild(container);
     }
-
-    // 2. 로고 버전 정보 주입/업데이트
-    const logo = document.querySelector('.nav-logo');
-    const existingVersion = document.querySelector('.logo-version');
-    if (logo) {
-      if (existingVersion) {
-        if (existingVersion.textContent !== 'v1.3.0') {
-          existingVersion.textContent = 'v1.3.0';
-          existingVersion.style.fontSize = '12px';
-          existingVersion.style.color = '#ffba08';
-          existingVersion.style.fontWeight = '900';
-          existingVersion.style.opacity = '1';
-        }
-      } else {
-        const vSpan = document.createElement('span');
-        vSpan.className = 'logo-version';
-        vSpan.textContent = 'v1.3.0';
-        vSpan.style.fontSize = '12px';
-        vSpan.style.color = '#ffba08';
-        vSpan.style.fontWeight = '900';
-        vSpan.style.marginLeft = '8px';
-        vSpan.style.opacity = '1';
-        logo.appendChild(vSpan);
-      }
-    }
+    // ... 버전 정보 생략
   }, 1000);
 })();
+*/
 
 function getAuthToken() {
   return localStorage.getItem('ds_auth_token') || '';

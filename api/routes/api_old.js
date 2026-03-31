@@ -515,29 +515,13 @@ router.post('/generate', async (req, res) => {
 
       res.json(parsed);
     } catch (parseError) {
-      // JSON 자동 복구 시도
-      log(`[AI Proxy] JSON Parse Error - 자동 복구 시도 중...`);
-      try {
-        let repaired = clean;
-        repaired = repaired.replace(/,\s*$/, '');
-        const openBraces    = (repaired.match(/\{/g) || []).length;
-        const closeBraces   = (repaired.match(/\}/g) || []).length;
-        const openBrackets  = (repaired.match(/\[/g) || []).length;
-        const closeBrackets = (repaired.match(/\]/g) || []).length;
-        for (let i = 0; i < openBrackets - closeBrackets; i++) repaired += ']';
-        for (let i = 0; i < openBraces   - closeBraces;   i++) repaired += '}';
-        const parsed = JSON.parse(repaired);
-        log(`[AI Proxy] JSON 자동 복구 성공!`);
-        res.json(parsed);
-      } catch (repairError) {
-        log(`[AI Proxy] JSON Parse Error: ${parseError.message}`, 'error');
-        log(`[AI Proxy] Raw Response Snippet: ${raw.substring(0, 500)}...`, 'error');
-        res.status(500).json({ 
-          error: 'AI 응답 파싱 실패 (JSON 포맷 오류)', 
-          details: parseError.message,
-          raw: raw.substring(0, 1000) 
-        });
-      }
+      log(`[AI Proxy] JSON Parse Error: ${parseError.message}`, 'error');
+      log(`[AI Proxy] Raw Response Snippet: ${raw.substring(0, 500)}...`, 'error');
+      res.status(500).json({ 
+        error: 'AI 응답 파싱 실패 (JSON 포맷 오류)', 
+        details: parseError.message,
+        raw: raw.substring(0, 1000) 
+      });
     }
   } catch (error) {
     log(`[AI Proxy] Execution Error: ${error.message}`, 'error');
@@ -545,47 +529,6 @@ router.post('/generate', async (req, res) => {
         error: `AI 생성 중 오류: ${error.message}`, 
         details: error.stack?.split('\n')[0] 
     });
-  }
-});
-
-/**
- * NEW: Episode-specific Resource Generation (Budget & PPL)
- */
-router.post('/generate/episode-resources', authMiddleware, async (req, res) => {
-  try {
-    const { projectId, epIdx, context } = req.body;
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    const anthropic = new Anthropic({ apiKey });
-    const config = await getSystemConfig();
-
-    log(`[Episode Resources] Generating for Project ${projectId}, Ep ${epIdx + 1}`);
-
-    const prompt = context.userPrompt; 
-    const systemPrompt = context.systemPrompt || config.systemPrompt;
-
-    const startTime = Date.now();
-    const msg = await anthropic.messages.create({
-      model: config.productionModel || 'claude-sonnet-4-6',
-      max_tokens: 4000,
-      system: systemPrompt,
-      messages: [{ role: "user", content: prompt }],
-    });
-
-    const duration = ((Date.now() - startTime)/1000).toFixed(1);
-    let raw = msg.content[0].text;
-    
-    // JSON extraction
-    let clean = raw;
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (jsonMatch) clean = jsonMatch[0];
-
-    const parsed = JSON.parse(clean);
-    log(`[Episode Resources] Success in ${duration}s`);
-    
-    res.json(parsed);
-  } catch (error) {
-    log(`[Episode Resources] Error: ${error.message}`, 'error');
-    res.status(500).json({ error: error.message });
   }
 });
 

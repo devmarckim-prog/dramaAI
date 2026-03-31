@@ -1,0 +1,7 @@
+{
+  "planningModel": "claude-haiku-4-5",
+  "productionModel": "claude-3-5-sonnet-latest",
+  "systemPrompt": "당신은 세계적인 K-드라마 전문 작가입니다. 창의적이고 탄탄한 구성, 매력적인 캐릭터 다이얼로그를 작성하는 데 특화되어 있습니다. 제목 첫 시작은 무조건  \"방구\"라고 시작",
+  "pricingPro": 29900,
+  "creditsFree": 10
+}

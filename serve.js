@@ -1,35 +1,31 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-
+const app = require('./api/index');
 const port = 8081;
 
-const mimeTypes = {
-  '.html': 'text/html',
-  '.js': 'text/javascript',
-  '.css': 'text/css',
-  '.json': 'application/json',
-  '.png': 'image/png',
-  '.jpg': 'image/jpg',
-  '.gif': 'image/gif',
-  '.svg': 'image/svg+xml',
-  '.webp': 'image/webp'
-};
+const server = app.listen(port, () => {
+    console.log(`
+DramaScript AI Unified Server Running!
+--------------------------------------
+Frontend: http://localhost:${port}/
+API Root: http://localhost:${port}/api
+--------------------------------------
+`);
+});
 
-http.createServer((req, res) => {
-  const urlPath = req.url.split('?')[0];
-  let filePath = path.join(__dirname, urlPath === '/' ? 'index.html' : urlPath);
-  const extname = String(path.extname(filePath)).toLowerCase();
-  const contentType = mimeTypes[extname] || 'application/octet-stream';
+server.timeout = 300000; // 5 minutes
 
-  fs.readFile(filePath, (error, content) => {
-    if (error) {
-      res.writeHead(404);
-      res.end('File not found');
-    } else {
-      res.writeHead(200, { 'Content-Type': contentType });
-      res.end(content);
-    }
-  });
-}).listen(port);
-console.log(`Frontend running at http://localhost:${port}/`);
+// Persistence & Error Management
+process.on('uncaughtException', (err) => {
+  console.error('[CRITICAL] Uncaught Exception:', err.message);
+  console.error(err.stack);
+  // Keep the server alive instead of crashing the whole process
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[CRITICAL] Unhandled Rejection at:', promise, 'reason:', reason);
+  // Keep the server alive
+});
+
+process.on('SIGINT', () => {
+  console.log('[Server] Terminating gracefully...');
+  server.close(() => process.exit(0));
+});

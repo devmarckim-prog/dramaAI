@@ -224,12 +224,12 @@ function updateApiKeyStatusUI(hasKey, msg){
 function saveApiKey(){
   const key = document.getElementById('settings-api-key')?.value.trim()||'';
   const model = document.getElementById('settings-model')?.value||'claude-sonnet-4-6';
-  if(!key){ showToast('API 키를 입력해주세요.','warn','??'); return; }
-  if(!key.startsWith('sk-ant-')){ showToast('올바른 Anthropic API 키 형식이 아닙니다. (sk-ant-로 시작)','warn','??'); return; }
+  if(!key){ showToast('API 키를 입력해주세요.','warn','✨'); return; }
+  if(!key.startsWith('sk-ant-')){ showToast('올바른 Anthropic API 키 형식이 아닙니다. (sk-ant-로 시작)','warn','✨'); return; }
   localStorage.setItem('ds_api_key', key);
   localStorage.setItem('ds_model', model);
   updateApiKeyStatusUI(true);
-  showToast('API 키가 저장되었습니다.','success','??',3000);
+  showToast('API 키가 저장되었습니다.','success','✨',3000);
 }
 
 function deleteApiKey(){
@@ -238,7 +238,7 @@ function deleteApiKey(){
   const inp = document.getElementById('settings-api-key');
   if(inp) inp.value='';
   updateApiKeyStatusUI(false);
-  showToast('API 키가 삭제되었습니다.','info','???',2500);
+  showToast('API 키가 삭제되었습니다.','info','🗑️',2500);
 }
 
 function toggleApiKeyVisibility(){
@@ -246,13 +246,13 @@ function toggleApiKeyVisibility(){
   const btn = document.getElementById('api-key-eye-btn');
   if(!inp) return;
   inp.type = inp.type==='password'?'text':'password';
-  if(btn) btn.textContent = inp.type==='password'?'??':'??';
+  if(btn) btn.textContent = inp.type==='password'?'✨':'✨';
 }
 
 async function testApiKey(){
   const key = localStorage.getItem('ds_api_key')||'';
-  if(!key){ showToast('저장된 API 키가 없습니다.','warn','??'); return; }
-  showToast('연결 테스트 중...','info','??',2000);
+  if(!key){ showToast('저장된 API 키가 없습니다.','warn','✨'); return; }
+  showToast('연결 테스트 중...','info','✨',2000);
   try{
     const res = await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -267,10 +267,10 @@ async function testApiKey(){
     if(res.ok){ showToast('API 연결 성공! AI 생성이 활성화됩니다.','success','?',4000); }
     else{
       const e=await res.json().catch(()=>({}));
-      showToast(`연결 실패: ${e?.error?.message||res.status}`,'warn','??',5000);
+      showToast(`연결 실패: ${e?.error?.message||res.status}`,'warn','✨',5000);
     }
   }catch(e){
-    showToast(`연결 오류: ${e.message}`,'warn','??',5000);
+    showToast(`연결 오류: ${e.message}`,'warn','✨',5000);
   }
 }
 
@@ -336,7 +336,10 @@ async function renderProjectCards(){
         ${bgStyle ? `<div class="pcg-bg" style="${bgStyle}"></div>` : ''}
         <div class="pcg-overlay"></div>
         <div class="pcg-body">
-          <div class="pcg-badge"><div class="pcg-badge-dot"></div>AI 생성 중</div>
+          <div style="display:flex; justify-content:space-between; align-items:flex-start">
+            <div class="pcg-badge"><div class="pcg-badge-dot"></div>AI 생성 중</div>
+            <button class="pcg-log-btn" onclick="showDebugLog()">개발자 로그</button>
+          </div>
           <div class="pcg-title">${p.title||'새 드라마'}</div>
           <div class="pcg-logline">${p.logline||p.genre||''}</div>
           <div class="pcg-steps">${stepsHtml}</div>
@@ -391,15 +394,60 @@ async function openProject(id){
   const list = await window.fetchProjects();
   const p = list.find(x => x.id === id || x.id.toString() === id.toString());
   if(!p) return;
-  try{
+  
+  try {
     currentInput = typeof p.input === 'string' ? JSON.parse(p.input) : p.input;
+    
+    // AI가 생성한 데이터가 있으면 전역 상태에 반영
+    if (p.title) {
+      const heroT = document.getElementById('result-hero-title-el');
+      if (heroT) heroT.textContent = p.title;
+      const sideT = document.getElementById('sidebar-title-label');
+      if (sideT) sideT.textContent = p.title;
+    }
+    
+    if (p.logline) {
+      const heroL = document.getElementById('result-logline');
+      if (heroL) heroL.textContent = p.logline;
+      const detailingL = document.getElementById('ov-logline');
+      if (detailingL) detailingL.textContent = p.logline;
+    }
+    
+    if (p.synopsis) {
+      const synEl = document.getElementById('ov-story');
+      if (synEl) synEl.textContent = p.synopsis;
+    }
+    
+    // 에피소드 데이터가 있으면 반영
+    if (p.episodes && Array.isArray(p.episodes) && p.episodes.length > 0) {
+      aiEpisodes = p.episodes;
+    } else {
+      aiEpisodes = buildDemoEpisodes(currentInput);
+    }
+    
+    // 상세 결과 페이지 초기화 유도
     applyDemoResult(currentInput);
-    aiEpisodes = buildDemoEpisodes(currentInput);
-    aiScript = buildDemoScript(currentInput);
+    
+    // AI 데이터가 있다면 덮어쓰기 (applyDemoResult 이후에 실행해야 덮어써짐)
+    if (p.title) {
+       const h = document.getElementById('result-hero-title-el');
+       if(h) h.textContent = p.title;
+    }
+    if (p.logline) {
+       const l = document.getElementById('result-logline');
+       if(l) l.textContent = p.logline;
+       const ol = document.getElementById('ov-logline');
+       if(ol) ol.textContent = p.logline;
+    }
+    if (p.synopsis) {
+       const os = document.getElementById('ov-story');
+       if(os) os.textContent = p.synopsis;
+    }
+
   } catch(e) {
     console.error("Open Project Error:", e);
-    currentInput = null;
   }
+  
   showPage('result');
 }
 
@@ -977,7 +1025,7 @@ function getScript(epIdx){ return window._scripts[epIdx]||null; }
 /* N화 대본 생성 (버튼 클릭 시) - 청크 최적화 */
 async function generateScriptForEp(epIdx){
   const planData = window._planData;
-  if(!planData) return showToast('기획 데이터가 없습니다.','warn','??');
+  if(!planData) return showToast('기획 데이터가 없습니다.','warn','✨');
   const btn = document.getElementById('btn-gen-script-'+epIdx);
   if(btn){ btn.disabled=true; btn.textContent='생성 중...'; }
   
@@ -1000,7 +1048,7 @@ async function generateScriptForEp(epIdx){
       updateScriptSidebar();
     }
   } catch(e){
-    showToast(`대본 1차 생성 오류: ${e.message}`,'warn','??',5000);
+    showToast(`대본 1차 생성 오류: ${e.message}`,'warn','✨',5000);
     if(btn){ btn.textContent='다시 시도'; btn.disabled=false; }
     return;
   }
@@ -1744,7 +1792,7 @@ function finishTitleEdit(){
   const v=inp.value.trim();
   if(v){el.textContent=v;document.getElementById('sidebar-title-label').textContent=v;}
   inp.style.display='none';el.style.display='inline-block';
-  showToast('제목이 수정되었습니다.','success','??',2000);
+  showToast('제목이 수정되었습니다.','success','✨',2000);
 }
 
 /* ===================================
@@ -2138,7 +2186,7 @@ function buildRelationMap(){
         ${lines}${nodes}
       </svg>
       <div class="relation-map-legend">${legend}
-        <span style="margin-left:auto">?? 남주 · ?? 여주 · ? 조연</span>
+        <span style="margin-left:auto">👨 남주 · 👩 여주 · 🧑 조연</span>
       </div>
     </div>`;
 }
@@ -2505,7 +2553,7 @@ function buildDemoScript(input, epIdx=0){
 /* ===================================
    MODALS / TOAST
 =================================== */
-function showToast(msg,type='info',icon='??',dur=3500){
+function showToast(msg,type='info',icon='✨',dur=3500){
   const c=document.getElementById('toast-container');const id='t'+Date.now();
   const d=document.createElement('div');d.className='toast '+(type||'');d.id=id;
   d.innerHTML=`<span class="toast-icon">${icon}</span><span>${msg}</span><button class="toast-close" onclick="closeToast('${id}')">?</button>`;
@@ -2513,7 +2561,7 @@ function showToast(msg,type='info',icon='??',dur=3500){
 }
 function closeToast(id){const el=document.getElementById(id);if(!el)return;el.classList.add('hiding');setTimeout(()=>el.remove(),260);}
 
-function showModal({icon='??',iconType='info',title,subtitle,body='',buttons=[]}){
+function showModal({icon='✨',iconType='info',title,subtitle,body='',buttons=[]}){
   closeModal();
   const cls='modal-icon-'+iconType;
   const btns=buttons.map((b,i)=>`<button class="${b.style==='primary'?'btn btn-primary':b.style==='danger'?'btn btn-danger':'btn btn-ghost'}" id="mbtn-${i}">${b.label}</button>`).join('');
@@ -2522,16 +2570,16 @@ function showModal({icon='??',iconType='info',title,subtitle,body='',buttons=[]}
 }
 function closeModal(){const bd=document.getElementById('modal-backdrop');if(!bd)return;bd.classList.add('hiding');setTimeout(()=>{document.getElementById('modal-container').innerHTML='';},200);}
 
-function showPdfModal(){showModal({icon:'??',iconType:'info',title:'PDF 내보내기',subtitle:'Pro 플랜 전용',body:'PDF 내보내기는 <strong>프로 플랜</strong> 이상에서 사용 가능합니다.',buttons:[{label:'닫기',style:'ghost'},{label:'Pro 체험 시작',style:'primary',action:()=>showPlanModal('pro')}]});}
-function showNextEpModal(){showModal({icon:'??',iconType:'info',title:'다음 화 생성',subtitle:'다음 화 대본을 생성합니다',body:'데모 모드에서는 샘플 씬으로 표시됩니다.',buttons:[{label:'취소',style:'ghost'},{label:'생성',style:'primary',action:()=>showToast('샘플을 불러옵니다.','info','??')}]});}
+function showPdfModal(){showModal({icon:'✨',iconType:'info',title:'PDF 내보내기',subtitle:'Pro 플랜 전용',body:'PDF 내보내기는 <strong>프로 플랜</strong> 이상에서 사용 가능합니다.',buttons:[{label:'닫기',style:'ghost'},{label:'Pro 체험 시작',style:'primary',action:()=>showPlanModal('pro')}]});}
+function showNextEpModal(){showModal({icon:'✨',iconType:'info',title:'다음 화 생성',subtitle:'다음 화 대본을 생성합니다',body:'데모 모드에서는 샘플 씬으로 표시됩니다.',buttons:[{label:'취소',style:'ghost'},{label:'생성',style:'primary',action:()=>showToast('샘플을 불러옵니다.','info','✨')}]});}
 function showPlanModal(plan){
   const plans={
-    pro:{icon:'?',iconType:'info',title:'프로 플랜 ? 14일 무료 체험',subtitle:'₩29,000/월',body:'14일 무료 체험 후 결제가 시작됩니다. 현재 준비 중입니다.',buttons:[{label:'닫기',style:'ghost'},{label:'출시 알림 신청',style:'primary',action:()=>showToast('신청 완료!','success','??')}]},
-    studio:{icon:'??',iconType:'confirm',title:'스튜디오 플랜 문의',subtitle:'₩99,000/월',body:'문의: hello@dramascript.ai',buttons:[{label:'닫기',style:'ghost'},{label:'이메일 문의',style:'primary',action:()=>showToast('hello@dramascript.ai','info','??',5000)}]}
+    pro:{icon:'?',iconType:'info',title:'프로 플랜 ? 14일 무료 체험',subtitle:'₩29,000/월',body:'14일 무료 체험 후 결제가 시작됩니다. 현재 준비 중입니다.',buttons:[{label:'닫기',style:'ghost'},{label:'출시 알림 신청',style:'primary',action:()=>showToast('신청 완료!','success','✨')}]},
+    studio:{icon:'✨',iconType:'confirm',title:'스튜디오 플랜 문의',subtitle:'₩99,000/월',body:'문의: hello@dramascript.ai',buttons:[{label:'닫기',style:'ghost'},{label:'이메일 문의',style:'primary',action:()=>showToast('hello@dramascript.ai','info','✨',5000)}]}
   };
   if(plans[plan])showModal(plans[plan]);
 }
-function showDeleteAccountModal(){showModal({icon:'??',iconType:'confirm',title:'계정 삭제',subtitle:'이 작업은 되돌릴 수 없습니다',body:'계정과 모든 프로젝트가 <strong>영구 삭제</strong>됩니다. 정말 삭제하시겠습니까?',buttons:[{label:'취소',style:'ghost'},{label:'계정 삭제',style:'danger',action:()=>{handleLogout();clearAllProjects();showToast('계정이 삭제되었습니다.','success','???');}}]});}
+function showDeleteAccountModal(){showModal({icon:'✨',iconType:'confirm',title:'계정 삭제',subtitle:'이 작업은 되돌릴 수 없습니다',body:'계정과 모든 프로젝트가 <strong>영구 삭제</strong>됩니다. 정말 삭제하시겠습니까?',buttons:[{label:'취소',style:'ghost'},{label:'계정 삭제',style:'danger',action:()=>{handleLogout();clearAllProjects();showToast('계정이 삭제되었습니다.','success','🗑️');}}]});}
 
 /* ===================================
    SAMPLE IMAGE
@@ -3064,7 +3112,7 @@ function openSample2(){
   if(ptv) ptv.textContent = '8억 2,000만원';
   updateScriptSidebar();
   showPanel('overview');
-  showToast('디렉터스 아레나 샘플을 불러왔습니다.','success','??',2500);
+  showToast('디렉터스 아레나 샘플을 불러왔습니다.','success','✨',2500);
 }
 
 function applySample2Result(s){
@@ -3590,7 +3638,7 @@ function openSampleProject(){
   buildResultPanels();
   updateScriptSidebar();
   showPanel('overview');
-  showToast('시크릿가든 샘플을 불러왔습니다.','success','??',2500);
+  showToast('시크릿가든 샘플을 불러왔습니다.','success','✨',2500);
 }
 
 function applySampleResult(s){
@@ -3643,9 +3691,9 @@ function applySampleResult(s){
 }
 
 
-/* ???????????????????????????????????
+/* 🇰🇷🇰🇷🇰🇷🇰🇷🇰🇷🇰🇷🇰🇷🇰🇷???
    플로팅 AI 에이전트
-??????????????????????????????????? */
+🇰🇷🇰🇷🇰🇷🇰🇷🇰🇷🇰🇷🇰🇷🇰🇷??? */
 let _floatingAgentCtx = {sceneIdx:0, lineIdx:null, heading:''};
 
 function toggleFloatingAgent(){
@@ -4039,7 +4087,7 @@ function _pplCard(p){
       <span class="ppl-exposure">${p.eps||''}</span>
       <span class="ppl-price-r">${p.price||''}</span>
     </div>
-    <button class="ppl-scene-btn" onclick="openPplSceneModal(${p.id})">?? 씬 상세</button>
+    <button class="ppl-scene-btn" onclick="openPplSceneModal(${p.id})">🔍 씬 상세</button>
   </div>`;
 }
 
@@ -4072,7 +4120,7 @@ function renderPplScene(){
     html+=`<div class="ppl-scene-view-item">
       <div class="ppl-scene-view-header" onclick="togglePplScene('psc-${idx}')">
         <div>
-          <div class="ppl-scene-view-heading">?? ${scene}</div>
+          <div class="ppl-scene-view-heading">🎞️ ${scene}</div>
           <div class="ppl-scene-view-meta">${items.length}개 브랜드 · 예상 수익 ${numToPrice(total)}</div>
         </div>
         <span style="font-size:12px;color:var(--ink3);transition:transform .2s" id="psc-chev-${idx}">▶</span>
@@ -4139,7 +4187,7 @@ function openPplSceneModal(id){
   box.innerHTML=`
     <div class="ppl-scene-modal-hero">
       <div class="ppl-scene-modal-hero-bg"></div>
-      <div class="ppl-scene-modal-heading">?? ${p.scene}</div>
+      <div class="ppl-scene-modal-heading">🎞️ ${p.scene}</div>
       <div class="ppl-scene-modal-sub">${p.industry} · ${p.eps}</div>
     </div>
     <div class="ppl-scene-modal-body">
@@ -4170,7 +4218,7 @@ function openPplSceneModal(id){
     </div>
     <div class="ppl-scene-modal-footer">
       <button class="btn btn-ghost" onclick="closePplSceneModal()">닫기</button>
-      <button class="btn btn-teal" onclick="showToast('협찬 문의가 등록되었습니다.','success','??');closePplSceneModal()">협찬 문의</button>
+      <button class="btn btn-teal" onclick="showToast('협찬 문의가 등록되었습니다.','success','✨');closePplSceneModal()">협찬 문의</button>
     </div>`;
   modal.style.display='flex';
   modal.onclick=e=>{ if(e.target===modal) closePplSceneModal(); };
@@ -4234,8 +4282,8 @@ function updateEraLabel(year){
   el.textContent=eraYearLabel(year);
   const info=getEraInfo(year);
   tags.innerHTML=`
-    <div class="era-tag"><span class="era-tag-flag">????</span><span class="era-tag-text"><span class="era-tag-label">한국:</span>${info.kr}</span></div>
-    <div class="era-tag"><span class="era-tag-flag">??</span><span class="era-tag-text"><span class="era-tag-label">세계:</span>${info.west}</span></div>`;
+    <div class="era-tag"><span class="era-tag-flag">🇰🇷</span><span class="era-tag-text"><span class="era-tag-label">한국:</span>${info.kr}</span></div>
+    <div class="era-tag"><span class="era-tag-flag">✨</span><span class="era-tag-text"><span class="era-tag-label">세계:</span>${info.west}</span></div>`;
 }
 
 /* ===================================
@@ -4346,7 +4394,7 @@ function resetAutoChars(){
   if(banner) banner.style.display='none';
   if(manualBox) manualBox.style.display='';
   if(divider) divider.style.display='';
-  showToast('초기화되었습니다.','info','??',2000);
+  showToast('초기화되었습니다.','info','✨',2000);
 }
 
 function jumpToNow(){
@@ -4480,68 +4528,6 @@ window.confirmDeleteProject = function(projectId) {
 };
 
 /**
- * 프로젝트 스타일의 공통 확인 모달
- */
-window.showConfirmModal = function(title, message, onConfirm) {
-  const wrap = document.getElementById('login-modal-wrap'); // 기존 모달 랩 재사용
-  if (!wrap) return;
-
-  wrap.innerHTML = `
-    <div class="login-backdrop" id="modal-backdrop" onclick="closeConfirmModal(event)">
-      <div class="login-box" style="padding:0; overflow:hidden; border:1px solid var(--border); box-shadow:0 10px 30px rgba(0,0,0,0.5)">
-        <div class="login-hero" style="min-height:0; padding:20px 24px; background:linear-gradient(135deg, var(--paper3), var(--paper1))">
-          <div class="login-logo" style="font-size:18px"><span style="color:var(--red); font-weight:700">ALERT:</span> ${title}</div>
-        </div>
-        <div class="login-body" style="padding:24px">
-          <div class="login-sub" style="font-size:14px; color:var(--ink2); text-align:left; margin-bottom:24px; line-height:1.6">
-            ${message}
-          </div>
-          <div style="display:flex; gap:12px; justify-content:flex-end">
-            <button class="btn btn-ghost" onclick="closeConfirmModal()">취소</button>
-            <button class="btn btn-primary" id="modal-confirm-btn" style="background:var(--red); color:#fff; border-color:var(--red)">삭제하기</button>
-          </div>
-        </div>
-      </div>
-    </div>`;
-
-  const confirmBtn = document.getElementById('modal-confirm-btn');
-  confirmBtn.onclick = () => {
-    onConfirm();
-    closeConfirmModal();
-  };
-};
-
-window.closeConfirmModal = function(e) {
-  if (e && e.target.id !== 'modal-backdrop') return;
-  const bd = document.getElementById('modal-backdrop');
-  if (bd) {
-    bd.classList.add('hiding');
-    setTimeout(() => {
-      document.getElementById('login-modal-wrap').innerHTML = '';
-    }, 200);
-  }
-};
-/**
- * 프로젝트 삭제 확인 모달
- */
-window.confirmDeleteProject = function(projectId) {
-  showConfirmModal(
-    '프로젝트 삭제',
-    '이 프로젝트를 삭제하시겠습니까? 삭제된 프로젝트는 복구할 수 없습니다.',
-    async () => {
-      try {
-        await window.deleteProject(projectId);
-        showToast('프로젝트가 삭제되었습니다.', 'success');
-        renderProjectCards();
-      } catch (err) {
-        console.error("Delete failed:", err);
-        showToast('삭제 중 오류가 발생했습니다: ' + err.message, 'error');
-      }
-    }
-  );
-};
-
-/**
  * 프로젝트 스타일의 공용 확인 모달
  */
 window.showConfirmModal = function(title, message, onConfirm) {
@@ -4583,3 +4569,33 @@ window.closeConfirmModal = function(e) {
     }, 200);
   }
 };
+
+// Global scope exposure for UI responsiveness (to support onclick handlers in index.html)
+window.handleStartBtn = handleStartBtn;
+window.showPage = showPage;
+window.addChar = addChar;
+window.prevStep = prevStep;
+window.nextStep = nextStep;
+window.startGenerate = startGenerate;
+window.startTitleEdit = startTitleEdit;
+window.finishTitleEdit = finishTitleEdit;
+window.showPanel = showPanel;
+window.showFullScript = showFullScript;
+window.showPdfModal = showPdfModal;
+window.switchPplView = switchPplView;
+window.filterSimilar = filterSimilar;
+window.scrollSceneRow = scrollSceneRow;
+window.handleLogout = handleLogout;
+window.showPlanModal = showPlanModal;
+window.onApiKeyInput = onApiKeyInput;
+window.toggleApiKeyVisibility = toggleApiKeyVisibility;
+window.saveApiKey = saveApiKey;
+window.deleteApiKey = deleteApiKey;
+window.testApiKey = testApiKey;
+window.clearAllProjects = clearAllProjects;
+window.showDeleteAccountModal = showDeleteAccountModal;
+window.closeFullScript = closeFullScript;
+window.sendFixedAgentScene = sendFixedAgentScene;
+window.showToast = showToast;
+window.closeModal = closeModal;
+
