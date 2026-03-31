@@ -31,6 +31,11 @@ async function getSystemConfig() {
     systemPrompt: "당신은 세계적인 K-드라마 전문 작가입니다."
   };
 
+  if (!serviceSupabase) {
+    console.error('[Config] Supabase Service Client is NOT initialized. Check environment variables.');
+    return defaults;
+  }
+
   // 1. Try Supabase Cloud Config First
   try {
     const { data, error } = await serviceSupabase
@@ -125,6 +130,12 @@ router.get('/auth/google', async (req, res) => {
   const origin = req.get('origin') || req.get('referer') || 'http://localhost:8081/';
   log(`[Auth] Google Login requested from: ${origin}`);
   
+  if (!supabase) {
+    const errorMsg = '서버 설정(Supabase)이 완료되지 않았습니다. 관리자에게 문의하세요. (Missing SUPABASE_URL)';
+    log(`[Auth] Google Login failed: ${errorMsg}`, 'error');
+    return res.status(500).json({ error: errorMsg });
+  }
+
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -187,6 +198,12 @@ const authMiddleware = async (req, res, next) => {
   }
 
   req.token = token; 
+  
+  if (!supabase) {
+    log('[Auth] Rejecting: Supabase client not initialized.', 'error');
+    return res.status(500).json({ error: '인증 서버 설정 오류' });
+  }
+
   const { data: { user }, error } = await supabase.auth.getUser(token);
   
   if (error || !user) {

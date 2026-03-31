@@ -20,6 +20,11 @@ const adminAuth = async (req, res, next) => {
       return res.status(401).json({ error: 'Token format invalid' });
     }
 
+    if (!supabase) {
+      console.error('[Admin Auth] Supabase client is NOT initialized.');
+      return res.status(500).json({ error: '인증 서버 설정 오류 (Missing SUPABASE_URL)' });
+    }
+
     // Safer destructuring to prevent crash if data is null
     const { data, error } = await supabase.auth.getUser(token);
     const user = data?.user;
@@ -45,16 +50,20 @@ const adminAuth = async (req, res, next) => {
     }
 
     // Rule 3: Database Role Check - check if user has 'admin' role in user_profiles
-    const { data: profile, error: pErr } = await serviceSupabase
-      .from('user_profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single();
-    
-    if (!pErr && profile && profile.role === 'admin') {
-      console.log(`[Admin Auth] Database Admin access granted: ${user.email}`);
-      req.user = user;
-      return next();
+    if (!serviceSupabase) {
+      console.warn('[Admin Auth] Service Supabase not initialized, skipping DB role check');
+    } else {
+      const { data: profile, error: pErr } = await serviceSupabase
+        .from('user_profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+      
+      if (!pErr && profile && profile.role === 'admin') {
+        console.log(`[Admin Auth] Database Admin access granted: ${user.email}`);
+        req.user = user;
+        return next();
+      }
     }
 
     // Rule 4: Domain Check - @dramascript.ai are auto-admins
