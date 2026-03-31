@@ -3051,3 +3051,52 @@
 [2026-03-31T07:40:23.921Z] SERVER STARTING...
 [2026-03-31T07:40:24.058Z] [Mount] Admin API Routes -> /api/admin
 [2026-03-31T07:40:24.059Z] [Mount] User API Routes -> /api
+[2026-03-31T07:44:31.552Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.576Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.581Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.614Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.616Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.620Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.622Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.623Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.625Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.627Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.632Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.633Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.635Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.636Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.644Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.843Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T07:44:31.940Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T07:44:32.009Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T07:44:32.011Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T07:44:34.275Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-03-31T07:44:34.276Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-03-31T07:44:34.277Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-03-31T07:46:44.162Z] SERVER STARTING...
+[2026-03-31T07:46:44.277Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T07:46:44.278Z] [Mount] User API Routes -> /api
+[2026-03-31T07:46:44.408Z] SERVER STARTING...
+[2026-03-31T07:46:44.516Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T07:46:44.517Z] [Mount] User API Routes -> /api
+[2026-03-31T07:47:51.434Z] SERVER STARTING...
+[2026-03-31T07:47:51.572Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T07:47:51.573Z] [Mount] User API Routes -> /api
+[2026-03-31T07:47:51.755Z] SERVER STARTING...
+[2026-03-31T07:47:51.758Z] SERVER STARTING...
+[2026-03-31T07:47:51.868Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T07:47:51.869Z] [Mount] User API Routes -> /api
+[2026-03-31T07:47:51.875Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T07:47:51.875Z] [Mount] User API Routes -> /api
+[2026-03-31T07:48:09.450Z] SERVER STARTING...
+[2026-03-31T07:48:09.572Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T07:48:09.572Z] [Mount] User API Routes -> /api
+[2026-03-31T07:48:09.725Z] SERVER STARTING...
+[2026-03-31T07:48:09.824Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T07:48:09.825Z] [Mount] User API Routes -> /api
+[2026-03-31T07:49:58.795Z] SERVER STARTING...
+[2026-03-31T07:49:58.915Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T07:49:58.916Z] [Mount] User API Routes -> /api
+[2026-03-31T07:49:59.056Z] SERVER STARTING...
+[2026-03-31T07:49:59.157Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T07:49:59.157Z] [Mount] User API Routes -> /api
