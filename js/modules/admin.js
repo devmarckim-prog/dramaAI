@@ -478,13 +478,24 @@ window.viewAdminProjectDetail = async (id) => {
   try {
     const res = await adminFetch(`/api/admin/projects/${id}`);
     const project = await res.json();
+    
+    // Improved Mapping: Root fields are priority (Real generated projects)
+    // Legacy support for projects using 'plan_data'
+    const plan = project.plan_data || {};
+    
+    const logline = project.logline || plan.logline || '로그라인 정보가 없습니다.';
+    const synopsis = project.synopsis || plan.synopsis || '시놉시스 정보가 없습니다.';
+    const characters = project.chars || plan.characters || [];
+    const scenes = project.episodes || plan.scenes || []; // episodes is now an array of story objects
+    
+    const epCount = Array.isArray(scenes) ? scenes.length : (typeof project.episodes === 'number' ? project.episodes : 8);
+    const genre = project.genre || '장르 미지정';
+    const platform = project.platform || 'Platform';
+    const status = project.status || 'Draft';
+
     const modal = document.createElement('div');
     modal.className = 'admin-viewer-overlay';
-    
-    // Structure the plan data beautifully
-    const plan = project.plan_data || {};
-    const characters = plan.characters || [];
-    const scenes = plan.scenes || [];
+    modal.id = 'admin-project-detail-modal';
 
     modal.innerHTML = `
       <div class="admin-viewer-header">
@@ -501,17 +512,20 @@ window.viewAdminProjectDetail = async (id) => {
         <div class="admin-viewer-paper">
           <center>
             <h1 style="font-family:var(--serif); font-size:32px; margin-bottom:10px">${project.title}</h1>
-            <p style="color:#666; font-size:14px; margin-bottom:40px">${project.genre} | ${project.tone} | ${project.episodes}부작</p>
+            <div style="display:flex; justify-content:center; gap:12px; align-items:baseline; margin-bottom:40px">
+               <span class="admin-badge admin-badge-done">${platform}</span>
+               <span style="color:#666; font-size:14px">${genre} | ${epCount}부작 | 🏷️ ${status}</span>
+            </div>
           </center>
 
           <div class="viewer-section">
             <h4 class="viewer-label">LOGLINE</h4>
-            <div class="viewer-text">${plan.logline || '로그라인 정보가 없습니다.'}</div>
+            <div class="viewer-text">${logline}</div>
           </div>
 
           <div class="viewer-section">
             <h4 class="viewer-label">SYNOPSIS</h4>
-            <div class="viewer-text">${plan.synopsis || '시놉시스 정보가 없습니다.'}</div>
+            <div class="viewer-text" style="white-space: pre-wrap;">${synopsis}</div>
           </div>
 
           <div class="viewer-section">
@@ -519,23 +533,23 @@ window.viewAdminProjectDetail = async (id) => {
             <div class="viewer-char-grid">
               ${characters.map(c => `
                 <div class="viewer-char-item">
-                  <strong>${c.name}</strong> <small>(${c.age || '?'})</small>
-                  <p>${c.role || ''}</p>
+                  <strong>${c.name || '이름 없음'}</strong> ${c.age ? '<small>(' + c.age + ')</small>' : ''}
+                  <p>${c.role || c.desc || ''}</p>
                 </div>
               `).join('') || '<p style="color:#999">캐릭터 정보가 없습니다.</p>'}
             </div>
           </div>
 
           <div class="viewer-section">
-            <h4 class="viewer-label">EPISODE PLAN</h4>
+            <h4 class="viewer-label">EPISODE PLAN (SYNC FROM DB)</h4>
             <div class="viewer-scene-list">
-              ${scenes.map((s, i) => `
+              ${Array.isArray(scenes) ? scenes.map((s, i) => `
                 <div class="viewer-scene-item">
                   <div class="viewer-scene-num">${i + 1}화</div>
-                  <div class="viewer-scene-title">${s.title}</div>
-                  <div class="viewer-scene-desc">${s.desc || s.summary || ''}</div>
+                  <div class="viewer-scene-title">${s.title || (i + 1 + '화 줄거리')}</div>
+                  <div class="viewer-scene-desc">${s.story || s.desc || s.summary || ''}</div>
                 </div>
-              `).join('') || '<p style="color:#999">화별 계획이 없습니다.</p>'}
+              `).join('') : '<p style="color:#999">회차별 상세 줄거리 정보가 아직 생성되지 않았거나 숫자 데이터만 존재합니다.</p>'}
             </div>
           </div>
 

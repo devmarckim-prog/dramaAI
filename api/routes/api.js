@@ -263,17 +263,21 @@ router.post('/projects', authMiddleware, async (req, res) => {
       ...(status   !== undefined && { status }),
     };
 
-    // Clean episodes to ensure numeric value
-    let epCount = 8;
+    // Clean episodes to ensure numeric value or preserve array/object
+    let epOutput = 8;
     if (episodes !== undefined && episodes !== null) {
-      if (typeof episodes === 'number') epCount = episodes;
-      else if (typeof episodes === 'string') {
+      if (Array.isArray(episodes)) {
+        epOutput = episodes; // Preserve the array!
+      } else if (typeof episodes === 'number') {
+        epOutput = episodes;
+      } else if (typeof episodes === 'string') {
         const p = parseInt(episodes.replace(/[^0-9]/g, ''));
-        if (!isNaN(p)) epCount = p;
+        if (!isNaN(p)) epOutput = p;
       } else if (typeof episodes === 'object') {
         // AI might return { val: 8 } or similar
         const firstNum = Object.values(episodes).find(v => !isNaN(parseInt(v)));
-        if (firstNum !== undefined) epCount = parseInt(firstNum);
+        if (firstNum !== undefined) epOutput = parseInt(firstNum);
+        else epOutput = episodes; // Fallback to object itself
       }
     }
 
@@ -289,7 +293,7 @@ router.post('/projects', authMiddleware, async (req, res) => {
     if (logline !== undefined) payload.logline = logline;
     if (synopsis !== undefined) payload.synopsis = synopsis;
     if (chars !== undefined) payload.chars = Array.isArray(chars) ? chars : [];
-    if (episodes !== undefined) payload.episodes = epCount;
+    if (episodes !== undefined) payload.episodes = epOutput;
     if (ppl !== undefined) payload.ppl = Array.isArray(ppl) ? ppl : [];
     if (budget !== undefined) payload.budget = typeof budget === 'object' ? budget : {};
     if (status !== undefined) payload.status = status;

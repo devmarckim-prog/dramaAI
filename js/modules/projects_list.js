@@ -161,8 +161,8 @@ export async function openProject(id) {
       platform: p.platform,
       genre: p.genre,
       episodes: p.episodes,
-      stats: p.stats,
-      characters: p.characters || p.chars || [],
+      stats: p.stats || p.budget || {},
+      characters: p.chars || p.characters || [],
       ppl: p.ppl || [],
       budget: p.budget || (p.stats && p.stats.budget)
     };
@@ -254,10 +254,9 @@ function _getCleanEps(val) {
   if (!val) return 8;
   
   // If it's an array (episode list), preserve it! 
-  // Important: This fixes the "empty synopsis" issue where arrays were converted to numbers.
   if (Array.isArray(val)) return val;
   
-  // If it's already a number
+  // If it's a number, return it
   if (typeof val === 'number') return val;
   
   // If it's a string, try parsing it

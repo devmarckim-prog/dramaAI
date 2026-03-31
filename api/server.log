@@ -2926,3 +2926,67 @@
 [2026-03-31T03:17:24.157Z] SERVER STARTING...
 [2026-03-31T03:17:24.254Z] [Mount] Admin API Routes -> /api/admin
 [2026-03-31T03:17:24.255Z] [Mount] User API Routes -> /api
+[2026-03-31T03:18:41.476Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.502Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.508Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.537Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.781Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.782Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.784Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.784Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.788Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.789Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.790Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.792Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.793Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.796Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.800Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.841Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.908Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.974Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T03:18:41.976Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T03:20:10.340Z] SERVER STARTING...
+[2026-03-31T03:20:10.457Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:20:10.458Z] [Mount] User API Routes -> /api
+[2026-03-31T03:20:10.670Z] SERVER STARTING...
+[2026-03-31T03:20:10.781Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:20:10.782Z] [Mount] User API Routes -> /api
+[2026-03-31T03:20:47.578Z] SERVER STARTING...
+[2026-03-31T03:20:47.714Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:20:47.715Z] [Mount] User API Routes -> /api
+[2026-03-31T03:20:47.898Z] SERVER STARTING...
+[2026-03-31T03:20:47.933Z] SERVER STARTING...
+[2026-03-31T03:20:48.020Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:20:48.021Z] [Mount] User API Routes -> /api
+[2026-03-31T03:20:48.056Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:20:48.056Z] [Mount] User API Routes -> /api
+[2026-03-31T03:22:20.494Z] SERVER STARTING...
+[2026-03-31T03:22:20.632Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:22:20.633Z] [Mount] User API Routes -> /api
+[2026-03-31T03:22:20.834Z] SERVER STARTING...
+[2026-03-31T03:22:20.966Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:22:20.967Z] [Mount] User API Routes -> /api
+[2026-03-31T03:23:12.962Z] SERVER STARTING...
+[2026-03-31T03:23:13.083Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:23:13.083Z] [Mount] User API Routes -> /api
+[2026-03-31T03:23:13.215Z] SERVER STARTING...
+[2026-03-31T03:23:13.336Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:23:13.337Z] [Mount] User API Routes -> /api
+[2026-03-31T03:23:18.941Z] SERVER STARTING...
+[2026-03-31T03:23:19.063Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:23:19.063Z] [Mount] User API Routes -> /api
+[2026-03-31T03:23:19.218Z] SERVER STARTING...
+[2026-03-31T03:23:19.321Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:23:19.322Z] [Mount] User API Routes -> /api
+[2026-03-31T03:23:41.405Z] SERVER STARTING...
+[2026-03-31T03:23:41.548Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:23:41.548Z] [Mount] User API Routes -> /api
+[2026-03-31T03:23:41.694Z] SERVER STARTING...
+[2026-03-31T03:23:41.812Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:23:41.812Z] [Mount] User API Routes -> /api
+[2026-03-31T03:24:29.903Z] SERVER STARTING...
+[2026-03-31T03:24:30.025Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:24:30.026Z] [Mount] User API Routes -> /api
+[2026-03-31T03:24:30.201Z] SERVER STARTING...
+[2026-03-31T03:24:30.322Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T03:24:30.323Z] [Mount] User API Routes -> /api
