@@ -672,32 +672,42 @@ router.get('/admin/samples', authMiddleware, async (req, res) => {
   }
 });
 
-router.post('/admin/samples', authMiddleware, async (req, res) => {
+router.post('/admin/samples/batch', authMiddleware, async (req, res) => {
   try {
-    const { id, title, data: sampleData, isVisible } = req.body;
+    const { samples } = req.body;
+    if (!Array.isArray(samples)) throw new Error('Invalid samples data');
+
+    const upsertPromises = samples.map(s => {
+      const { id, title, data: sampleData, isVisible } = s;
+      
+      const updatedSampleData = {
+        ...sampleData,
+        isVisible: isVisible !== undefined ? isVisible : (sampleData.isVisible !== undefined ? sampleData.isVisible : true)
+      };
+
+      const upsertData = {
+        title,
+        data: updatedSampleData,
+        updated_at: new Date().toISOString()
+      };
+      if (id) upsertData.id = id;
+      
+      return serviceSupabase
+        .from('samples')
+        .upsert(upsertData, { onConflict: 'id' });
+    });
+
+    const results = await Promise.all(upsertPromises);
+    const errors = results.filter(r => r.error);
     
-    // Ensure visibility flag is synced into the data blob
-    const updatedSampleData = {
-      ...sampleData,
-      isVisible: isVisible !== undefined ? isVisible : (sampleData.isVisible !== undefined ? sampleData.isVisible : true)
-    };
+    if (errors.length > 0) {
+      console.error('[Admin API] Batch Save Errors:', errors.map(e => e.error));
+      throw new Error(`Failed to update ${errors.length} samples`);
+    }
 
-    const upsertData = {
-      title,
-      data: updatedSampleData,
-      updated_at: new Date().toISOString()
-    };
-    if (id) upsertData.id = id;
-
-    const { data, error } = await serviceSupabase
-      .from('samples')
-      .upsert(upsertData, { onConflict: 'id' })
-      .select();
-
-    if (error) throw error;
-    res.json({ success: true, data: data[0] });
+    res.json({ success: true, count: samples.length });
   } catch (err) {
-    console.error('[Admin API] Sample Save Error:', err);
+    console.error('[Admin API] Batch Save Error:', err);
     res.status(500).json({ error: err.message });
   }
 });

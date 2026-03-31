@@ -836,11 +836,22 @@ async function renderAdminSamples(container) {
       return;
     }
 
+    // We'll store the IDs of the samples currently rendered for batch saving
+    window._adminSampleIds = samples.map(s => s.id);
+
     container.innerHTML = `
       <div style="padding:20px; animation:fadeUp 0.4s ease-out">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px">
-          <div class="admin-section-title" style="margin:0">🎬 샘플 프로젝트 관리</div>
-          <button class="btn btn-ghost" onclick="window.seedDefaultSamples()" style="font-size:12px">전체 초기화/재생성 🔄</button>
+          <div>
+            <div class="admin-section-title" style="margin:0">🎬 샘플 프로젝트 관리</div>
+            <p style="font-size:11px; color:#888; margin-top:4px">샘플의 노출 여부와 데이터를 한꺼번에 수정하고 하단의 버튼으로 저장하세요.</p>
+          </div>
+          <div style="display:flex; gap:12px">
+            <button class="btn btn-primary" onclick="window.saveAllAdminSamples(this)" style="padding:8px 24px; font-weight:600; box-shadow:0 0 15px rgba(212,175,55,0.3)">
+              ✅ 샘플 노출 및 데이터 저장하기
+            </button>
+            <button class="btn btn-ghost" onclick="window.seedDefaultSamples()" style="font-size:12px">전체 초기화/재생성 🔄</button>
+          </div>
         </div>
         <div class="admin-samples-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap:20px">
           ${samples.map(s => {
@@ -863,6 +874,7 @@ async function renderAdminSamples(container) {
                 </div>
               </div>
 
+              <!-- 생성 진행률 바 (어드민 가독성용) -->
               <div class="admin-config-group" style="margin-bottom:15px">
                 <label class="admin-config-label" style="display:flex; justify-content:space-between">
                   생성 진행률 
@@ -882,8 +894,6 @@ async function renderAdminSamples(container) {
                 <label class="admin-config-label">데이터 (JSON)</label>
                 <textarea id="sample-data-${s.id}" class="admin-config-input admin-config-textarea" style="height:250px; font-family:monospace; font-size:11px">${JSON.stringify(s.data, null, 2)}</textarea>
               </div>
-
-              <button class="btn btn-primary" style="width:100%; margin-top:10px" onclick="window.saveAdminSample('${s.id}')">샘플 데이터 & 노출 설정 저장</button>
             </div>
             `;
           }).join('')}
@@ -895,26 +905,62 @@ async function renderAdminSamples(container) {
   }
 }
 
-window.saveAdminSample = async function(id) {
-  const title = document.getElementById(`sample-title-${id}`).value;
-  const dataStr = document.getElementById(`sample-data-${id}`).value;
-  const isVisible = document.getElementById(`sample-visible-${id}`).checked;
+window.saveAllAdminSamples = async function(btn) {
+  if (!window._adminSampleIds || window._adminSampleIds.length === 0) return;
   
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '저장 중...';
+  }
+
+  const batchData = [];
+  let hasError = false;
+
+  for (const id of window._adminSampleIds) {
+    try {
+      const title = document.getElementById(`sample-title-${id}`).value;
+      const dataStr = document.getElementById(`sample-data-${id}`).value;
+      const isVisible = document.getElementById(`sample-visible-${id}`).checked;
+      const data = JSON.parse(dataStr);
+      
+      batchData.push({ id, title, data, isVisible });
+    } catch (e) {
+      showToast(`[Error] ID ${id}: JSON 형식이 올바르지 않습니다.`, 'error');
+      hasError = true;
+      break;
+    }
+  }
+
+  if (hasError) {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '✅ 샘플 노출 및 데이터 저장하기';
+    }
+    return;
+  }
+
   try {
-    const data = JSON.parse(dataStr);
-    const res = await adminFetch('/api/admin/samples', {
+    const res = await adminFetch('/api/admin/samples/batch', {
       method: 'POST',
-      body: JSON.stringify({ id, title, data, isVisible })
+      body: JSON.stringify({ samples: batchData })
     });
     
     if (res.ok) {
-      showToast(`${title} 샘플이 저장되었습니다.`, 'success');
+      showToast('모든 샘플 노출 설정과 데이터가 저장되었습니다.', 'success');
+      // Re-render to update timestamps and state
+      const container = document.getElementById('admin-tab-content');
+      if (container) await renderAdminSamples(container);
     } else {
       const err = await res.json();
       showToast('저장 실패: ' + err.error, 'error');
     }
   } catch (err) {
-    showToast('JSON 형식이 올바르지 않습니다: ' + err.message, 'error');
+    showToast('서버 연결 중 오류가 발생했습니다: ' + err.message, 'error');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '✅ 샘플 노출 및 데이터 저장하기';
+    }
   }
 };
 
