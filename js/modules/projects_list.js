@@ -211,7 +211,9 @@ function _normalizeProject(p) {
     characters: _safeArray(p.characters || p.chars),
     ppl: _safeArray(p.ppl),
     scripts: _safeJSON(p.scripts || (p.input && p.input.scripts), []),
-    createdAt: p.createdAt || '',
+    pct: p.pct || 0,
+    stepIdx: p.stepIdx || 0,
+    createdAt: p.createdAt || p.created_at || '',
     is_sample: p.is_sample === true || p.isSample === true || (p.id && (p.id.toString().startsWith('sample-') || p.id === 'sample1' || p.id === 'sample2'))
   };
 }

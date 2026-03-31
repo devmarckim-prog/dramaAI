@@ -1,1 +1,1 @@
-<div class="header-version" id="header-version">v0.1.6</div>
+v0.1.7 - AI Generation Stability & Data Integrity Patch

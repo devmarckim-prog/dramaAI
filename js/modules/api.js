@@ -138,6 +138,7 @@ export async function startGenerationFlow() {
       await saveProject({ 
         id: state.generatingId, 
         stats: detailData.stats || detailData.conflicts,
+        status: 'generating',
         pct: 55, 
         stepIdx: 2 
       });
@@ -158,9 +159,10 @@ export async function startGenerationFlow() {
     await saveProject({ 
       id: state.generatingId, 
       budget: finalBudget,
-      ppl: pplData?.ppl || pplData,
-      pct: 85, 
-      stepIdx: 5 
+      ppl: pplData?.ppl || pplData || [],
+      status: 'generating',
+      pct: 85,
+      stepIdx: 3
     });
     if (window.renderProjectCards) window.renderProjectCards();
 

@@ -277,61 +277,66 @@ router.post('/projects', authMiddleware, async (req, res) => {
       }
     }
 
+    // Build partial payload only with provided fields to avoid wiping existing data
     const payload = {
       user_id: req.user.id,
-      title: title || 'Untitled',
-      genre: genre || 'Drama',
-      platform: platform || 'OTT',
-      logline: logline || '',
-      synopsis: synopsis || '',
-      chars: Array.isArray(chars) ? chars : [],
-      episodes: epCount,
-      ppl: Array.isArray(ppl) ? ppl : [],
-      budget: typeof budget === 'object' ? budget : {},
-      status: status || 'planning',
-      pct: pct || 0,
-      stepIdx: stepIdx || 0,
-      input: mergedInput
+      updated_at: new Date().toISOString()
     };
 
-    // Robust ID handling: Always keep as string (DB is TEXT type)
-    if (id) {
-      payload.id = String(id);
-    }
-
+    if (title !== undefined) payload.title = title;
+    if (genre !== undefined) payload.genre = genre;
+    if (platform !== undefined) payload.platform = platform;
+    if (logline !== undefined) payload.logline = logline;
+    if (synopsis !== undefined) payload.synopsis = synopsis;
+    if (chars !== undefined) payload.chars = Array.isArray(chars) ? chars : [];
+    if (episodes !== undefined) payload.episodes = epCount;
+    if (ppl !== undefined) payload.ppl = Array.isArray(ppl) ? ppl : [];
+    if (budget !== undefined) payload.budget = typeof budget === 'object' ? budget : {};
+    if (status !== undefined) payload.status = status;
+    if (pct !== undefined) payload.pct = pct;
+    if (stepIdx !== undefined) payload.stepIdx = stepIdx;
+    if (input !== undefined) payload.input = mergedInput;
+    
     // Save scripts if provided (episode scripts storage)
     if (scripts !== undefined) {
       payload.scripts = (typeof scripts === 'object' && scripts !== null) ? scripts : {};
     }
     // Save error message for failed generations
     if (error_msg !== undefined) {
-      payload.error_msg = String(error_msg || '').substring(0, 1000); // Limit length
+      payload.error_msg = String(error_msg || '').substring(0, 1000); 
     }
 
     const userDb = req.user.isGuest ? serviceSupabase : createUserClient(req.token);
-    console.log(`[Projects] Saving project for user ${req.user.id}:`, { id: payload.id, title: payload.title, status: payload.status });
+    let finalProject;
 
-    const { data, error } = await userDb
-      .from('projects')
-      .upsert(payload, { onConflict: 'id' })
-      .select()
-      .single();
-
-    if (error) {
-      console.error('[Projects] Upsert error:', error.message, error.details);
-      return res.status(error.code === 'PGRST116' ? 409 : 400).json({ 
-        error: error.message,
-        details: error.details,
-        hint: error.hint
-      });
+    if (id) {
+       payload.id = String(id);
+       // PARTIAL UPDATE
+       log(`[Projects] Updating project ${payload.id} (pct: ${payload.pct}%)`);
+       const { data, error } = await userDb.from('projects').update(payload).eq('id', payload.id).select().single();
+       if (error) {
+           log(`[Projects] Update failed for ${payload.id}, trying upsert as fallback: ${error.message}`);
+           const { data: upData, error: upError } = await userDb.from('projects').upsert(payload, { onConflict: 'id' }).select().single();
+           if (upError) throw upError;
+           finalProject = upData;
+       } else {
+           finalProject = data;
+       }
+    } else {
+       // NEW INSERT
+       if (!payload.id) {
+           payload.id = 'p-' + req.user.id.substring(0, 5) + '-' + Date.now();
+       }
+       log(`[Projects] Creating new project: ${payload.id}`);
+       const { data, error } = await userDb.from('projects').insert(payload).select().single();
+       if (error) throw error;
+       finalProject = data;
     }
 
-    console.log('[Projects] Save successful:', data.id);
-
     // Background sync profile
-    syncProfile(req.user).catch(err => console.error('[Sync] Failed:', err));
+    syncProfile(req.user).catch(err => log(`[Sync] Failed: ${err.message}`, 'error'));
 
-    res.json({ success: true, project: data });
+    res.json({ success: true, project: finalProject });
   } catch (err) {
     console.error('[Projects] Server error:', err);
     res.status(500).json({ error: err.message });
