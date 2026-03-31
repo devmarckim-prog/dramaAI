@@ -529,10 +529,11 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-height: 70vh;
-  overflow-y: auto;
+  height: 450px !important; /* Fixed height for reliable scrolling */
+  overflow-y: scroll !important;
   padding-right: 12px;
-  padding-bottom: 60px; /* Space for last item */
+  padding-bottom: 60px;
+  min-height: 0;
 }
 
 /* Custom Scrollbar for better UI */

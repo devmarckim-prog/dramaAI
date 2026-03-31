@@ -135,12 +135,19 @@ export async function startGenerationFlow() {
 
     // PHASE 2: DETAIL
     addDebugLog('상세 인물 관계도 및 갈등 구조 설정 중...');
-    const detailData = await callAPI_Plan_Detail(input, coreData);
+    let detailData = null;
+    try {
+      detailData = await callAPI_Plan_Detail(input, coreData);
+    } catch (e) {
+      addDebugLog(`상세 묘사 생성 단계 지연/오류: ${e.message}. 다음 단계로 강제 진행합니다.`, 'warn');
+      detailData = { logline: coreData.logline, synopsis: coreData.synopsis, characters: coreData.characters || [] };
+    }
+
     if (detailData) {
       state.planData = { ...state.planData, ...detailData };
       await saveProject({ 
         id: state.generatingId, 
-        stats: detailData.stats || detailData.conflicts,
+        stats: detailData.stats || detailData.conflicts || {},
         status: 'generating',
         pct: 55, 
         stepIdx: 2 
@@ -351,22 +358,33 @@ export async function callBackendAI(promptType, promptData) {
     return { success: true, mock: true };
   }
 
-  const res = await fetch(`${API_BASE_URL}/generate`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      // Always send fingerprint so guest credit tracking works
-      'x-guest-fingerprint': getGuestFingerprint()
-    },
-    body: JSON.stringify({ type: promptType, content: promptData })
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s timeout for AI
 
-  if (!res.ok) {
-    const errBody = await res.json().catch(() => ({}));
-    throw new Error(errBody.error || `AI generation failed (${res.status})`);
+  try {
+    const res = await fetch(`${API_BASE_URL}/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'x-guest-fingerprint': getGuestFingerprint()
+      },
+      body: JSON.stringify({ type: promptType, content: promptData }),
+      signal: controller.signal
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      throw new Error(errBody.error || `AI generation failed (${res.status})`);
+    }
+    return await res.json();
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') throw new Error('AI 응답 시간이 초과되었습니다 (60초). 다시 시도해주세요.');
+    throw err;
   }
-  return await res.json();
 }
 
 export async function saveProject(projectData) {

@@ -13,6 +13,7 @@ import { generateEpResources } from './api.js';
 const colors = ['#C9933A', '#5EAED4', '#888'];
 
 export function buildResultPanels() {
+  console.log('[Dashboard] Building Result Panels...', state.planData);
   const charGrid = document.getElementById('char-cards-r');
   if (charGrid) charGrid.innerHTML = '';
   
@@ -27,32 +28,66 @@ export function buildResultPanels() {
   renderScript();
 }
 
-function renderOverview() {
+function renderOverview(retryCount = 0) {
   const p = state.planData || {};
   const input = state.currentInput || {};
   
   const title = p.title || input.title || '새 프로젝트';
+  
+  // Update Hero section (immediate)
   const el = document.getElementById('result-hero-title-el');
   if (el) el.textContent = title;
   
-  const loglineText = p.logline || input.logline || '';
+  const logline = p.logline || input.logline || '';
+  const synopsis = p.synopsis || input.synopsis || '';
   const loglineEl = document.getElementById('result-logline');
-  if (loglineEl) loglineEl.textContent = loglineText;
+  if (loglineEl) loglineEl.textContent = logline;
   
-  // Also update the hidden/extra logline cards if they exist
-  const loglineCard = document.querySelector('.result-hero-logline');
-  if (loglineCard && !p.logline && input.logline) loglineCard.textContent = input.logline;
-
   const sideTitle = document.getElementById('sidebar-title-label');
   if (sideTitle) sideTitle.textContent = title;
 
-  const badge = document.getElementById('result-badge');
-  if (badge) {
-    const platform = p.platform || input.platform || 'OTT';
-    const genre = p.genre || input.genre || '장르';
-    const epCount = p.episodes?.length || input.episodes || 8;
-    badge.innerHTML = `🌟 ${platform} · ${genre} · ${epCount}부작`;
-  }
+  // Use a slight delay to ensure panel DOM is ready
+  setTimeout(() => {
+    const ovLogline = document.getElementById('ov-logline');
+    const ovStory = document.getElementById('ov-story');
+
+    if (!ovLogline && retryCount < 5) {
+      // If elements not found, retry up to 5 times (500ms total)
+      console.warn('[Dashboard] Overview elements missing, retrying...', retryCount);
+      return renderOverview(retryCount + 1);
+    }
+
+    if (ovLogline) ovLogline.textContent = logline || '로그라인 정보가 없습니다.';
+    if (ovStory) ovStory.textContent = synopsis || '전체 줄거리 정보가 없습니다.';
+
+    // Update Stat Cards
+    const stats = p.stats || p.budget || {};
+    const ovBudget = document.getElementById('ov-budget');
+    const heroBudget = document.getElementById('stat-budget');
+    const budgetVal = stats.budget ? `₩${(typeof stats.budget === 'number' ? stats.budget : 0).toLocaleString()}` : '-';
+    if (ovBudget) ovBudget.textContent = budgetVal;
+    if (heroBudget) heroBudget.textContent = budgetVal;
+    
+    const ovPpl = document.getElementById('ov-ppl');
+    const heroPpl = document.getElementById('stat-ppl');
+    const pplVal = stats.ppl_revenue ? `₩${(typeof stats.ppl_revenue === 'number' ? stats.ppl_revenue : 0).toLocaleString()}` : '-';
+    if (ovPpl) ovPpl.textContent = pplVal;
+    if (heroPpl) heroPpl.textContent = pplVal;
+
+    const badge = document.getElementById('result-badge');
+    if (badge) {
+      const platform = p.platform || input.platform || 'OTT';
+      const genre = p.genre || input.genre || '장르';
+      let epCount = 8;
+      if (Array.isArray(p.episodes)) epCount = p.episodes.length;
+      else if (typeof p.episodes === 'number') epCount = p.episodes;
+      else if (input.episodes) epCount = input.episodes;
+      badge.innerHTML = `🌟 ${platform} · ${genre} · ${epCount}부작`;
+      
+      const heroScenes = document.getElementById('stat-scenes');
+      if (heroScenes) heroScenes.textContent = Array.isArray(p.episodes) ? `${p.episodes.length * 10}씬+` : '-';
+    }
+  }, 100);
 }
 
 export function buildCharCards() {
