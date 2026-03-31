@@ -222,14 +222,29 @@ async function renderAdminDashboard(container) {
          <table class="admin-table">
            <thead><tr><th>일시</th><th>프로젝트</th><th>사용자</th><th>결과</th></tr></thead>
            <tbody>
-             ${recentProjects.slice(0, 5).map(p => `
+             ${recentProjects.slice(0, 10).map(p => {
+               const progress = p.pct || 0;
+               const dateStr = new Date(p.created_at).toLocaleString('ko-KR', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+               return `
                <tr>
-                 <td style="color:#666">${new Date(p.created_at).toLocaleString('ko-KR', { hour12:false, month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' })}</td>
-                 <td><strong>${p.title}</strong></td>
-                 <td style="font-size:12px; color:#888">${p.user_email || 'anonymous'}</td>
-                 <td><span class="admin-badge ${p.status === 'success' || !p.status ? 'admin-badge-done' : 'admin-badge-err'}">${p.status || 'Success'}</span></td>
+                 <td style="color:#666; font-size:11px">${dateStr}</td>
+                 <td>
+                   <div style="font-weight:600; font-size:13px">${p.title}</div>
+                   <div style="font-size:10px; color:#888">${p.genre}</div>
+                 </td>
+                 <td style="font-size:11px; color:#888">${p.user_email || 'anonymous'}</td>
+                 <td>
+                   <div style="display:flex; align-items:center; gap:8px">
+                     <span class="admin-badge ${p.status === 'done' || p.status === 'success' ? 'admin-badge-done' : (p.status === 'error' ? 'admin-badge-err' : 'admin-badge-gen')}">${p.status || 'Success'}</span>
+                     <div style="flex:1; min-width:60px; height:4px; background:rgba(255,255,255,0.05); border-radius:2px; overflow:hidden">
+                       <div style="width:${progress}%; height:100%; background:var(--gold); transition: width 0.3s"></div>
+                     </div>
+                     <span style="font-size:10px; color:var(--gold)">${progress}%</span>
+                   </div>
+                 </td>
                </tr>
-             `).join('')}
+               `;
+             }).join('')}
            </tbody>
          </table>
       </div>
@@ -275,18 +290,37 @@ async function renderAdminScripts(container) {
     </div>
     <div class="admin-table-wrap">
        <table class="admin-table" id="admin-projects-table">
-         <thead><tr><th>ID</th><th>프로젝트명</th><th>장르</th><th>사용자</th><th>상태</th><th>관리</th></tr></thead>
+         <thead><tr><th>생성일시</th><th>프로젝트명</th><th>장르</th><th>사용자</th><th>진행률</th><th>관리</th></tr></thead>
          <tbody>
-           ${projects.map(p => `
+           ${projects.map(p => {
+             const progress = p.pct || 0;
+             const isDone = p.status === 'done' || p.status === 'success' || (progress === 100 && p.status !== 'error');
+             const dateStr = new Date(p.created_at).toLocaleString('ko-KR', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
+             
+             return `
              <tr class="admin-project-row" data-search="${p.title.toLowerCase()} ${p.user_email?.toLowerCase() || ''}">
-               <td>#${p.id.toString().slice(-4)}</td>
-               <td><strong>${p.title}</strong></td>
-               <td>${p.genre}</td>
+               <td style="font-size:11px; color:#888">${dateStr}</td>
+               <td>
+                 <div style="font-weight:600">${p.title}</div>
+                 <div style="font-size:10px; color:#666">ID: #${p.id.toString().slice(-6)}</div>
+               </td>
+               <td><span style="font-size:12px">${p.genre}</span></td>
                <td style="font-size:12px">${p.user_email || 'Guest'}</td>
-               <td><span class="admin-badge ${p.status === 'success' || !p.status ? 'admin-badge-done' : 'admin-badge-gen'}">${p.status || 'Success'}</span></td>
+               <td>
+                 <div style="display:flex; align-items:center; gap:10px">
+                   <div style="flex:1; min-width:80px; height:6px; background:rgba(255,255,255,0.05); border-radius:3px; overflow:hidden">
+                     <div style="width:${progress}%; height:100%; background:${p.status === 'error' ? 'var(--red)' : 'var(--gold)'}; transition: width 0.3s"></div>
+                   </div>
+                   <div style="display:flex; flex-direction:column; align-items:flex-end">
+                     <span style="font-size:11px; font-weight:700; color:${isDone ? 'var(--teal)' : 'var(--gold)'}">${progress}%</span>
+                     <span style="font-size:9px; color:#777">${p.status || 'Success'}</span>
+                   </div>
+                 </div>
+               </td>
                <td><button class="btn btn-primary" style="padding:4px 12px; font-size:12px" onclick="window.viewAdminProjectDetail('${p.id}')">상세</button></td>
              </tr>
-           `).join('')}
+             `;
+           }).join('')}
          </tbody>
        </table>
     </div>
@@ -809,20 +843,50 @@ async function renderAdminSamples(container) {
           <button class="btn btn-ghost" onclick="window.seedDefaultSamples()" style="font-size:12px">전체 초기화/재생성 🔄</button>
         </div>
         <div class="admin-samples-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap:20px">
-          ${samples.map(s => `
-            <div class="admin-config-card" style="margin:0">
-              <h4 style="margin-bottom:12px; color:var(--gold)">${s.title} <small style="color:#666; font-size:10px; font-weight:normal">(${s.id})</small></h4>
+          ${samples.map(s => {
+            const isVisible = s.data && s.data.isVisible !== false;
+            const progress = s.data && s.data.pct !== undefined ? s.data.pct : 100;
+            const dateStr = s.updated_at ? new Date(s.updated_at).toLocaleDateString('ko-KR', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' }) : '날짜 없음';
+            
+            return `
+            <div class="admin-config-card" style="margin:0; position:relative; overflow:hidden">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px">
+                <div>
+                  <h4 style="margin:0; color:var(--gold)">${s.title}</h4>
+                  <div style="font-size:11px; color:#888; margin-top:4px">ID: ${s.id} | 생성/수정: ${dateStr}</div>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:flex-end">
+                  <label class="switch-container" style="display:flex; align-items:center; gap:8px; cursor:pointer">
+                    <span style="font-size:11px; color:${isVisible ? 'var(--gold)' : '#666'}">${isVisible ? '노출 중' : '비노출'}</span>
+                    <input type="checkbox" id="sample-visible-${s.id}" ${isVisible ? 'checked' : ''} style="cursor:pointer">
+                  </label>
+                </div>
+              </div>
+
+              <div class="admin-config-group" style="margin-bottom:15px">
+                <label class="admin-config-label" style="display:flex; justify-content:space-between">
+                  생성 진행률 
+                  <span style="color:var(--gold); font-weight:bold">${progress}%</span>
+                </label>
+                <div style="width:100%; height:6px; background:rgba(255,255,255,0.05); border-radius:3px; margin-top:6px; overflow:hidden">
+                  <div style="width:${progress}%; height:100%; background:linear-gradient(90deg, var(--gold), #fff); box-shadow:0 0 10px var(--gold)"></div>
+                </div>
+              </div>
+
               <div class="admin-config-group">
                 <label class="admin-config-label">표시 제목</label>
                 <input type="text" id="sample-title-${s.id}" class="admin-config-input" value="${s.title}">
               </div>
+
               <div class="admin-config-group">
                 <label class="admin-config-label">데이터 (JSON)</label>
-                <textarea id="sample-data-${s.id}" class="admin-config-input admin-config-textarea" style="height:300px; font-family:monospace; font-size:11px">${JSON.stringify(s.data, null, 2)}</textarea>
+                <textarea id="sample-data-${s.id}" class="admin-config-input admin-config-textarea" style="height:250px; font-family:monospace; font-size:11px">${JSON.stringify(s.data, null, 2)}</textarea>
               </div>
-              <button class="btn btn-primary" style="width:100%" onclick="window.saveAdminSample('${s.id}')">샘플 데이터 저장</button>
+
+              <button class="btn btn-primary" style="width:100%; margin-top:10px" onclick="window.saveAdminSample('${s.id}')">샘플 데이터 & 노출 설정 저장</button>
             </div>
-          `).join('')}
+            `;
+          }).join('')}
         </div>
       </div>
     `;
@@ -834,12 +898,13 @@ async function renderAdminSamples(container) {
 window.saveAdminSample = async function(id) {
   const title = document.getElementById(`sample-title-${id}`).value;
   const dataStr = document.getElementById(`sample-data-${id}`).value;
+  const isVisible = document.getElementById(`sample-visible-${id}`).checked;
   
   try {
     const data = JSON.parse(dataStr);
     const res = await adminFetch('/api/admin/samples', {
       method: 'POST',
-      body: JSON.stringify({ id, title, data })
+      body: JSON.stringify({ id, title, data, isVisible })
     });
     
     if (res.ok) {

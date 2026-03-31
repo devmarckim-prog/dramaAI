@@ -4,10 +4,21 @@
 - [x] `.project-slate-card` 정사각형 비율(1:1) 적용
 - [x] 제목 오버레이 및 하단 그라데이션 가독성 강화
 - [x] Create task.md and Implementation Plan
-- [/] **UI & Styling**
-    - [x] Standardize `.project-card-new` dimensions and borders in `style.css`
-    - [ ] Update Model selection UI in Admin Panel to include Claude 4 series
-- [/] **Backend & API**
+- [x] Admin Dashboard Enhancement (Visibility & Progress)
+    - [x] Add visibility toggles (Exposed/Hidden) to Sample Management
+    - [x] Add real-time progress bars and creation dates to Sample Management
+    - [x] Integrate visibility filtering in public `/api/samples`
+    - [x] Add progress bars and creation dates to Admin Project List (Scripts tab)
+    - [x] Add progress bars and creation dates to Admin Dashboard (Recent Timeline)
+- [x] Logline UX Improvement
+    - [x] Set default logline in wizard Step 3
+    - [x] Add auto-clearing logic on focus/click
+- [x] Serverless Stability (Harden Vercel Production)
+    - [x] Fix file-system write errors on Vercel
+    - [x] Defensive Supabase client initialization
+- [x] Deployment & Verification
+    - [x] Push all changes to Vercel
+- [ ] **Backend & API**
     - [x] Add process error handlers to `serve.js`
     - [/] Debug and Fix Project Deletion in `api/routes/api.js`
         - [ ] Verify Supabase RLS and Guest Fingerprint filtering

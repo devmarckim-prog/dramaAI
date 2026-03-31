@@ -3058,6 +3058,40 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height
     transform: translateY(-5px) scale(1.02);
 }
 
+/* Admin Sample Enhancements */
+.switch-container input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 32px;
+  height: 18px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 9px;
+  position: relative;
+  transition: .3s;
+  border: 1px solid rgba(255,255,255,0.2);
+  margin: 0;
+  vertical-align: middle;
+}
+.switch-container input:checked {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.switch-container input:after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: .3s;
+}
+.switch-container input:checked:after {
+  left: 16px;
+}
+
 
 
 

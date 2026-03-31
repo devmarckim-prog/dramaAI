@@ -4,5 +4,7 @@ server/data.db
 server/.env
 .env
 *.txt
+*.log
+api/server.log
 split.js
 .DS_Store

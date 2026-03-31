@@ -287,7 +287,10 @@
       <div class="form-section">
         <label class="form-label">로그라인 / 소재 <span style="color:var(--gold)">*</span></label>
         <div class="form-sub">한 줄로 이야기를 요약해주세요 ✍️ 입력 내용으로 가제를 자동 생성합니다</div>
-        <textarea class="form-input form-textarea" id="inp-logline" placeholder="예: 식당을 열기 위해 세입자로 들어온 여자 쉐프와 냉철한 남자 건물주와의 로맨스"></textarea>
+        <textarea class="form-input form-textarea" id="inp-logline" 
+          placeholder="드라마의 핵심 소재를 입력해주세요"
+          onfocus="if(this.value.includes('이순신 장군이')) this.value=''">이순신 장군이 현대로 타임 슬립해서 부산에 횟집을 차려서 성공하다.
+그 과정에서 일본 여성과의 로맨스</textarea>
       </div>
       <!-- 시대 배경 타임라인 슬라이더 -->
       <div class="form-section">

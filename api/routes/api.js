@@ -635,13 +635,21 @@ router.get('/test', (req, res) => {
 /* --- SAMPLES API (Public) --- */
 router.get('/samples', async (req, res) => {
   try {
+    // Only return samples that are NOT explicitly hidden (isVisible defaults to true if missing)
     const { data, error } = await serviceSupabase
       .from('samples')
       .select('*')
       .order('id', { ascending: true });
     
     if (error) throw error;
-    res.json(data);
+
+    // Filter in JS to support flexible JSONB visibility flag (legacy fallback)
+    const filtered = data.filter(s => {
+      const isVisible = s.data && s.data.isVisible !== false;
+      return isVisible;
+    });
+
+    res.json(filtered);
   } catch (err) {
     console.error('[Public API] Samples Fetch Error:', err);
     res.status(500).json({ error: err.message });
@@ -666,11 +674,18 @@ router.get('/admin/samples', authMiddleware, async (req, res) => {
 
 router.post('/admin/samples', authMiddleware, async (req, res) => {
   try {
-    const { id, title, data: sampleData } = req.body;
+    const { id, title, data: sampleData, isVisible } = req.body;
     
+    // Ensure visibility flag is synced into the data blob
+    const updatedSampleData = {
+      ...sampleData,
+      isVisible: isVisible !== undefined ? isVisible : (sampleData.isVisible !== undefined ? sampleData.isVisible : true)
+    };
+
     const upsertData = {
       title,
-      data: sampleData,
+      data: updatedSampleData,
+      updated_at: new Date().toISOString()
     };
     if (id) upsertData.id = id;
 
