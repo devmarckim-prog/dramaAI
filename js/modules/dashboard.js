@@ -87,6 +87,26 @@ function renderOverview(retryCount = 0) {
       const heroScenes = document.getElementById('stat-scenes');
       if (heroScenes) heroScenes.textContent = Array.isArray(p.episodes) ? `${p.episodes.length * 10}씬+` : '-';
     }
+
+    // Update Conflicts
+    const conflicts = p.conflicts || [];
+    const conflictGrid = document.getElementById('ov-conflicts');
+    if (conflictGrid) {
+      if (conflicts && conflicts.length > 0) {
+        conflictGrid.innerHTML = conflicts.map(c => `
+          <div class="conflict-card ${c.color || 'ink'}">
+            <div class="conflict-label">${c.label}</div>
+            <div class="conflict-desc">${c.desc}</div>
+          </div>
+        `).join('');
+      } else {
+        conflictGrid.innerHTML = `
+          <div class="conflict-card ink" style="grid-column: span 2; opacity: 0.6; border-style: dashed;">
+            <div class="conflict-desc">갈등 구조 정보가 아직 생성되지 않았습니다.</div>
+          </div>
+        `;
+      }
+    }
   }, 100);
 }
 

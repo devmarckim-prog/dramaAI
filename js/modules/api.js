@@ -147,7 +147,8 @@ export async function startGenerationFlow() {
       state.planData = { ...state.planData, ...detailData };
       await saveProject({ 
         id: state.generatingId, 
-        stats: detailData.stats || detailData.conflicts || {},
+        conflicts: detailData.conflicts || [],
+        stats: detailData.stats || {},
         status: 'generating',
         pct: 55, 
         stepIdx: 2 
