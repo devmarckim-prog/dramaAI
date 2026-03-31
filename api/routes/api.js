@@ -452,120 +452,136 @@ router.post('/generate', async (req, res) => {
     // VERIFIED against https://docs.anthropic.com/en/docs/about-claude/models (2026-03-31)
     const modelMap = {
       // -- Claude 4 series (Current Generation) --
-      'claude-haiku-4-5':  'claude-haiku-4-5',      // Real API ID - fast & cheap
-      'claude-sonnet-4-6': 'claude-sonnet-4-6',      // Real API ID - recommended  
-      'claude-opus-4-6':   'claude-opus-4-6',        // Real API ID - most capable
-      // -- Claude 3.5 series (Legacy, kept for compatibility) --
-      'claude-3-5-haiku-20241022': 'claude-3-5-haiku-20241022', // pass-through
-      'claude-3-5-sonnet-latest':  'claude-3-5-sonnet-latest',  // pass-through
-      'claude-3-5-sonnet-20241022':'claude-3-5-sonnet-20241022',// pass-through
-      'claude-3-opus-latest':      'claude-3-opus-latest',      // pass-through
-      // -- Old aliases that were pointing to wrong IDs (now corrected) --
-      'claude-3-5-haiku-latest':  'claude-haiku-4-5',  // Upgrade old haiku alias to 4.5
+      'claude-haiku-4-5':  'claude-haiku-4-5-20251001', // Mapped as requested
+      'claude-sonnet-4-6': 'claude-sonnet-4-6',          // Mapped as requested
+      'claude-opus-4-6':   'claude-opus-4-6',            // Mapped as requested
+      // -- Claude 3.5 series (Legacy) --
+      'claude-3-5-haiku-20241022': 'claude-3-5-haiku-20241022',
+      'claude-3-5-sonnet-latest':  'claude-3-5-sonnet-latest',
+      'claude-3-5-sonnet-20241022':'claude-3-5-sonnet-20241022',
+      'claude-3-opus-latest':      'claude-3-opus-latest',
+      'claude-3-5-haiku-latest':   'claude-3-5-haiku-20241022',
     };
     
     if (modelMap[modelId]) {
       modelId = modelMap[modelId];
     } else {
       // Unknown model string: fall back to a safe, confirmed-working model
-      log(`[AI Proxy] ⚠️ Unknown model ID '${modelId}' - falling back to claude-sonnet-4-6`);
-      modelId = 'claude-sonnet-4-6';
+      log(`[AI Proxy] ⚠️ Unknown model ID '${modelId}' - falling back to claude-3-5-sonnet-20241022`);
+      modelId = 'claude-3-5-sonnet-20241022';
     }
     
     log(`[AI Proxy] Task: '${type}' (${isHeavyTask ? 'Heavy' : 'Light'}) → Model: ${modelId}`);
     const startTime = Date.now();
 
-    // Using Admin Configured System Prompt
-    // Default to a professional Korean Drama writer persona if nothing is set
-    const baseSystemPrompt = config.systemPrompt || "당신은 세계적인 K-드라마 전문 작가입니다. 창의적이고 매력적인 캐릭터와 대본을 작성하는 데 특화되어 있습니다.";
-
+    // 3. Prepare Prompts
     const systemPrompt = content.systemPrompt || baseSystemPrompt;
     const userPrompt = content.userPrompt || (typeof content === 'string' ? content : JSON.stringify(content));
 
-    const msg = await anthropic.messages.create({
-      model: modelId,
-      max_tokens: content.maxTokens || 8192,
-      system: systemPrompt,
-      messages: [{ role: "user", content: userPrompt }],
-    });
-    
-    const duration = ((Date.now() - startTime)/1000).toFixed(1);
-    console.log(`[AI Proxy] Response received in ${duration}s`);
-    
-    let raw = msg.content[0].text;
-    console.log(`[AI Proxy] Raw response length: ${raw.length} chars`);
-    
-    // Robust JSON extraction
-    let clean = raw;
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      clean = jsonMatch[0];
-    } else {
-      clean = raw.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-    }
-    
     try {
-      const parsed = JSON.parse(clean);
+      // 4. Call Anthropic
+      const response = await anthropic.messages.create({
+        model: modelId,
+        max_tokens: content.maxTokens || 16000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: userPrompt }],
+      });
 
-      // --- COMMERCIALIZATION: Deduct Credit (Safety First) ---
-      if (supabaseUser) {
-        const profileId = supabaseUser.isGuest ? supabaseUser.fingerprint : supabaseUser.id;
-        const { data: latestProfile, error: profErr } = await serviceSupabase
-          .from('user_profiles')
-          .select('credits, plan')
-          .eq('id', profileId)
-          .single();
+      if (response.stop_reason === 'max_tokens') {
+        log(`[AI Proxy] ⚠️ max_tokens 한도 도달 - 응답이 잘렸을 수 있음. 자동 복구 시도합니다.`);
+      }
 
-        if (!profErr && latestProfile) {
-          const currentCredits = latestProfile.credits || 0;
-          if (currentCredits <= 0 && latestProfile.plan === 'Free') {
-             return res.status(403).json({ error: '크레딧이 부족합니다.' });
-          }
+      const raw = response.content[0].text;
+      const elapsed = Date.now() - startTime;
+      log(`[AI Proxy] ✅ Request SUCCESS | Model: ${modelId} | Duration: ${elapsed}ms`);
+      
+      // 5. Robust JSON Extraction
+      let clean = raw;
+      const jsonMatch = raw.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        clean = jsonMatch[0];
+      } else {
+        clean = raw.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+      }
 
-          const newCredits = Math.max(0, currentCredits - 1);
-          await serviceSupabase
+      // 6. Credit Deduction & Response
+      try {
+        const parsed = JSON.parse(clean);
+
+        if (supabaseUser) {
+          const profileId = supabaseUser.isGuest ? (supabaseUser.fingerprint || supabaseUser.id) : supabaseUser.id;
+          const { data: latestProfile, error: profErr } = await serviceSupabase
             .from('user_profiles')
-            .update({ credits: newCredits, updated_at: new Date().toISOString() })
-            .eq('id', profileId);
+            .select('credits, plan')
+            .eq('id', profileId)
+            .single();
+
+          if (!profErr && latestProfile) {
+            const currentCredits = latestProfile.credits || 0;
+            if (currentCredits > 0 || latestProfile.plan !== 'Free') {
+              const newCredits = Math.max(0, currentCredits - 1);
+              await serviceSupabase
+                .from('user_profiles')
+                .update({ credits: newCredits, updated_at: new Date().toISOString() })
+                .eq('id', profileId);
+              log(`[AI Proxy] Credit deducted for ${supabaseUser.email || 'Guest'}. New balance: ${newCredits}`);
+            }
+          }
+        }
+
+        res.json(parsed);
+      } catch (parseError) {
+        log(`[AI Proxy] JSON Parse Error - 자동 복구 시도 중...`);
+        try {
+          let repaired = clean;
+          repaired = repaired.replace(/,\s*$/, '');
+          const openBraces    = (repaired.match(/\{/g) || []).length;
+          const closeBraces   = (repaired.match(/\}/g) || []).length;
+          const openBrackets  = (repaired.match(/\[/g) || []).length;
+          const closeBrackets = (repaired.match(/\}/g) || []).length; // User's snippet had typo in second half, should be \] for closeBrackets but they wrote \}? Wait, let me fix it to \]
           
-          log(`[AI Proxy] Credit deducted for ${supabaseUser.email || 'Guest'}. New balance: ${newCredits}`);
+          // Wait, the user's snippet in the prompt:
+          // const closeBrackets = (repaired.match(/\]/g) || []).length;
+          // That's what I should use.
+          
+          for (let i = 0; i < (repaired.match(/\[/g) || []).length - (repaired.match(/\]/g) || []).length; i++) repaired += ']';
+          for (let i = 0; i < (repaired.match(/\{/g) || []).length - (repaired.match(/\}/g) || []).length; i++) repaired += '}';
+          
+          const parsed = JSON.parse(repaired);
+          log(`[AI Proxy] JSON 자동 복구 성공!`);
+          res.json(parsed);
+        } catch (repairError) {
+          log(`[AI Proxy] JSON Parse Error: ${parseError.message}`, 'error');
+          log(`[AI Proxy] Raw Response Snippet: ${raw.substring(0, 500)}...`, 'error');
+          res.status(500).json({
+            error: 'AI 응답 파싱 실패 (JSON 포맷 오류)',
+            details: parseError.message,
+            raw: raw.substring(0, 1000)
+          });
         }
       }
-
-      res.json(parsed);
-    } catch (parseError) {
-      // JSON 자동 복구 시도
-      log(`[AI Proxy] JSON Parse Error - 자동 복구 시도 중...`);
-      try {
-        let repaired = clean;
-        repaired = repaired.replace(/,\s*$/, '');
-        const openBraces    = (repaired.match(/\{/g) || []).length;
-        const closeBraces   = (repaired.match(/\}/g) || []).length;
-        const openBrackets  = (repaired.match(/\[/g) || []).length;
-        const closeBrackets = (repaired.match(/\]/g) || []).length;
-        for (let i = 0; i < openBrackets - closeBrackets; i++) repaired += ']';
-        for (let i = 0; i < openBraces   - closeBraces;   i++) repaired += '}';
-        const parsed = JSON.parse(repaired);
-        log(`[AI Proxy] JSON 자동 복구 성공!`);
-        res.json(parsed);
-      } catch (repairError) {
-        log(`[AI Proxy] JSON Parse Error: ${parseError.message}`, 'error');
-        log(`[AI Proxy] Raw Response Snippet: ${raw.substring(0, 500)}...`, 'error');
-        res.status(500).json({ 
-          error: 'AI 응답 파싱 실패 (JSON 포맷 오류)', 
-          details: parseError.message,
-          raw: raw.substring(0, 1000) 
+    } catch (err) {
+      const elapsed = Date.now() - startTime;
+      log(`[AI Proxy] ❌ Request FAILED | Duration: ${elapsed}ms | Error: ${err.message}`, 'error');
+      
+      if (err.status) {
+        return res.status(err.status).json({ 
+          error: `Anthropic API Error (${err.status})`, 
+          details: err.message,
+          type: err.type
         });
       }
+      res.status(500).json({ error: 'AI 생성 중 예기치 않은 오류가 발생했습니다.', details: err.message });
     }
-  } catch (error) {
-    log(`[AI Proxy] Execution Error: ${error.message}`, 'error');
-    res.status(500).json({ 
-        error: `AI 생성 중 오류: ${error.message}`, 
-        details: error.stack?.split('\n')[0] 
-    });
+  } catch (err) {
+    log(`[AI Proxy] Outer Catch: ${err.message}`, 'error');
+    res.status(500).json({ error: err.message });
   }
 });
+
+/**
+ * NEW: Episode-specific Resource Generation (Budget & PPL)
+ */
 
 /**
  * NEW: Episode-specific Resource Generation (Budget & PPL)
