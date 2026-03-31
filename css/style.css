@@ -2453,28 +2453,7 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height
 }
 
 /* ================ SYSTEM COMPONENTS (Moved from Inline) ================ */
-.debug-overlay-premium {
-  position: fixed; bottom: 20px; right: 20px; width: 340px; height: 240px;
-  background: rgba(26, 20, 16, 0.95); color: #00ff00;
-  font-family: monospace; font-size: 10px; padding: 12px;
-  border-radius: 16px; z-index: 10000; display: flex; flex-direction: column;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4); pointer-events: none;
-  border: 1px solid rgba(201, 147, 58, 0.3);
-}
-.debug-overlay-header {
-  font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;
-  margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;
-  pointer-events: auto;
-}
-.debug-overlay-premium.minimized {
-  height: 40px; overflow: hidden; width: 140px; padding: 10px 14px;
-}
-.debug-overlay-premium.minimized .debug-overlay-content {
-  display: none;
-}
-.debug-overlay-content {
-  flex: 1; overflow-y: auto; line-height: 1.5;
-}
+/* Removed Duplicate Debug Overlay Styles - Consolidated below at line 2680 */
 .debug-log-modal-box {
   background: #121212 !important; color: #eee !important; border-radius: 20px !important;
   width: 600px; max-width: 90vw; height: 80vh; max-height: 800px;
@@ -2680,45 +2659,86 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height
 /* Premium Debug Overlay Redesign */
 .debug-overlay-premium {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 320px;
+  bottom: 24px;
+  right: 24px;
+  width: 380px;
   max-height: 400px;
-  background: rgba(10, 10, 10, 0.9);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  z-index: 2000;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  height: 320px;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(201, 147, 58, 0.4);
+  border-radius: 14px;
+  z-index: 11000; /* Highest priority */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 15px rgba(201, 147, 58, 0.1);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
 }
+
 .debug-overlay-premium.minimized {
-  width: 120px;
-  height: 40px;
-  border-radius: 20px;
+  width: 140px;
+  height: 44px;
+  border-radius: 22px;
+  border-color: rgba(201, 147, 58, 0.2);
+  background: rgba(15, 15, 15, 0.95);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
 }
+
 .debug-overlay-header {
-  padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   justify-content: space-between;
   align-items: center;
   user-select: none;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
+
+.debug-overlay-header .debug-header-flex {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+}
+
+.debug-overlay-premium.minimized .debug-header-actions {
+  display: none;
+}
+
+.debug-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
 .debug-overlay-content {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
   overflow-y: auto;
-  font-family: 'Cascadia Code', 'Consolas', monospace;
   font-size: 11px;
-  color: #ccc;
-  line-height: 1.5;
+  color: #d1d1d1;
+  line-height: 1.6;
 }
 .debug-log-entry { margin-bottom: 4px; border-left: 2px solid transparent; padding-left: 6px; }
+
+/* Debug Log Full Modal Box */
+.debug-log-modal-box {
+  background: #121212 !important; 
+  color: #eee !important; 
+  border-radius: 20px !important;
+  width: 800px; 
+  max-width: 95vw; 
+  height: 85vh; 
+  max-height: 900px;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.7); 
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
 .debug-log-time { color: #666; font-size: 9px; margin-right: 6px; }
 .debug-log-type-info { border-color: var(--teal); }
 .debug-log-type-warn { border-color: var(--gold); color: var(--gold); }
