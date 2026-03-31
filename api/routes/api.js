@@ -10,9 +10,11 @@ const logFile = path.resolve(__dirname, '../../api/server.log');
 const log = (msg) => {
   const entry = `[${new Date().toISOString()}] ${msg}\n`;
   try {
-    fs.appendFileSync(logFile, entry);
+    if (process.env.NODE_ENV !== 'production') {
+      fs.appendFileSync(logFile, entry);
+    }
   } catch (e) {
-    // console fallback if file is locked or missing
+    // Ignore FS errors
   }
   console.log(msg);
 };

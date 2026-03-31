@@ -68,11 +68,17 @@ const adminAuth = async (req, res, next) => {
     return res.status(403).json({ error: '관리자 전용 기능입니다. 접근 권한이 없습니다.' });
 
   } catch (err) {
-    const fs = require('fs');
-    const path = require('path');
-    const logPath = path.resolve(__dirname, 'admin_auth_error.log');
-    const logMsg = `[${new Date().toISOString()}] Admin Auth Error: ${err.message}\nStack: ${err.stack}\nCWD: ${process.cwd()}\n\n`;
-    fs.appendFileSync(logPath, logMsg);
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const logPath = path.resolve(__dirname, 'admin_auth_error.log');
+      const logMsg = `[${new Date().toISOString()}] Admin Auth Error: ${err.message}\nStack: ${err.stack}\nCWD: ${process.cwd()}\n\n`;
+      if (process.env.NODE_ENV !== 'production') {
+        fs.appendFileSync(logPath, logMsg);
+      }
+    } catch (logErr) {
+      // Ignore logging errors in production
+    }
     
     console.error('[Admin Auth] CRITICAL Middleware Error:', err);
     res.status(500).json({ 

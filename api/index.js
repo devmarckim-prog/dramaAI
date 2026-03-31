@@ -6,7 +6,14 @@ const fs = require('fs');
 const logFile = path.resolve(__dirname, 'server.log');
 const log = (msg) => {
   const entry = `[${new Date().toISOString()}] ${msg}\n`;
-  fs.appendFileSync(logFile, entry);
+  try {
+    // Only attempt to write if we are not in a known restricted environment
+    if (process.env.NODE_ENV !== 'production') {
+      fs.appendFileSync(logFile, entry);
+    }
+  } catch (e) {
+    // Ignore FS errors in serverless/read-only environments
+  }
   console.log(msg);
 };
 

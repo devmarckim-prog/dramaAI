@@ -404,24 +404,31 @@ router.post('/config', async (req, res) => {
       console.warn('[Admin Config] Supabase Update failed (Table might not exist):', error.message);
     }
 
-    // 2. Backup to local disk (for reliability)
-    const fs = require('fs');
-    const path = require('path');
-    const configDir = path.join(__dirname, '../config');
-    if (!fs.existsSync(configDir)) fs.mkdirSync(configDir, { recursive: true });
+    // 2. Backup to local disk (for reliability) - Optional in production
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const configDir = path.join(__dirname, '../config');
+      if (process.env.NODE_ENV !== 'production') {
+        if (!fs.existsSync(configDir)) fs.mkdirSync(configDir, { recursive: true });
+        
+        const configPath = path.join(configDir, 'system.json');
+        const newConfig = { 
+          planningModel, 
+          productionModel, 
+          systemPrompt, 
+          pricingPro: parseInt(pricingPro) || 29900, 
+          creditsFree: parseInt(creditsFree) || 10 
+        };
+        fs.writeFileSync(configPath, JSON.stringify(newConfig, null, 2));
+        console.log('[Admin Config] Local backup successful');
+      }
+    } catch (fsErr) {
+      console.warn('[Admin Config] Local backup failed (likely read-only FS):', fsErr.message);
+    }
     
-    const configPath = path.join(configDir, 'system.json');
-    const newConfig = { 
-      planningModel, 
-      productionModel, 
-      systemPrompt, 
-      pricingPro: parseInt(pricingPro) || 29900, 
-      creditsFree: parseInt(creditsFree) || 10 
-    };
-    fs.writeFileSync(configPath, JSON.stringify(newConfig, null, 2));
-    
-    console.log('[Admin Config] Settings Updated (Cloud & Local):', newConfig);
-    res.json({ message: 'Configuration saved successfully', config: newConfig, cloud: !error });
+    console.log('[Admin Config] Settings Updated (Cloud & Local):', { planningModel, productionModel });
+    res.json({ message: 'Configuration saved successfully', cloud: !error });
 } catch (error) {
     console.error('[Admin Config] Save Error:', error);
     res.status(500).json({ error: error.message });
