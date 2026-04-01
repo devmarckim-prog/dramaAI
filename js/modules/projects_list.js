@@ -9,7 +9,7 @@ export async function renderProjectCards() {
   wrap.innerHTML = '<div class="project-list-loading"><div class="pcg-spinner"></div>로딩 중...</div>';
 
   const projects = await fetchProjects();
-  
+
   if (!projects || projects.length === 0) {
     wrap.innerHTML = `
       <div class="project-empty-state">
@@ -29,10 +29,22 @@ export async function renderProjectCards() {
       <div class="project-card-new-label project-card-new-label-premium">새 드라마 집필</div>
     </div>`;
 
-  const stepLabels = ['기획안 구성','인물 관계도','회차별 구성','캐스팅 추천','제작비 산출','PPL 제안','대본 집필'];
+  const statusLabels = {
+    'initializing': '프로젝트 초기화 중',
+    'generating': 'AI 작가 집필 중',
+    'core_done': '핵심 컨셉 설계 완료',
+    'outline_done': '회차 아웃라인 구성 완료',
+    'plan_done': '회차별 상세 기획 완료',
+    'sample_done': '기획안 & 샘플 대본 완성',
+    'prod_done': '제작/캐스팅 산출 완료',
+    'ppl_done': 'PPL 기획 완료',
+    'done': '전체 집필 완료',
+    'error': '생성 중 오류 발생'
+  };
+
   const sampleImgUrl = 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&q=80';
 
-  projects.sort((a,b) => {
+  projects.sort((a, b) => {
     const da = new Date(b.created_at || b.createdAt || 0);
     const db = new Date(a.created_at || a.createdAt || 0);
     return da - db;
@@ -43,10 +55,10 @@ export async function renderProjectCards() {
     const isGen = p.status === 'generating';
     const pct = isErr ? 100 : (p.pct || 0);
     const stepIdx = isErr ? 0 : (p.stepIdx || 0);
-    
+
     // Shared delete button HTML (Hidden for samples)
-    const delBtnHtml = p.is_sample 
-      ? '' 
+    const delBtnHtml = p.is_sample
+      ? ''
       : `<button class="project-card-del" onclick="event.stopPropagation(); window.confirmDeleteProject('${p.id}')">&times;</button>`;
 
     // Extract Flag metadata
@@ -63,31 +75,54 @@ export async function renderProjectCards() {
       ${era ? `<span class="project-flag">${era}</span>` : ''}
     </div>`;
 
-    if (isGen || isErr) {
-       html += `
-         <div class="project-slate-card ${isGen ? 'generating' : ''} ${isErr ? 'status-error' : ''}" id="gen-card-${p.id}" onclick="openProject('${p.id}')" style="${isErr ? 'cursor: not-allowed; opacity: 0.8;' : ''}">
+    if (isGen || isErr || p.status === 'sample_done') {
+      const statusText = statusLabels[p.status] || '진행 중';
+      const isPaused = p.status === 'sample_done';
+
+      html += `
+         <div class="project-slate-card ${isGen ? 'generating' : ''} ${isErr ? 'status-error' : ''} ${isPaused ? 'status-paused' : ''}" id="gen-card-${p.id}" onclick="openProject('${p.id}')" style="${isErr ? 'cursor: not-allowed; opacity: 0.8;' : ''}">
           ${delBtnHtml}
           <div class="project-card-img-wrap">
-            <div class="project-card-img-overlay" style="${isErr ? 'background: rgba(255,0,0,0.1);' : ''}"></div>
+            <div class="project-card-img-overlay" style="${isErr ? 'background: rgba(255,0,0,0.1);' : (isPaused ? 'background: rgba(0,255,0,0.05);' : '')}"></div>
             ${flagHtml}
             <div class="project-card-body-slate">
-              <div class="pcg-badge-premium ${isErr ? 'pcg-badge-error' : ''}" style="${isErr ? 'background: #ff4d4d; color: #fff;' : ''}">
-                <div class="pcg-badge-dot ${isErr ? 'pcg-badge-dot-error' : ''}"></div>
-                ${isErr ? 'AI 생성 실패 (클릭 불가)' : 'AI 작가 집필 중'}
+              <div class="pcg-badge-premium ${isErr ? 'pcg-badge-error' : ''} ${isPaused ? 'pcg-badge-paused' : ''}" 
+                   style="${isErr ? 'background: #ff4d4d; color: #fff;' : (isPaused ? 'background: var(--gold); color: #000;' : '')}">
+                <div class="pcg-badge-dot ${isErr ? 'pcg-badge-dot-error' : ''} ${isPaused ? 'pcg-badge-dot-paused' : ''}"></div>
+                ${isErr ? 'AI 생성 실패' : (isPaused ? '기획안 검토 가능' : 'AI 작가 집필 중')}
               </div>
               <div class="project-card-title-slate" style="${isErr ? 'color: #ffcccc;' : ''}">${p.title || '새 드라마'}</div>
               <div class="pcg-progress-wrap">
                   <div class="project-card-meta-row" style="color:#fff; font-size:10px; margin-bottom:4px;">
-                    <span>${isErr ? '❌ 에러 발생' : (stepLabels[stepIdx] || '진행 중')}</span>
+                    <span>${statusText}</span>
                     <span>${pct}%</span>
                   </div>
                   <div class="pcg-bar" style="height:4px; background:rgba(255,255,255,0.2);">
-                    <div class="pcg-bar-fill pcg-bar-fill-dynamic" style="width:${pct}%; background:${isErr ? '#ff4d4d' : 'var(--gold)'};"></div>
+                    <div class="pcg-bar-fill pcg-bar-fill-dynamic" style="width:${pct}%; background:${isErr ? '#ff4d4d' : (isPaused ? '#4CAF50' : 'var(--gold)')};"></div>
                   </div>
               </div>
+              
+              ${isPaused ? `
+                <div class="project-card-action-bar" style="margin-top:12px;">
+                  <button class="btn btn-primary btn-sm btn-finalize-gen" style="width:100%; font-size:11px; padding:6px;" 
+                          onclick="event.stopPropagation(); window.finalizeProject('${p.id}')">
+                    🚀 전체 대본 및 제작계획 생성하기
+                  </button>
+                </div>
+              ` : ''}
+              
+              ${isErr ? `
+                <div class="project-card-action-bar" style="margin-top:12px;">
+                  <button class="btn btn-outline btn-sm btn-retry-gen" style="width:100%; font-size:11px; padding:6px; color:#fff; border-color:#fff;" 
+                          onclick="event.stopPropagation(); window.resumeProject('${p.id}')">
+                    🔄 다시 시도하기
+                  </button>
+                </div>
+              ` : ''}
             </div>
           </div>
         </div>`;
+
     } else {
       const dateStr = _formatRelativeDate(p.createdAt);
       const isOtt = p.platform === 'OTT';
@@ -116,7 +151,7 @@ export async function renderProjectCards() {
 
   html += `</div>`;
   wrap.innerHTML = html;
-  
+
   const sub = document.getElementById('projects-page-sub');
   if (sub) sub.textContent = `총 ${projects.length}개의 프로덕션 슬레이트`;
 }
@@ -126,7 +161,7 @@ function _formatRelativeDate(date) {
   const now = new Date();
   const past = new Date(date);
   const diff = Math.floor((now - past) / 1000);
-  
+
   if (diff < 60) return '방금 전';
   if (diff < 3600) return `${Math.floor(diff / 60)}분 전`;
   if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`;
@@ -148,10 +183,10 @@ export async function openProject(id) {
     showToast('AI 생성 중 오류가 발생한 프로젝트입니다. 다시 생성해 주세요.', 'error');
     return;
   }
-  
+
   try {
     const p = _normalizeProject(rawP);
-    
+
     state.currentInput = p.input;
     state.planData = {
       id: p.id,
@@ -166,7 +201,7 @@ export async function openProject(id) {
       ppl: p.ppl || [],
       budget: p.budget || (p.stats && p.stats.budget)
     };
-    
+
     state.scripts = p.scripts || {};
 
     showPage('result');
@@ -188,7 +223,7 @@ function _normalizeProject(p) {
     if (typeof val === 'object') return val;
     if (typeof val === 'string') {
       if (val.includes('[object Object]')) return fallback;
-      try { return JSON.parse(val); } catch(e) { return fallback; }
+      try { return JSON.parse(val); } catch (e) { return fallback; }
     }
     return fallback;
   };
@@ -254,31 +289,31 @@ function _getCleanEps(val, p) {
   // Priority: episodes_count (new field) -> parsed episodes
   if (p && p.episodes_count) return Number(p.episodes_count);
   if (!val) return 8;
-  
+
   // If it's an array (episode list), preserve it! 
   if (Array.isArray(val)) return val;
-  
+
   // If it's a number, return it
   if (typeof val === 'number') return val;
-  
+
   // If it's a string, try parsing it
   if (typeof val === 'string') {
     if (val.includes('[object')) return 8;
     const parsed = parseInt(val.replace(/[^0-9]/g, ''));
     return isNaN(parsed) ? 8 : parsed;
   }
-  
+
   // If it's an object, check common properties
   if (typeof val === 'object') {
     if (val.val !== undefined) return Number(val.val);
     if (val.count !== undefined) return Number(val.count);
     if (val.value !== undefined) return Number(val.value);
     if (val.episodes !== undefined) return Number(val.episodes);
-    
+
     // Fallback: search for any number in the object values
     const firstNum = Object.values(val).find(v => !isNaN(parseInt(v)));
     if (firstNum !== undefined) return parseInt(firstNum);
   }
-  
+
   return 8;
 }

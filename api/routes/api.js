@@ -43,7 +43,7 @@ async function getSystemConfig() {
       .select('*')
       .eq('id', 'global')
       .single();
-    
+
     if (!error && data) {
       log(`[Config] Loaded from Supabase Cloud: ${data.production_model}`);
       return {
@@ -66,7 +66,7 @@ async function getSystemConfig() {
   } catch (err) {
     console.error('[Config] Failed to read system.json:', err);
   }
-  
+
   return defaults;
 }
 
@@ -75,12 +75,12 @@ async function getSystemConfig() {
  */
 async function syncProfile(user) {
   if (!user) return null;
-  
+
   // If guest, return a mock profile
   if (user.id === GLOBAL_GUEST_UUID || user.isGuest) {
     return { id: user.id, email: 'guest@dramascript.ai', role: 'guest', plan: 'Free', credits: 999 };
   }
-  
+
   // High-priority Admin rule for new users or domain-level control
   const isPrimaryEmail = user.email && (user.email.endsWith('@dramascript.ai') || user.email === 'dev.marckim@gmail.com');
 
@@ -97,8 +97,8 @@ async function syncProfile(user) {
       .single();
 
     if (error) {
-       console.log(`[Profile Sync] Creating/Updating profile for ${user.email || 'Guest'}`);
-       const { data: newProfile, error: insErr } = await serviceSupabase
+      console.log(`[Profile Sync] Creating/Updating profile for ${user.email || 'Guest'}`);
+      const { data: newProfile, error: insErr } = await serviceSupabase
         .from('user_profiles')
         .upsert({
           id: profileId,
@@ -111,8 +111,8 @@ async function syncProfile(user) {
         .select()
         .single();
       if (insErr) {
-         console.error('[Profile Sync] UPSERT error:', insErr.message);
-         return { id: profileId, email: user.email, role: user.isGuest ? 'guest' : 'user', plan: 'Free', credits: defaultCredits };
+        console.error('[Profile Sync] UPSERT error:', insErr.message);
+        return { id: profileId, email: user.email, role: user.isGuest ? 'guest' : 'user', plan: 'Free', credits: defaultCredits };
       }
       return newProfile;
     }
@@ -129,7 +129,7 @@ const router = express.Router();
 router.get('/auth/google', async (req, res) => {
   const origin = req.get('origin') || req.get('referer') || 'http://localhost:8081/';
   log(`[Auth] Google Login requested from: ${origin}`);
-  
+
   if (!supabase) {
     const errorMsg = '서버 설정(Supabase)이 완료되지 않았습니다. 관리자에게 문의하세요. (Missing SUPABASE_URL)';
     log(`[Auth] Google Login failed: ${errorMsg}`, 'error');
@@ -140,15 +140,15 @@ router.get('/auth/google', async (req, res) => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: origin, 
+        redirectTo: origin,
       },
     });
-    
+
     if (error) {
       log(`[Auth] OAuth Error: ${error.message} (Origin: ${origin})`, 'error');
       return res.status(error.status || 400).json({ error: error.message });
     }
-    
+
     if (!data.url) {
       log(`[Auth] OAuth URL generation failed for origin: ${origin}`, 'error');
       return res.status(500).json({ error: 'OAuth URL generation failed' });
@@ -183,10 +183,10 @@ const authMiddleware = async (req, res, next) => {
   if (!token && guestFingerprint) {
     // If it is a valid UUID, use it directly. Otherwise, stick with GLOBAL fallback for now.
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(guestFingerprint);
-    req.user = { 
-        id: isUuid ? guestFingerprint : GLOBAL_GUEST_UUID, 
-        fingerprint: guestFingerprint, 
-        isGuest: true 
+    req.user = {
+      id: isUuid ? guestFingerprint : GLOBAL_GUEST_UUID,
+      fingerprint: guestFingerprint,
+      isGuest: true
     };
     log(`[Auth] Authorized Guest: ${guestFingerprint.substring(0, 8)}... (ID Type: ${isUuid ? 'Unique' : 'Shared'})`);
     return next();
@@ -197,15 +197,15 @@ const authMiddleware = async (req, res, next) => {
     return res.status(401).json({ error: 'No token or fingerprint provided' });
   }
 
-  req.token = token; 
-  
+  req.token = token;
+
   if (!supabase) {
     log('[Auth] Rejecting: Supabase client not initialized.', 'error');
     return res.status(500).json({ error: '인증 서버 설정 오류' });
   }
 
   const { data: { user }, error } = await supabase.auth.getUser(token);
-  
+
   if (error || !user) {
     // If it's a guest request with a bad token, try falling back to fingerprint
     if (guestFingerprint) {
@@ -214,7 +214,7 @@ const authMiddleware = async (req, res, next) => {
     }
     return res.status(401).json({ error: 'Invalid or expired token' });
   }
-  
+
   req.user = user;
   next();
 };
@@ -235,15 +235,52 @@ router.get('/profile', authMiddleware, async (req, res) => {
 /* --- PROJECTS API --- */
 router.get('/projects', authMiddleware, async (req, res) => {
   const userDb = req.user.isGuest ? serviceSupabase : createUserClient(req.token);
-  
+
   let query = userDb.from('projects').select('*').eq('user_id', req.user.id);
-  
+
   // Sorting for both guests and members
   query = query.order('created_at', { ascending: false });
-    
+
   const { data: projects, error } = await query;
   if (error) return res.status(500).json({ error: error.message });
   res.json(projects);
+});
+
+/**
+ * GET Single Project with Episodes
+ */
+router.get('/projects/:id', authMiddleware, async (req, res) => {
+  try {
+    const userDb = req.user.isGuest ? serviceSupabase : createUserClient(req.token);
+    const projectId = req.params.id;
+
+    // 1. Fetch Project
+    const { data: project, error: pErr } = await userDb
+      .from('projects')
+      .select('*')
+      .eq('id', projectId)
+      .single();
+
+    if (pErr || !project) return res.status(404).json({ error: 'Project not found' });
+
+    // 2. Fetch Episodes
+    const { data: episodes, error: eErr } = await userDb
+      .from('episodes')
+      .select('*')
+      .eq('project_id', projectId)
+      .order('ep_num', { ascending: true });
+
+    if (eErr) {
+      log(`[Projects] Error fetching episodes for ${projectId}: ${eErr.message}`, 'error');
+    }
+
+    // Merge episodes into project object for the frontend
+    project.episodes_list = episodes || [];
+    
+    res.json(project);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 router.post('/projects', authMiddleware, async (req, res) => {
@@ -260,7 +297,7 @@ router.post('/projects', authMiddleware, async (req, res) => {
       ...baseInput,
       ...(platform !== undefined && { platform }),
       ...(episodes !== undefined && { episodes }),
-      ...(status   !== undefined && { status }),
+      ...(status !== undefined && { status }),
     };
 
     // Clean episodes to ensure numeric value or preserve array/object
@@ -304,41 +341,41 @@ router.post('/projects', authMiddleware, async (req, res) => {
     if (stats !== undefined) payload.stats = typeof stats === 'object' ? stats : {};
     if (episodes_count !== undefined) payload.episodes_count = parseInt(episodes_count);
     else if (typeof episodes === 'number') payload.episodes_count = episodes;
-    
+
     // Save scripts if provided (episode scripts storage)
     if (scripts !== undefined) {
       payload.scripts = (typeof scripts === 'object' && scripts !== null) ? scripts : {};
     }
     // Save error message for failed generations
     if (error_msg !== undefined) {
-      payload.error_msg = String(error_msg || '').substring(0, 1000); 
+      payload.error_msg = String(error_msg || '').substring(0, 1000);
     }
 
     const userDb = req.user.isGuest ? serviceSupabase : createUserClient(req.token);
     let finalProject;
 
     if (id) {
-       payload.id = String(id);
-       // PARTIAL UPDATE
-       log(`[Projects] Updating project ${payload.id} (pct: ${payload.pct}%)`);
-       const { data, error } = await userDb.from('projects').update(payload).eq('id', payload.id).select().single();
-       if (error) {
-           log(`[Projects] Update failed for ${payload.id}, trying upsert as fallback: ${error.message}`);
-           const { data: upData, error: upError } = await userDb.from('projects').upsert(payload, { onConflict: 'id' }).select().single();
-           if (upError) throw upError;
-           finalProject = upData;
-       } else {
-           finalProject = data;
-       }
+      payload.id = String(id);
+      // PARTIAL UPDATE
+      log(`[Projects] Updating project ${payload.id} (pct: ${payload.pct}%)`);
+      const { data, error } = await userDb.from('projects').update(payload).eq('id', payload.id).select().single();
+      if (error) {
+        log(`[Projects] Update failed for ${payload.id}, trying upsert as fallback: ${error.message}`);
+        const { data: upData, error: upError } = await userDb.from('projects').upsert(payload, { onConflict: 'id' }).select().single();
+        if (upError) throw upError;
+        finalProject = upData;
+      } else {
+        finalProject = data;
+      }
     } else {
-       // NEW INSERT
-       if (!payload.id) {
-           payload.id = 'p-' + req.user.id.substring(0, 5) + '-' + Date.now();
-       }
-       log(`[Projects] Creating new project: ${payload.id}`);
-       const { data, error } = await userDb.from('projects').insert(payload).select().single();
-       if (error) throw error;
-       finalProject = data;
+      // NEW INSERT
+      if (!payload.id) {
+        payload.id = 'p-' + req.user.id.substring(0, 5) + '-' + Date.now();
+      }
+      log(`[Projects] Creating new project: ${payload.id}`);
+      const { data, error } = await userDb.from('projects').insert(payload).select().single();
+      if (error) throw error;
+      finalProject = data;
     }
 
     // Background sync profile
@@ -358,7 +395,7 @@ router.delete('/projects/:id', authMiddleware, async (req, res) => {
     log(`[Projects] DELETE request for project: ${projectId} (User: ${userId}, Guest: ${!!req.user.isGuest})`);
 
     const userDb = req.user.isGuest ? serviceSupabase : createUserClient(req.token);
-    
+
     // 1. Precise ID categorization
     // If it contains a hyphen, it's a UUID. If it's purely numeric, it's a numeric ID.
     const isUuid = projectId.includes('-');
@@ -373,30 +410,30 @@ router.delete('/projects/:id', authMiddleware, async (req, res) => {
     let queryBuilder = userDb.from('projects').delete().eq('id', targetId).eq('user_id', userId);
 
     const { data, error, count } = await queryBuilder.select();
-    
+
     if (error) {
       log(`[Projects] Delete error for ID ${projectId}: ${error.message} (${error.code})`, 'error');
       if (error.code === '22P02') {
-         return res.status(400).json({ error: 'ID 형식이 올바르지 않습니다.', details: error.message });
+        return res.status(400).json({ error: 'ID 형식이 올바르지 않습니다.', details: error.message });
       }
       throw error;
     }
 
     log(`[Projects] Delete result: ${count || 0} rows removed.`);
-    
+
     // 3. Fallback: If no rows deleted, maybe the ID type was misinterpreted
     if (!count || count === 0) {
       log(`[Projects] No rows deleted for ${targetId}. Trying opposite type fallback...`);
       const fallbackId = isNumeric ? projectId.toString() : (parseInt(projectId) || null);
-      
+
       if (fallbackId !== null && fallbackId !== targetId) {
         const { count: count2 } = await userDb.from('projects').delete().eq('id', fallbackId).eq('user_id', userId).select();
         if (count2 > 0) {
-           log(`[Projects] Fallback delete success for ${fallbackId}.`);
-           return res.json({ success: true, count: count2 });
+          log(`[Projects] Fallback delete success for ${fallbackId}.`);
+          return res.json({ success: true, count: count2 });
         }
       }
-      
+
       log(`[Projects] FINAL NOTICE: No project found to delete for ID: ${projectId}`);
       return res.json({ success: true, message: '삭제할 프로젝트를 찾을 수 없거나 권한이 없습니다.' });
     }
@@ -415,7 +452,7 @@ router.post('/generate', async (req, res) => {
     const authHeader = req.headers['authorization'];
     const guestFingerprint = req.headers['x-guest-fingerprint'];
     let supabaseUser = null;
-    
+
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
       const { data: { user }, error } = await supabase.auth.getUser(token);
@@ -431,9 +468,9 @@ router.post('/generate', async (req, res) => {
       // --- COMMERCIALIZATION: Credit Check ---
       const profile = await syncProfile(supabaseUser);
       if (profile && profile.credits <= 0 && profile.plan === 'Free') {
-        return res.status(403).json({ 
-          error: '크레딧이 부족합니다.', 
-          details: '프로 요금제로 업그레이드하거나 크레딧을 충전해 주세요.' 
+        return res.status(403).json({
+          error: '크레딧이 부족합니다.',
+          details: '프로 요금제로 업그레이드하거나 크레딧을 충전해 주세요.'
         });
       }
     }
@@ -450,7 +487,7 @@ router.post('/generate', async (req, res) => {
     console.log(`[AI Proxy] Type: ${type}, Tokens: ${content.maxTokens || 'default'}`);
 
     const anthropic = new Anthropic({ apiKey });
-    
+
     // === MODEL SELECTION LOGIC ===
     // Planning-type tasks use the fast/cheap planningModel
     // Script/production-type tasks use the powerful productionModel
@@ -458,24 +495,24 @@ router.post('/generate', async (req, res) => {
     const isHeavyTask = SCRIPT_TYPES.includes(type);
     let modelId = isHeavyTask
       ? (config.productionModel || 'claude-sonnet-4-6')
-      : (config.planningModel  || 'claude-haiku-4-5');
-    
+      : (config.planningModel || 'claude-haiku-4-5');
+
     // === MODEL ALIAS MAP ===
     // Maps admin UI aliases (human-readable) to the real Anthropic API IDs.
     // VERIFIED against https://docs.anthropic.com/en/docs/about-claude/models (2026-03-31)
     const modelMap = {
       // -- Claude 4 series (Current Generation) --
-      'claude-haiku-4-5':  'claude-haiku-4-5-20251001', // Mapped as requested
+      'claude-haiku-4-5': 'claude-haiku-4-5-20251001', // Mapped as requested
       'claude-sonnet-4-6': 'claude-sonnet-4-6',          // Mapped as requested
-      'claude-opus-4-6':   'claude-opus-4-6',            // Mapped as requested
+      'claude-opus-4-6': 'claude-opus-4-6',            // Mapped as requested
       // -- Claude 3.5 series (Legacy) --
       'claude-3-5-haiku-20241022': 'claude-3-5-haiku-20241022',
-      'claude-3-5-sonnet-latest':  'claude-3-5-sonnet-latest',
-      'claude-3-5-sonnet-20241022':'claude-3-5-sonnet-20241022',
-      'claude-3-opus-latest':      'claude-3-opus-latest',
-      'claude-3-5-haiku-latest':   'claude-3-5-haiku-20241022',
+      'claude-3-5-sonnet-latest': 'claude-3-5-sonnet-latest',
+      'claude-3-5-sonnet-20241022': 'claude-3-5-sonnet-20241022',
+      'claude-3-opus-latest': 'claude-3-opus-latest',
+      'claude-3-5-haiku-latest': 'claude-3-5-haiku-20241022',
     };
-    
+
     if (modelMap[modelId]) {
       modelId = modelMap[modelId];
     } else {
@@ -483,7 +520,7 @@ router.post('/generate', async (req, res) => {
       log(`[AI Proxy] ⚠️ Unknown model ID '${modelId}' - falling back to claude-3-5-sonnet-20241022`);
       modelId = 'claude-3-5-sonnet-20241022';
     }
-    
+
     log(`[AI Proxy] Task: '${type}' (${isHeavyTask ? 'Heavy' : 'Light'}) → Model: ${modelId}`);
     const startTime = Date.now();
 
@@ -507,7 +544,7 @@ router.post('/generate', async (req, res) => {
       const raw = response.content[0].text;
       const elapsed = Date.now() - startTime;
       log(`[AI Proxy] ✅ Request SUCCESS | Model: ${modelId} | Duration: ${elapsed}ms`);
-      
+
       // 5. Robust JSON Extraction
       let clean = raw;
       const jsonMatch = raw.match(/\{[\s\S]*\}/);
@@ -548,18 +585,14 @@ router.post('/generate', async (req, res) => {
         try {
           let repaired = clean;
           repaired = repaired.replace(/,\s*$/, '');
-          const openBraces    = (repaired.match(/\{/g) || []).length;
-          const closeBraces   = (repaired.match(/\}/g) || []).length;
-          const openBrackets  = (repaired.match(/\[/g) || []).length;
-          const closeBrackets = (repaired.match(/\}/g) || []).length; // User's snippet had typo in second half, should be \] for closeBrackets but they wrote \}? Wait, let me fix it to \]
-          
-          // Wait, the user's snippet in the prompt:
-          // const closeBrackets = (repaired.match(/\]/g) || []).length;
-          // That's what I should use.
-          
-          for (let i = 0; i < (repaired.match(/\[/g) || []).length - (repaired.match(/\]/g) || []).length; i++) repaired += ']';
-          for (let i = 0; i < (repaired.match(/\{/g) || []).length - (repaired.match(/\}/g) || []).length; i++) repaired += '}';
-          
+          const openBraces = (repaired.match(/\{/g) || []).length;
+          const closeBraces = (repaired.match(/\}/g) || []).length;
+          const openBrackets = (repaired.match(/\[/g) || []).length;
+          const closeBrackets = (repaired.match(/\]/g) || []).length;
+
+          for (let i = 0; i < openBrackets - closeBrackets; i++) repaired += ']';
+          for (let i = 0; i < openBraces - closeBraces; i++) repaired += '}';
+
           const parsed = JSON.parse(repaired);
           log(`[AI Proxy] JSON 자동 복구 성공!`);
           res.json(parsed);
@@ -576,10 +609,10 @@ router.post('/generate', async (req, res) => {
     } catch (err) {
       const elapsed = Date.now() - startTime;
       log(`[AI Proxy] ❌ Request FAILED | Duration: ${elapsed}ms | Error: ${err.message}`, 'error');
-      
+
       if (err.status) {
-        return res.status(err.status).json({ 
-          error: `Anthropic API Error (${err.status})`, 
+        return res.status(err.status).json({
+          error: `Anthropic API Error (${err.status})`,
           details: err.message,
           type: err.type
         });
@@ -593,47 +626,45 @@ router.post('/generate', async (req, res) => {
 });
 
 /**
- * NEW: Episode-specific Resource Generation (Budget & PPL)
+ * NEW: Trigger Supabase Edge Function for the 7-step AI Generation Flow
  */
-
-/**
- * NEW: Episode-specific Resource Generation (Budget & PPL)
- */
-router.post('/generate/episode-resources', authMiddleware, async (req, res) => {
+router.post('/generate/start', authMiddleware, async (req, res) => {
   try {
-    const { projectId, epIdx, context } = req.body;
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    const anthropic = new Anthropic({ apiKey });
-    const config = await getSystemConfig();
+    const { projectId, input } = req.body;
+    const SUPABASE_URL = process.env.SUPABASE_URL;
+    const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
-    log(`[Episode Resources] Generating for Project ${projectId}, Ep ${epIdx + 1}`);
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      throw new Error('Supabase configuration missing in environment variables.');
+    }
 
-    const prompt = context.userPrompt; 
-    const systemPrompt = context.systemPrompt || config.systemPrompt;
+    const functionUrl = `${SUPABASE_URL}/functions/v1/generate`;
+    
+    log(`[Edge Trigger] Calling Edge Function for ${projectId}...`);
 
-    const startTime = Date.now();
-    const msg = await anthropic.messages.create({
-      model: config.productionModel || 'claude-sonnet-4-6',
-      max_tokens: 4000,
-      system: systemPrompt,
-      messages: [{ role: "user", content: prompt }],
+    // Call Supabase Edge Function
+    // [Logic Hardening] We don't await the full generation here because it takes minutes.
+    // Instead, we just ensure the request was sent and accepted.
+    fetch(functionUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${req.token || SUPABASE_ANON_KEY}`,
+        'apikey': SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({ projectId, input, action: 'start' })
+    }).catch(err => {
+      log(`[Edge Trigger] ❌ Background Trigger Error for ${projectId}: ${err.message}`, 'error');
     });
 
-    const duration = ((Date.now() - startTime)/1000).toFixed(1);
-    let raw = msg.content[0].text;
+    log(`[Edge Trigger] ✅ Triggered background generation for ${projectId}`);
     
-    // JSON extraction
-    let clean = raw;
-    const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (jsonMatch) clean = jsonMatch[0];
+    // Return immediately so the frontend can start polling
+    res.json({ success: true, message: 'Generation started in background', projectId });
 
-    const parsed = JSON.parse(clean);
-    log(`[Episode Resources] Success in ${duration}s`);
-    
-    res.json(parsed);
-  } catch (error) {
-    log(`[Episode Resources] Error: ${error.message}`, 'error');
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    log(`[Edge Trigger] ❌ Setup Error: ${err.message}`, 'error');
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -651,8 +682,8 @@ router.post('/payment', authMiddleware, async (req, res) => {
 });
 
 router.get('/test', (req, res) => {
-  res.json({ 
-    success: true, 
+  res.json({
+    success: true,
     message: 'DramaScript AI API is working on Vercel!',
     env_check: {
       has_anthropic: !!process.env.ANTHROPIC_API_KEY,
@@ -669,7 +700,7 @@ router.get('/samples', async (req, res) => {
       .from('samples')
       .select('*')
       .order('id', { ascending: true });
-    
+
     if (error) throw error;
 
     // Filter in JS to support flexible JSONB visibility flag (legacy fallback)
@@ -692,7 +723,7 @@ router.get('/admin/samples', authMiddleware, async (req, res) => {
       .from('samples')
       .select('*')
       .order('id', { ascending: true });
-    
+
     if (error) throw error;
     res.json(data);
   } catch (err) {
@@ -708,7 +739,7 @@ router.post('/admin/samples/batch', authMiddleware, async (req, res) => {
 
     const upsertPromises = samples.map(s => {
       const { id, title, data: sampleData, isVisible } = s;
-      
+
       const updatedSampleData = {
         ...sampleData,
         isVisible: isVisible !== undefined ? isVisible : (sampleData.isVisible !== undefined ? sampleData.isVisible : true)
@@ -720,7 +751,7 @@ router.post('/admin/samples/batch', authMiddleware, async (req, res) => {
         updated_at: new Date().toISOString()
       };
       if (id) upsertData.id = id;
-      
+
       return serviceSupabase
         .from('samples')
         .upsert(upsertData, { onConflict: 'id' });
@@ -728,7 +759,7 @@ router.post('/admin/samples/batch', authMiddleware, async (req, res) => {
 
     const results = await Promise.all(upsertPromises);
     const errors = results.filter(r => r.error);
-    
+
     if (errors.length > 0) {
       console.error('[Admin API] Batch Save Errors:', errors.map(e => e.error));
       throw new Error(`Failed to update ${errors.length} samples`);

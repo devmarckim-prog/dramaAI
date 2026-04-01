@@ -16,7 +16,7 @@ export function buildResultPanels() {
   console.log('[Dashboard] Building Result Panels...', state.planData);
   const charGrid = document.getElementById('char-cards-r');
   if (charGrid) charGrid.innerHTML = '';
-  
+
   const epBars = document.getElementById('ep-bars-r');
   if (epBars) epBars.innerHTML = '';
 
@@ -31,18 +31,18 @@ export function buildResultPanels() {
 function renderOverview(retryCount = 0) {
   const p = state.planData || {};
   const input = state.currentInput || {};
-  
+
   const title = p.title || input.title || '새 프로젝트';
-  
+
   // Update Hero section (immediate)
   const el = document.getElementById('result-hero-title-el');
   if (el) el.textContent = title;
-  
+
   const logline = p.logline || input.logline || '';
   const synopsis = p.synopsis || input.synopsis || '';
   const loglineEl = document.getElementById('result-logline');
   if (loglineEl) loglineEl.textContent = logline;
-  
+
   const sideTitle = document.getElementById('sidebar-title-label');
   if (sideTitle) sideTitle.textContent = title;
 
@@ -64,20 +64,20 @@ function renderOverview(retryCount = 0) {
     const stats = p.stats || p.budget || {};
     const inputEps = input.episodes ? parseInt(input.episodes.toString().replace(/[^0-9]/g, '')) : 8;
     const epCount = p.episodes_count || inputEps || (Array.isArray(p.episodes) ? p.episodes.length : 8);
-    
+
     // Budget & PPL extraction with deep search
     let budgetRaw = p.budget || stats.budget || stats.budgetRaw;
     if (typeof budgetRaw === 'object' && budgetRaw !== null) budgetRaw = budgetRaw.total || budgetRaw.amount || budgetRaw.value;
 
     let pplRaw = p.ppl_revenue || p.ppl || stats.ppl || stats.ppl_revenue || stats.pplRaw;
     if (Array.isArray(pplRaw)) {
-       // sum it up if it's an array of objects
-       pplRaw = pplRaw.reduce((acc, curr) => acc + (parseInt(curr.revenue || curr.amount || 0)), 0);
+      // sum it up if it's an array of objects
+      pplRaw = pplRaw.reduce((acc, curr) => acc + (parseInt(curr.revenue || curr.amount || 0)), 0);
     }
-    
+
     const ovBudget = document.getElementById('ov-budget');
     const heroBudget = document.getElementById('stat-budget');
-    
+
     function formatCurrency(val) {
       if (!val || val === '-' || val === 0) return '-';
       if (typeof val === 'number') return `₩${val.toLocaleString()}만`;
@@ -97,13 +97,13 @@ function renderOverview(retryCount = 0) {
     if (heroBudget) heroBudget.textContent = bDisp;
     const input = p.input || {};
     console.log('[Dashboard] Rendering project:', p.id, p.title);
-    console.log('[Dashboard] Data Structure:', { 
-      episodes: p.episodes, 
-      episodes_count: p.episodes_count, 
-      conflicts: p.conflicts, 
-      stats: p.stats 
+    console.log('[Dashboard] Data Structure:', {
+      episodes: p.episodes,
+      episodes_count: p.episodes_count,
+      conflicts: p.conflicts,
+      stats: p.stats
     });
-    
+
     const ovPpl = document.getElementById('ov-ppl');
     const heroPpl = document.getElementById('stat-ppl');
     const pDisp = formatCurrency(pplRaw);
@@ -115,7 +115,7 @@ function renderOverview(retryCount = 0) {
       const platform = p.platform || input.platform || 'OTT';
       const genre = p.genre || input.genre || '장르';
       badge.innerHTML = `🌟 ${platform} · ${genre} · ${epCount}부작`;
-      
+
       const heroScenes = document.getElementById('stat-scenes');
       if (heroScenes) {
         let totalScenes = 0;
@@ -154,10 +154,10 @@ function renderOverview(retryCount = 0) {
 export function buildCharCards() {
   const grid = document.getElementById('char-cards-r');
   if (!grid) return;
-  
+
   const cast = state.planData?.characters || state.currentInput?.chars || [];
   const baseDefault = JSON.parse(JSON.stringify(CAST_DATA_BASE));
-  
+
   // Use real cast if available, otherwise default sample cast
   const finalCast = cast.length ? cast.map((c, i) => {
     const d = baseDefault[i % baseDefault.length];
@@ -170,7 +170,7 @@ export function buildCharCards() {
       actors: c.actors || d.actors
     };
   }) : baseDefault;
-  
+
   // Save to a temporary list to use in selectChar
   state.currentDashboardCast = finalCast;
 
@@ -184,7 +184,7 @@ export function buildCharCards() {
       <div class="cdesc">${c.desc}</div>
       <div class="char-default-tag">${c.actors?.[0]?.name || ''} 캐스팅 제안</div>
     </div>`).join('');
-    
+
   renderCast(0);
   buildRelationMap();
 }
@@ -193,11 +193,11 @@ export function renderCast(i) {
   const castList = state.currentDashboardCast || CAST_DATA_BASE;
   const d = castList[i];
   if (!d) return;
-  
+
   const title = document.getElementById('cast-title-r');
   const role = document.getElementById('cast-role-r');
   const list = document.getElementById('cast-list-r');
-  
+
   if (title) title.textContent = d.name;
   if (role) role.textContent = (d.role || '캐릭터') + ' 🎬 추천 캐스팅';
   if (list) {
@@ -228,20 +228,20 @@ export function buildRelationMap() {
   if (!wrap) return;
 
   const chars = (state.planData?.characters || state.currentInput?.chars || []).filter(c => c.name);
-  if (chars.length < 2) { 
-    wrap.innerHTML = '<div class="admin-loading-text" style="padding:40px; text-align:center; background:var(--paper2); border-radius:12px; border:1px solid var(--border)">인물 정보가 부족하여 관계도를 생성할 수 없습니다.</div>'; 
-    return; 
+  if (chars.length < 2) {
+    wrap.innerHTML = '<div class="admin-loading-text" style="padding:40px; text-align:center; background:var(--paper2); border-radius:12px; border:1px solid var(--border)">인물 정보가 부족하여 관계도를 생성할 수 없습니다.</div>';
+    return;
   }
 
   const male = chars.find(c => c.role === '남주' || (c.gender && c.gender.includes('남'))) || chars[1] || chars[0];
   const female = chars.find(c => c.role === '여주' || (c.gender && c.gender.includes('여'))) || chars[0];
   const subs = chars.filter(c => c !== male && c !== female).slice(0, 4);
-  
+
   const W = 800, H = 400;
   const cx = W / 2, cy = H / 2 + 20;
   const mPos = { x: cx - 200, y: cy };
   const fPos = { x: cx + 200, y: cy };
-  
+
   const arcPositions = [
     { x: cx - 320, y: cy - 120 }, { x: cx - 100, y: cy - 160 },
     { x: cx + 100, y: cy - 160 }, { x: cx + 320, y: cy - 120 },
@@ -265,7 +265,7 @@ export function buildRelationMap() {
         <stop offset="100%" style="stop-color:#82C5E5;stop-opacity:1" />
       </linearGradient>
     </defs>`;
-  
+
   // Links
   svg += `<path d="M ${mPos.x} ${mPos.y} Q ${cx} ${cy - 80} ${fPos.x} ${fPos.y}" fill="none" stroke="url(#gradGold)" stroke-width="5" class="rel-link" opacity="0.9" filter="url(#glow-gold)"/>`;
   svg += `
@@ -274,7 +274,7 @@ export function buildRelationMap() {
       <text font-size="12" fill="var(--gold)" text-anchor="middle" dominant-baseline="middle" font-weight="900">♥ 메인 관계</text>
     </g>
   `;
-  
+
   subs.forEach((c, i) => {
     const pos = arcPositions[i];
     if (!pos) return;
@@ -307,10 +307,10 @@ export function buildEpList() {
   const el = document.getElementById('ep-list-r');
   if (!el) return;
   el.innerHTML = '';
-  
+
   const rawEps = state.planData?.episodes || state.aiEpisodes || [];
-  const eps = Array.isArray(rawEps) ? rawEps : (typeof rawEps === 'number' ? Array.from({length: rawEps}, (_, i) => ({num: i+1})) : []);
-  
+  const eps = Array.isArray(rawEps) ? rawEps : (typeof rawEps === 'number' ? Array.from({ length: rawEps }, (_, i) => ({ num: i + 1 })) : []);
+
   if (eps.length === 0) {
     el.innerHTML = '<div class="project-empty-desc" style="padding:20px">에피소드 정보가 없습니다.</div>';
     return;
@@ -351,16 +351,16 @@ export function buildBudget() {
   const n = state.planData?.episodes?.length || state.currentInput?.episodes || 8;
   const bars = document.getElementById('ep-bars-r');
   if (!bars) return;
-  
+
   const breakdown = state.planData?.stats?.budgetBreakdown || [];
-  const tots = breakdown.length ? breakdown.map(ep => Object.values(ep.items || {}).reduce((s, v) => s + parseInt(v || 0), 0)) 
-               : Array.from({ length: n }, (_, i) => 12000 + Math.random() * 5000);
-               
+  const tots = breakdown.length ? breakdown.map(ep => Object.values(ep.items || {}).reduce((s, v) => s + parseInt(v || 0), 0))
+    : Array.from({ length: n }, (_, i) => 12000 + Math.random() * 5000);
+
   const max = Math.max(...tots, 100);
-  
+
   bars.innerHTML = tots.map((v, i) => {
     const isGenerated = breakdown.some(b => b.ep === i + 1);
-    
+
     // 1화이거나 이미 생성된 경우 바 그래프 표시
     if (i === 0 || isGenerated) {
       return `
@@ -387,10 +387,10 @@ export function buildBudget() {
         </div>`;
     }
   }).join('');
-    
+
   const tv = tots.reduce((a, b) => a + b, 0);
   const av = Math.round(tv / n);
-  
+
   const sumWrap = document.getElementById('budget-sum-wrap');
   if (sumWrap) {
     sumWrap.innerHTML = `
@@ -404,7 +404,7 @@ export function buildBudget() {
 export function buildPplPanel() {
   const pplGrid = document.getElementById('ppl-grid-r');
   if (!pplGrid) return;
-  
+
   const pplData = state.planData?.ppl || [];
   if (!pplData.length) {
     pplGrid.innerHTML = '<div class="project-empty-desc" style="padding:20px; text-align:center">PPL 제안 수집 중...</div>';

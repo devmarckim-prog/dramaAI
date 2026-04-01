@@ -124,12 +124,12 @@ async function initApp() {
   // IMMEDIATELY show home page to avoid blank screen
   if (window.showPage) window.showPage('home');
   Nav.addDebugLog("시스템 모듈 초기화 시작...");
-  
+
   // 0. Sync Samples from Cloud
   await syncSamplesFromServer().catch(err => console.warn('[App] Sample sync failed:', err));
-  
+
   let forceRedirect = false;
-  
+
   // 1. Auth State Check & Recovery
   Nav.addDebugLog("인증 상태 확인 중...");
   if (window.location.hash.includes('access_token')) {
@@ -143,7 +143,7 @@ async function initApp() {
         if (payload.email) localStorage.setItem('ds_user_email', payload.email);
         if (payload.user_metadata?.avatar_url) localStorage.setItem('ds_user_avatar', payload.user_metadata.avatar_url);
         Nav.addDebugLog(`사용자 로그인 성공: ${payload.email}`, "success");
-      } catch(e) { 
+      } catch (e) {
         Nav.addDebugLog("토큰 파싱 실패", "error");
       }
       state.isLoggedIn = true;
@@ -162,15 +162,15 @@ async function initApp() {
   } else {
     Nav.addDebugLog("비로그인 상태 (게스트 모드 대기)");
   }
-  
+
   // 2. Initial UI Render
   const currentPath = window.location.pathname;
   console.log(`[Init] Using Path: ${currentPath}`);
   Nav.addDebugLog(`경로 진입: ${currentPath}`);
-  
+
   Auth.renderNav();
   Wizard.updateStepUI();
-  
+
   const isCurrentlyAdmin = currentPath.startsWith('/admin') && !forceRedirect;
   const isSettings = currentPath.startsWith('/settings');
   const isWizard = currentPath.startsWith('/wizard');
@@ -197,13 +197,13 @@ async function initApp() {
       Nav.addDebugLog("홈 페이지 로드 완료.");
     }
   }
-  
+
   Nav.addDebugLog("API 설정 로드 중...");
   Settings.loadApiKeyToSettings();
-  
+
   Nav.addDebugLog("DramaScript AI 앱 준비 완료 🚀", "success");
   console.log("DramaScript AI App Initialized 🚀");
-  
+
   // Premium Scroll Animations
   initScrollAnimations();
 
@@ -240,7 +240,7 @@ function initScrollAnimations() {
 async function startGenerate() {
   const input = Wizard.collectWizardInput();
   if (!input) return;
-  
+
   try {
     await startGenerationFlow(input);
   } catch (e) {

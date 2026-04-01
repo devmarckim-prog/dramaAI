@@ -26,26 +26,90 @@ function getGuestFingerprint() {
   return gid;
 }
 
+// Global function to fetch project by ID with all details
+export async function fetchProjectById(id) {
+  try {
+    const res = await fetch(`/api/projects/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('ds_auth_token')}`,
+        'x-guest-fingerprint': getGuestFingerprint()
+      }
+    });
+    if (!res.ok) throw new Error('프로젝트 정보를 가져오지 못했습니다.');
+    return await res.json();
+  } catch (error) {
+    console.error('[API] fetchProjectById error:', error);
+    throw error;
+  }
+}
+
+export async function openProject(id) {
+  try {
+    // [New] Fetch full project data including episodes_list
+    const pRaw = await fetchProjectById(id);
+    const p = _normalizeProject(pRaw);
+
+    // Reject projects with error status
+    if (p.status === 'error') {
+      showToast('AI 생성 중 오류가 발생한 프로젝트입니다. 다시 생성해 주세요.', 'error');
+      return;
+    }
+
+    state.currentInput = p.input;
+    state.planData = {
+      id: p.id,
+      title: p.title,
+      logline: p.logline,
+      synopsis: p.synopsis,
+      platform: p.platform,
+      genre: p.genre,
+      episodes: p.episodes,
+      outline: p.outline,
+      stats: p.stats || p.budget || {},
+      characters: p.characters || p.chars || [],
+      ppl: p.ppl || [],
+      budget: p.budget || (p.stats && p.stats.budget),
+      episodes_list: p.episodes_list || [] // Normalized episodes
+    };
+
+    // Convert episodes_list to scripts mapping for legacy compat if needed
+    state.scripts = {};
+    if (p.episodes_list) {
+      p.episodes_list.forEach(ep => {
+        state.scripts[ep.ep_num] = ep.script;
+      });
+    }
+
+    showPage('result');
+    showToast(`${p.title} 프로젝트를 불러왔습니다.`, 'success');
+  } catch (e) {
+    console.error("Open Project Error:", e);
+    showToast('프로젝트 데이터를 불러오는 중 오류가 발생했습니다.', 'error');
+  }
+}
+
+window.openProject = openProject;
+
 export async function startGenerationFlow(input) {
   state.isGenerating = true;
   state.generatingId = 'gen-' + Date.now();
   state.currentInput = input;
-  
+
   // CRITICAL: Clear old planData/stats from state to prevent sample content leakage
-  state.planData = { 
+  state.planData = {
     title: input.title || (input.genre || '드라마') + ' 프로젝트',
     logline: input.logline || ''
   };
   state.scripts = {};
-  
+
   showPage('generating');
-  
+
   if (isGenerating) {
     console.warn('[API] Generation already in progress. Skipping duplicate call.');
     return;
   }
   isGenerating = true;
-  
+
   const inputData = collectWizardInput();
   if (!inputData || !inputData.logline) {
     showToast('로그라인을 입력해 주세요.', 'warn');
@@ -53,13 +117,13 @@ export async function startGenerationFlow(input) {
     return;
   }
   state.currentInput = input;
-  
+
   // 1. "마스터피스" 애니메이션 표시
   const overlay = document.getElementById('masterpiece-overlay');
   if (overlay) overlay.classList.add('active');
-  
+
   showToast('드라마 기획안 생성을 시작합니다. 잠시 후 프로젝트 목록으로 이동합니다.', 'info');
-  
+
   if (state.isGenerating) {
     addDebugLog('이미 프로젝트가 생성 중입니다. 잠시만 기다려 주세요.', 'warn');
     return;
@@ -68,7 +132,7 @@ export async function startGenerationFlow(input) {
 
   // 개발 로그 자동 오픈 중단 (사용자 요청으로 UI 카드로 대체)
   // showDebugLog();
-  
+
   addDebugLog('드라마 프로젝트 생성을 시작합니다...', 'success');
   addDebugLog(`타겟 플랫폼: ${input.platform}, 장르: ${input.genre}`);
 
@@ -97,9 +161,9 @@ export async function startGenerationFlow(input) {
       addDebugLog('서버 저장 실패. 로컬 저장소(Guest) 모드로 전환합니다...', 'warn');
       saveRes = await saveProject({ ...initialProject, fallback: true });
     }
-    
+
     if (!saveRes || !saveRes.success) {
-       throw new Error('프로젝트를 초기화할 수 없습니다. (Local Storage Error)');
+      throw new Error('프로젝트를 초기화할 수 없습니다. (Local Storage Error)');
     }
 
     state.generatingId = saveRes.id;
@@ -107,137 +171,150 @@ export async function startGenerationFlow(input) {
 
     // 2. 즉시 프로젝트 목록으로 이동하여 생성 중인 카드를 보여줌
     showPage('projects');
-    if (window.renderProjectCards) {
-      window.renderProjectCards();
-    } else {
-      renderProjectCards(); // fallback to imported one
-    }
-
-    // 2.5 부드러운 진행률 애니메이션 시작
-    startProgressSmoother(state.generatingId);
+    if (window.renderProjectCards) window.renderProjectCards();
 
     // 3. 2초 후 마스터피스 오버레이 제거
     setTimeout(() => {
       if (overlay) overlay.classList.remove('active');
     }, 2000);
 
-    // PHASE 1: CORE 
-    addDebugLog('AI 작가와 교신 중: 핵심 시놉시스 및 기획 구성...');
-    updateApiStatus('핵심 컨셉 설계 중...', '기획안(Core) 생성');
-    
-    const coreData = await callAPI_Core(input);
-    if (!coreData || (!coreData.title && !coreData.synopsis)) {
-      throw new Error('AI가 유효한 기획안을 생성하지 못했습니다. (Invalid AI Response)');
-    }
-    // Initial state.planData with coreData fields
-    state.planData = { 
-      synopsis: coreData.synopsis,
-      characters: coreData.characters || coreData.chars,
-      episodes: coreData.episodes || [],
-      ...coreData 
-    };
-    
-    await saveProject({
-      id: state.generatingId,
-      synopsis: state.planData.synopsis,
-      characters: state.planData.characters,
-      episodes: input.episodes || 8, // Persist the INTENDED episode count
-      status: '상세 기계안 구성 중...',
-      pct: 33,
-      stepIdx: 1
+    // [New] Trigger Supabase Edge Function
+    addDebugLog('서버 생성 엔진(Edge Function) 가동 중...', 'info');
+    const triggerRes = await fetch('/api/generate/start', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('ds_auth_token')}`,
+        'x-guest-fingerprint': getGuestFingerprint()
+      },
+      body: JSON.stringify({ projectId: state.generatingId, input })
     });
-    if (window.renderProjectCards) window.renderProjectCards();
 
-    // PHASE 2: DETAIL
-    addDebugLog('상세 인물 관계도 및 갈등 구조 설정 중...');
-    let detailData = null;
-    try {
-      detailData = await callAPI_Plan_Detail(input, coreData);
-    } catch (e) {
-      addDebugLog(`상세 묘사 생성 단계 지연/오류: ${e.message}. 다음 단계로 강제 진행합니다.`, 'warn');
-      detailData = { logline: coreData.logline, synopsis: coreData.synopsis, characters: coreData.characters || [] };
+    if (!triggerRes.ok) {
+      throw new Error('AI 생성 엔진 시작에 실패했습니다.');
     }
 
-    if (detailData) {
-      state.planData = { ...state.planData, ...detailData };
-      addDebugLog('상세 기획 데이터 적용 완료 (갈등 구조 포함)', 'success');
-      await saveProject({ 
-        id: state.generatingId, 
-        conflicts: detailData.conflicts || [],
-        stats: detailData.stats || detailData.budget || {},
-        status: 'generating',
-        pct: 55, 
-        stepIdx: 2 
-      });
-    }
-    if (window.renderProjectCards) window.renderProjectCards();
-
-    // PHASE 3: PRODUCTION & PPL (1화 전용)
-    addDebugLog('회차별 제작비 산출 및 PPL 기획 중 (1화 집중)...');
-    const prodData = await callAPI_Production(input);
-    const pplData = await callAPI_PPL(input, state.planData);
-    
-    // Ensure budget structure is correct
-    const finalBudget = prodData?.budget || prodData;
-    if (prodData?.budgetBreakdown) {
-       finalBudget.budgetBreakdown = prodData.budgetBreakdown;
-    }
-
-    const stage3Stats = prodData?.stats || finalBudget;
-    state.planData.stats = { ...state.planData.stats, ...stage3Stats };
-
-    await saveProject({ 
-      id: state.generatingId, 
-      budget: finalBudget,
-      stats: state.planData.stats,
-      ppl: pplData?.ppl || pplData || [],
-      status: 'generating',
-      pct: 85,
-      stepIdx: 3
-    });
-    if (window.renderProjectCards) window.renderProjectCards();
-
-    addDebugLog('주요 기획안 생성이 완료되었습니다!', 'success');
-    await finishGenerate(false, input);
-    updateApiStatus('기획안 구성 완료', '대기');
+    // 4. Start Polling Loop
+    startPolling(state.generatingId);
 
   } catch (error) {
-    addDebugLog(`에러 발생: ${error.message}`, 'error');
+    addDebugLog(`초기화 에러: ${error.message}`, 'error');
     if (state.generatingId) {
       await saveProject({ id: state.generatingId, status: 'error', pct: 0, error_msg: error.message });
     }
-    await finishGenerate(true, input, error.message);
+    showToast('생성을 시작할 수 없습니다.', 'error');
   } finally {
     state.isGenerating = false;
     isGenerating = false;
-    stopProgressSmoother();
-    const btn = document.getElementById('btn-next');
-    if (btn) {
-       btn.disabled = false;
-       btn.innerHTML = '🎬 시나리오 마스터피스 생성하기';
-    }
   }
 }
+
+let pollingInterval = null;
+export function startPolling(projectId) {
+  if (pollingInterval) clearInterval(pollingInterval);
+  
+  addDebugLog('진행 상태 모니터링 시작...', 'info');
+  
+  pollingInterval = setInterval(async () => {
+    try {
+      const projects = await fetchProjects(); // This fetches from server
+      const current = projects.find(p => p.id.toString() === projectId.toString());
+      
+      if (!current) return;
+
+      // Update UI cards
+      if (window.renderProjectCards) window.renderProjectCards();
+
+      if (current.status === 'done' || current.status === 'sample_done') {
+        console.log(`[Polling] Generation reached ${current.status}. Stopping poll.`);
+        stopPolling();
+        
+        if (current.status === 'done') {
+           showToast('드라마 마스터피스가 완성되었습니다!', 'success');
+        } else {
+           showToast('기획안과 샘플 대본이 준비되었습니다. 검토 후 전체 생성을 진행하세요.', 'info');
+        }
+      } else if (current.status === 'error') {
+        console.error('[Polling] Error detected in project status');
+        stopPolling();
+        showToast('생성 중 오류가 발생했습니다: ' + (current.error_msg || 'Unknown'), 'error');
+      }
+    } catch (e) {
+      console.warn('[Polling] Fetch error during polling:', e);
+    }
+  }, 3000); // 3 second interval
+}
+
+export async function resumeProject(projectId) {
+  try {
+    addDebugLog(`프로젝트 생성 재개 시도 (ID: ${projectId})...`, 'info');
+    
+    const triggerRes = await fetch('/api/generate/start', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('ds_auth_token')}`,
+        'x-guest-fingerprint': getGuestFingerprint()
+      },
+      body: JSON.stringify({ projectId, action: 'start' })
+    });
+
+    if (!triggerRes.ok) throw new Error('재개 요청 실패');
+
+    showToast('생성을 재개했습니다.', 'success');
+    startPolling(projectId);
+    showPage('projects');
+  } catch (e) {
+    showToast('재개 실패: ' + e.message, 'error');
+  }
+}
+
+export async function finalizeProject(projectId) {
+  try {
+    addDebugLog(`프로젝트 전체 생성 시작 (ID: ${projectId})...`, 'info');
+    
+    const triggerRes = await fetch('/api/generate/start', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('ds_auth_token')}`,
+        'x-guest-fingerprint': getGuestFingerprint()
+      },
+      body: JSON.stringify({ projectId, action: 'finalize' })
+    });
+
+    if (!triggerRes.ok) throw new Error('전체 생성 요청 실패');
+
+    showToast('전체 대본 및 제작 계획 작성을 시작합니다.', 'success');
+    startPolling(projectId);
+  } catch (e) {
+    showToast('요청 실패: ' + e.message, 'error');
+  }
+}
+
+window.resumeProject = resumeProject;
+window.finalizeProject = finalizeProject;
+
 
 let progressInterval = null;
 function startProgressSmoother(projectId) {
   if (progressInterval) clearInterval(progressInterval);
-  
+
   progressInterval = setInterval(() => {
     // 로컬 스토리지나 메모리상의 프로젝트 pct를 조금씩 올림
     const cards = document.querySelectorAll(`[id^="gen-card-${projectId}"] .pcg-bar-fill-dynamic`);
     const labels = document.querySelectorAll(`[id^="gen-card-${projectId}"] .pcg-progress-wrap span:last-child`);
-    
+
     if (cards.length > 0) {
       cards.forEach(card => {
         let currentPct = parseFloat(card.style.width) || 0;
         if (currentPct < 99) {
           // 자연스러운 속도로 증가 (초당 약 0.3~0.5%)
-          let increment = 0.05 + (Math.random() * 0.15); 
+          let increment = 0.05 + (Math.random() * 0.15);
           let newPct = Math.min(currentPct + increment, 99);
           card.style.width = newPct + '%';
           labels.forEach(l => {
-             if (l.textContent.includes('%')) l.textContent = Math.floor(newPct) + '%';
+            if (l.textContent.includes('%')) l.textContent = Math.floor(newPct) + '%';
           });
         }
       });
@@ -260,7 +337,7 @@ async function finishGenerate(isError, input, errMsg) {
   // with dummy data. If real data exists in state.planData, always prefer that.
   const realChars = state.planData?.characters || state.planData?.chars;
   const realEpisodes = state.planData?.episodes;
-  
+
   const finalPayload = {
     id: state.generatingId,
     title: state.planData?.title || (input.title) || (input.genre || '드라마') + ' 프로젝트',
@@ -294,7 +371,7 @@ async function finishGenerate(isError, input, errMsg) {
   // We want the 'count' meta to reflect the user's intent (e.g. 8) even if AI hasn't finished all lines yet.
   const requestedEps = parseInt(input.episodes) || 8;
   if (Array.isArray(realEpisodes) && realEpisodes.length > 0) {
-    finalPayload.episodes = realEpisodes; 
+    finalPayload.episodes = realEpisodes;
   }
   finalPayload.episodes_count = Number(requestedEps);
 
@@ -421,14 +498,14 @@ export async function saveProject(projectData) {
   const token = localStorage.getItem('ds_auth_token');
   const hasToken = token && token !== 'mock_token';
   const gid = getGuestFingerprint(); // Always compute fingerprint
-  
-  const headers = { 
+
+  const headers = {
     'Content-Type': 'application/json',
     // Always include fingerprint header - backend ignores it for authenticated users
     // but REQUIRES it for guests. Sending it always is safe and prevents 401 errors.
     'x-guest-fingerprint': gid
   };
-  
+
   if (hasToken) {
     headers['Authorization'] = `Bearer ${token}`;
   } else if (!projectData.fallback) {
@@ -438,7 +515,7 @@ export async function saveProject(projectData) {
 
   const API_BASE_URL = '/api';
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 7000); 
+  const timeoutId = setTimeout(() => controller.abort(), 7000);
 
   try {
     const res = await fetch(`${API_BASE_URL}/projects`, {
@@ -447,7 +524,7 @@ export async function saveProject(projectData) {
       body: JSON.stringify(projectData),
       signal: controller.signal
     });
-    
+
     clearTimeout(timeoutId);
 
     if (!res.ok) {
@@ -493,7 +570,7 @@ async function _saveLocal(projectData) {
 
 export async function fetchProjects() {
   const token = localStorage.getItem('ds_auth_token');
-  
+
   // 1. Fetch public samples from server (respects Admin visibility settings)
   let activeSamples = [];
   try {
@@ -513,16 +590,16 @@ export async function fetchProjects() {
     activeSamples = [DIRECTORS_ARENA_SAMPLE, SEOUL_NIGHT_SAMPLE]
       .filter(s => s && s.id);
   }
-  
+
   // 로컬 저장소 데이터 (Guest 용 또는 백업)
   let localData = [];
   try {
     const rawLocal = localStorage.getItem('ds_projects_local');
     const rawGuest = localStorage.getItem('ds_guest_projects');
-    
+
     // Clear legacy hidden samples as visibility is now server-controlled
     localStorage.removeItem('ds_hidden_samples');
-    
+
     const set1 = rawLocal ? JSON.parse(rawLocal) : [];
     const set2 = rawGuest ? JSON.parse(rawGuest) : [];
     const merged = [...set1];
@@ -532,7 +609,7 @@ export async function fetchProjects() {
       }
     });
     localData = merged;
-  } catch(e) {
+  } catch (e) {
     console.warn('[API] Local data parse error:', e);
   }
 
@@ -558,12 +635,12 @@ export async function fetchProjects() {
       headers: headers
     });
 
-    
+
     let serverProjects = [];
     if (res.ok) {
       const data = await res.json();
       serverProjects = Array.isArray(data) ? data : (data.projects || []);
-      
+
       // PASSIVE MIGRATION: If we have local guest projects, sync them to cloud
       const hasToken = !!localStorage.getItem('ds_token');
       if (localData.length > 0 && (state.isGuest || hasToken)) {
@@ -571,7 +648,7 @@ export async function fetchProjects() {
         for (const p of localData) {
           // If not already on server (by title match or ID)
           if (!serverProjects.some(sp => sp.id.toString() === p.id.toString() || sp.title === p.title)) {
-             await saveProject({ ...p, fallback: true }); // save to cloud
+            await saveProject({ ...p, fallback: true }); // save to cloud
           }
         }
         // Success: Clear guest projects so we don't duplicate next time
@@ -580,7 +657,7 @@ export async function fetchProjects() {
         console.log('[API] Migration complete. Local storage cleared.');
       }
     }
-    
+
     // 로컬과 서버 프로젝트 합치기 (중복 제거)
     const combined = [...serverProjects];
     localData.forEach(p => {
@@ -589,7 +666,7 @@ export async function fetchProjects() {
         combined.push(p);
       }
     });
-    
+
     // 샘플 추가 및 정렬 (샘플은 항상 상단)
     return [...activeSamples, ...combined].map(p => _sanitizeProject(p));
   } catch (err) {
@@ -604,7 +681,7 @@ export async function fetchProjects() {
  */
 function _sanitizeProject(p) {
   if (!p) return p;
-  
+
   const _fix = (val) => {
     if (typeof val === 'string' && val.includes('[object Object]')) return null;
     return val;
@@ -637,7 +714,7 @@ export async function deleteProject(id) {
         localStorage.setItem('ds_hidden_samples', JSON.stringify(hidden));
       }
       return true;
-    } catch(e) { return false; }
+    } catch (e) { return false; }
   }
 
   // 2. Clear Local Cache (Optimistic UI support)
@@ -654,7 +731,7 @@ export async function deleteProject(id) {
           console.log(`[API] Local project ${id} removed from ${key}`);
         }
       }
-    } catch(e) {}
+    } catch (e) { }
   });
 
   // 3. Server Deletion
@@ -676,12 +753,12 @@ export async function deleteProject(id) {
       method: 'DELETE',
       headers: headers
     });
-    
+
     if (res.ok || res.status === 404) {
       console.log('[API] Server delete confirmed for:', id);
       return true;
     }
-    
+
     const errData = await res.json().catch(() => ({}));
     console.warn('[API] Server delete failed:', res.status, errData);
     return false;
@@ -694,21 +771,21 @@ export async function deleteProject(id) {
 export async function generateScriptForEp(epIdx) {
   addDebugLog(`${epIdx + 1}화 대본 집필을 시작합니다...`);
   updateApiStatus(`${epIdx + 1}화 대본 생성 중`, 'Script Writer');
-  
+
   try {
     const prompt = `${_buildBaseContext(state.currentInput)}\n\n회차: ${epIdx + 1}화\n기획안 요약: ${state.planData?.synopsis || ''}\n\n위 내용을 바탕으로 해당 회차의 드라마 대본(씬별 대사 및 지문)을 완성해주세요.\n순수 JSON만 반환.`;
     const res = await callBackendAI('script', { userPrompt: prompt });
-    
+
     if (res && res.scenes) {
       state.scripts[epIdx] = res.scenes;
       addDebugLog(`${epIdx + 1}화 대본 집필 완료!`, 'success');
-      
+
       // 기획안과 대본 동시 저장
-      await saveProject({ 
-        id: state.generatingId, 
-        scripts: state.scripts 
+      await saveProject({
+        id: state.generatingId,
+        scripts: state.scripts
       });
-      
+
       if (window.renderScript) window.renderScript();
     }
   } catch (err) {
@@ -725,14 +802,14 @@ export async function generateScriptForEp(epIdx) {
 export async function generateEpResources(epIdx) {
   if (isGenerating) return;
   isGenerating = true;
-  
+
   addDebugLog(`${epIdx + 1}화 전용 제작비 및 PPL 산출 중...`);
   updateApiStatus(`${epIdx + 1}화 리소스 분석 중`, '제작/PPL 전문가');
 
   try {
     const epData = state.planData?.episodes?.[epIdx];
     const sceneText = epData?.scenes?.map(s => `${s.num} ${s.loc} - ${s.desc || ''}`).join('\n') || '';
-    
+
     const context = {
       systemPrompt: SYSTEM_PROMPTS.EPISODE_RESOURCES,
       userPrompt: `${_buildBaseContext(state.currentInput)}\n\n[대상 회차: ${epIdx + 1}화]\n스토리: ${epData?.story || ''}\n씬 리스트:\n${sceneText}\n\n위 내용을 바탕으로 해당 회차의 제작비 항목과 PPL 기획을 생성하세요.`
@@ -758,7 +835,7 @@ export async function generateEpResources(epIdx) {
     // 1. 제작비 업데이트 (budgetBreakdown)
     if (!state.planData.budget) state.planData.budget = {};
     if (!state.planData.budget.budgetBreakdown) state.planData.budget.budgetBreakdown = [];
-    
+
     // 기존에 해당 회차가 있다면 교체, 없으면 추가
     const existingIdx = state.planData.budget.budgetBreakdown.findIndex(b => b.ep === epIdx + 1);
     if (existingIdx !== -1) {
