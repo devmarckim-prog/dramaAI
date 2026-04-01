@@ -51,14 +51,14 @@ export async function renderProjectCards() {
 
     // Extract Flag metadata
     const genre = p.genre || '로맨스';
-    const episodes = p.episodes ? `${p.episodes}부작` : '8부작';
+    const episodesVal = (p.episodes_count) || (p.episodes && typeof p.episodes === 'number' ? p.episodes : 8);
     const target = (p.input && p.input.target_audience) || (p.stats && p.stats.target_audience) || '';
     const era = (p.input && p.input.setting_era) || (p.stats && p.stats.setting_era) || '';
 
     let flagHtml = `<div class="project-flag-group">
       ${p.is_sample ? `<span class="project-flag sample-flag">SAMPLE</span>` : ''}
       <span class="project-flag">${genre}</span>
-      <span class="project-flag">${episodes}</span>
+      <span class="project-flag">${episodesVal}부작</span>
       ${target ? `<span class="project-flag">${target}</span>` : ''}
       ${era ? `<span class="project-flag">${era}</span>` : ''}
     </div>`;
@@ -206,7 +206,7 @@ function _normalizeProject(p) {
     synopsis: p.synopsis || '',
     platform: p.platform || 'OTT',
     genre: p.genre || '드라마',
-    episodes: _getCleanEps(p.episodes),
+    episodes: _getCleanEps(p.episodes, p),
     input: _safeJSON(p.input),
     stats: _safeJSON(p.stats),
     characters: _safeArray(p.characters || p.chars),
@@ -250,7 +250,9 @@ export async function confirmDeleteProject(id) {
 
 window.confirmDeleteProject = confirmDeleteProject;
 
-function _getCleanEps(val) {
+function _getCleanEps(val, p) {
+  // Priority: episodes_count (new field) -> parsed episodes
+  if (p && p.episodes_count) return Number(p.episodes_count);
   if (!val) return 8;
   
   // If it's an array (episode list), preserve it! 

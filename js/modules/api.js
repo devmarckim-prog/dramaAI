@@ -26,15 +26,28 @@ function getGuestFingerprint() {
   return gid;
 }
 
-export async function startGenerationFlow() {
+export async function startGenerationFlow(input) {
+  state.isGenerating = true;
+  state.generatingId = 'gen-' + Date.now();
+  state.currentInput = input;
+  
+  // CRITICAL: Clear old planData/stats from state to prevent sample content leakage
+  state.planData = { 
+    title: input.title || (input.genre || '드라마') + ' 프로젝트',
+    logline: input.logline || ''
+  };
+  state.scripts = {};
+  
+  showPage('generating');
+  
   if (isGenerating) {
     console.warn('[API] Generation already in progress. Skipping duplicate call.');
     return;
   }
   isGenerating = true;
   
-  const input = collectWizardInput();
-  if (!input || !input.logline) {
+  const inputData = collectWizardInput();
+  if (!inputData || !inputData.logline) {
     showToast('로그라인을 입력해 주세요.', 'warn');
     isGenerating = false;
     return;
@@ -116,19 +129,21 @@ export async function startGenerationFlow() {
     if (!coreData || (!coreData.title && !coreData.synopsis)) {
       throw new Error('AI가 유효한 기획안을 생성하지 못했습니다. (Invalid AI Response)');
     }
-    
-    state.planData = coreData;
-    addDebugLog('핵심 기획안 수신 완료. 프로젝트 정보 업데이트 중...', 'success');
+    // Initial state.planData with coreData fields
+    state.planData = { 
+      synopsis: coreData.synopsis,
+      characters: coreData.characters || coreData.chars,
+      episodes: coreData.episodes || [],
+      ...coreData 
+    };
     
     await saveProject({
       id: state.generatingId,
-      title: coreData.title || initialProject.title,
-      logline: coreData.logline || initialProject.logline,
-      synopsis: coreData.synopsis,
-      chars: coreData.characters || coreData.chars, 
-      episodes: coreData.episodes,
-      status: 'generating',
-      pct: 30,
+      synopsis: state.planData.synopsis,
+      characters: state.planData.characters,
+      episodes: input.episodes || 8, // Persist the INTENDED episode count
+      status: '상세 기계안 구성 중...',
+      pct: 33,
       stepIdx: 1
     });
     if (window.renderProjectCards) window.renderProjectCards();
@@ -145,10 +160,11 @@ export async function startGenerationFlow() {
 
     if (detailData) {
       state.planData = { ...state.planData, ...detailData };
+      addDebugLog('상세 기획 데이터 적용 완료 (갈등 구조 포함)', 'success');
       await saveProject({ 
         id: state.generatingId, 
         conflicts: detailData.conflicts || [],
-        stats: detailData.stats || {},
+        stats: detailData.stats || detailData.budget || {},
         status: 'generating',
         pct: 55, 
         stepIdx: 2 
@@ -167,9 +183,13 @@ export async function startGenerationFlow() {
        finalBudget.budgetBreakdown = prodData.budgetBreakdown;
     }
 
+    const stage3Stats = prodData?.stats || finalBudget;
+    state.planData.stats = { ...state.planData.stats, ...stage3Stats };
+
     await saveProject({ 
       id: state.generatingId, 
       budget: finalBudget,
+      stats: state.planData.stats,
       ppl: pplData?.ppl || pplData || [],
       status: 'generating',
       pct: 85,
@@ -213,7 +233,7 @@ function startProgressSmoother(projectId) {
         let currentPct = parseFloat(card.style.width) || 0;
         if (currentPct < 99) {
           // 자연스러운 속도로 증가 (초당 약 0.3~0.5%)
-          let increment = 0.1 + (Math.random() * 0.2); 
+          let increment = 0.05 + (Math.random() * 0.15); 
           let newPct = Math.min(currentPct + increment, 99);
           card.style.width = newPct + '%';
           labels.forEach(l => {
@@ -221,6 +241,8 @@ function startProgressSmoother(projectId) {
           });
         }
       });
+    } else {
+      // 카드가 아직 안 그려졌을 경우 재시도 유도 (무시)
     }
   }, 300);
 }
@@ -241,33 +263,40 @@ async function finishGenerate(isError, input, errMsg) {
   
   const finalPayload = {
     id: state.generatingId,
-    title: state.planData?.title || (input.genre || '드라마') + ' 프로젝트',
+    title: state.planData?.title || (input.title) || (input.genre || '드라마') + ' 프로젝트',
+    logline: state.planData?.logline || input.logline || '',
+    synopsis: state.planData?.synopsis || input.synopsis || '',
     status: isError ? 'error' : 'done',
     error_msg: isError ? (errMsg || '알 수 없는 오류') : null,
     pct: 100,
     stepIdx: 7,
     input: input,
+    episodes_count: input.episodes || 8,
+    conflicts: state.planData?.conflicts || [],
+    stats: state.planData?.stats || state.planData?.budget || {},
+    budget: state.planData?.budget || {}
   };
 
   // Only include chars/episodes/ppl/budget if we have real AI data
   // (prevents overwriting already-saved real data with dummy fallbacks)
   if (realChars && realChars.length > 0) {
     finalPayload.chars = realChars;
-  } else if (isError) {
-    // On error: use safe minimal dummy data so the card renders without crashing
-    finalPayload.chars = [
-      { name: '주인공A', age: '28', gender: '여', job: '프리랜서', personality: '밝고 쾌활함', looks: '모던한 스타일', role: '여주' },
-      { name: '주인공B', age: '32', gender: '남', job: 'CEO', personality: '냉철하지만 따뜻함', looks: '깔끔한 수트', role: '남주' }
-    ];
   }
 
-  if (realEpisodes && realEpisodes.length > 0) {
-    finalPayload.episodes = state.planData?.episodes?.length || input.episodes || 8;
-  }
-
-  // Only include PPL/budget if they were generated (stored on state)
-  if (state.planData?.ppl) finalPayload.ppl = state.planData.ppl;
+  // Preserve conflicts and stats from state.planData
+  if (state.planData?.conflicts) finalPayload.conflicts = state.planData.conflicts;
+  if (state.planData?.stats) finalPayload.stats = state.planData.stats;
   if (state.planData?.budget) finalPayload.budget = state.planData.budget;
+  if (state.planData?.ppl) finalPayload.ppl = state.planData.ppl;
+
+  // Handle episodes carefully:
+  // If we have an array of detailed episodes, Suprabase route allows storing it.
+  // We want the 'count' meta to reflect the user's intent (e.g. 8) even if AI hasn't finished all lines yet.
+  const requestedEps = parseInt(input.episodes) || 8;
+  if (Array.isArray(realEpisodes) && realEpisodes.length > 0) {
+    finalPayload.episodes = realEpisodes; 
+  }
+  finalPayload.episodes_count = Number(requestedEps);
 
   await saveProject(finalPayload);
 
@@ -536,7 +565,8 @@ export async function fetchProjects() {
       serverProjects = Array.isArray(data) ? data : (data.projects || []);
       
       // PASSIVE MIGRATION: If we have local guest projects, sync them to cloud
-      if (localData.length > 0 && (isGuest || hasToken)) {
+      const hasToken = !!localStorage.getItem('ds_token');
+      if (localData.length > 0 && (state.isGuest || hasToken)) {
         console.log('[API] Found local projects. Initiating passive migration...');
         for (const p of localData) {
           // If not already on server (by title match or ID)

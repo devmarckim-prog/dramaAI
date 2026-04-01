@@ -61,6 +61,13 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height
 }
 .nav-logo:hover { opacity: .9; transform: translateY(-1px); }
 .nav-logo span { color: var(--gold); }
+.logo-img {
+  max-height: 40px;
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
 
 .nav-version {
   font-size: 10px;

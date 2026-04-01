@@ -248,7 +248,7 @@ router.get('/projects', authMiddleware, async (req, res) => {
 
 router.post('/projects', authMiddleware, async (req, res) => {
   try {
-    const { id, title, genre, logline, synopsis, chars, ppl, budget, input, platform, episodes, status, pct, stepIdx, error_msg, scripts, conflicts, stats } = req.body;
+    const { id, title, genre, logline, synopsis, chars, ppl, budget, input, platform, episodes, episodes_count, status, pct, stepIdx, error_msg, scripts, conflicts, stats } = req.body;
 
     const baseInput = typeof input === 'string' ? JSON.parse(input) : (input || {});
     // Inject fingerprint into input if guest
@@ -302,6 +302,8 @@ router.post('/projects', authMiddleware, async (req, res) => {
     if (input !== undefined) payload.input = mergedInput;
     if (conflicts !== undefined) payload.conflicts = Array.isArray(conflicts) ? conflicts : [];
     if (stats !== undefined) payload.stats = typeof stats === 'object' ? stats : {};
+    if (episodes_count !== undefined) payload.episodes_count = parseInt(episodes_count);
+    else if (typeof episodes === 'number') payload.episodes_count = episodes;
     
     // Save scripts if provided (episode scripts storage)
     if (scripts !== undefined) {

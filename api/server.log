@@ -3100,3 +3100,750 @@
 [2026-03-31T07:49:59.056Z] SERVER STARTING...
 [2026-03-31T07:49:59.157Z] [Mount] Admin API Routes -> /api/admin
 [2026-03-31T07:49:59.157Z] [Mount] User API Routes -> /api
+[2026-03-31T10:24:13.159Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.184Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.186Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.189Z] [SPA Fallback] Serving index.html for unknown path: /assets/img/logo.png
+[2026-03-31T10:24:13.192Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.460Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.682Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.684Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.685Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.690Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.692Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.693Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.694Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.695Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.695Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.700Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.701Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.748Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.817Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.886Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:24:13.887Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T10:30:36.893Z] SERVER STARTING...
+[2026-03-31T10:30:37.021Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T10:30:37.022Z] [Mount] User API Routes -> /api
+[2026-03-31T10:30:53.947Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T10:30:53.985Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T10:30:53.988Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T10:30:53.992Z] [SPA Fallback] Serving index.html for unknown path: /assets/img/logo.png
+[2026-03-31T10:30:53.994Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.040Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.287Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.289Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.290Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.291Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.292Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.293Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.295Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.296Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.299Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.301Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.301Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.341Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.488Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.559Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:30:54.561Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T10:30:55.198Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T10:30:55.202Z] [REQUEST] GET /api/projects | Auth: YES | Guest: YES
+[2026-03-31T10:30:55.203Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T10:30:55.281Z] [REQUEST] GET /api/profile | Auth: YES | Guest: NO
+[2026-03-31T10:31:06.155Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:31:06.156Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T10:31:06.656Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:31:06.658Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T10:31:19.142Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.144Z] [SPA Fallback] Serving index.html for unknown path: /assets/img/logo.png
+[2026-03-31T10:31:19.222Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.225Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.227Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.229Z] [SPA Fallback] Serving index.html for unknown path: /assets/img/logo.png
+[2026-03-31T10:31:19.308Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.310Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.313Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.318Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.321Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.323Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.327Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.332Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.334Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.339Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.340Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.344Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T10:31:19.907Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:20.190Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T10:31:20.223Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:31:20.226Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T10:31:29.692Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.735Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.740Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.742Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.743Z] [SPA Fallback] Serving index.html for unknown path: /assets/img/logo.png
+[2026-03-31T10:31:29.757Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.758Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.760Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.762Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.764Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.766Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.768Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.769Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.771Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.772Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.776Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.786Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.843Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.865Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.889Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:31:29.891Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T10:31:30.203Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:31:30.204Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T10:31:30.218Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:31:30.220Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T10:31:42.549Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:31:42.551Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T10:31:42.571Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:31:42.572Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T10:31:51.585Z] [REQUEST] GET /assets/img/ | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.587Z] [SPA Fallback] Serving index.html for unknown path: /assets/img/
+[2026-03-31T10:31:51.632Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.637Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.638Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.640Z] [SPA Fallback] Serving index.html for unknown path: /assets/img/logo.png
+[2026-03-31T10:31:51.699Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.701Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.704Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.706Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.707Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.708Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.709Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.710Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.714Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.716Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.718Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:51.723Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T10:31:52.274Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T10:31:52.612Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T10:31:52.712Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:31:52.713Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T10:32:27.296Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.316Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.318Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.320Z] [SPA Fallback] Serving index.html for unknown path: /assets/img/logo.png
+[2026-03-31T10:32:27.321Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.349Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.595Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.596Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.598Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.602Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.603Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.604Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.605Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.606Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.607Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.610Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.612Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.664Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.721Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.727Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T10:32:27.728Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T22:28:54.632Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-03-31T22:28:54.636Z] [Auth] Google Login requested from: http://localhost:8081/assets/img/
+[2026-03-31T22:28:54.639Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-03-31T22:29:06.867Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.891Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.896Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.897Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.914Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.915Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.916Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.918Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.920Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.921Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.922Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.923Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.924Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.925Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.928Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:06.930Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T22:29:07.183Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T22:29:07.332Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T22:29:07.349Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T22:29:07.351Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T22:29:42.796Z] [REQUEST] GET /VERSION.md | Auth: NO | Guest: NO
+[2026-03-31T22:29:42.855Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T22:29:42.856Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T22:32:34.413Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.435Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.437Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.438Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.471Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.738Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.739Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.740Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.744Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.745Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.747Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.748Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.751Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.752Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.754Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.755Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.779Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.875Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.879Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T22:32:34.882Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T22:32:40.745Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-03-31T22:32:40.745Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-03-31T22:32:40.746Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-03-31T22:52:30.978Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T22:52:30.998Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.001Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.002Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.028Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.030Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.031Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.032Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.034Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.035Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.036Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.037Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.038Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.039Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.043Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.045Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.301Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.435Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.444Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T22:52:31.446Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T22:52:47.318Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-03-31T22:52:47.319Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-03-31T22:52:47.319Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-03-31T22:54:11.744Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.805Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.807Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.808Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.835Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.837Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.839Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.840Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.842Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.845Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.847Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.850Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.852Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.853Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.856Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:11.857Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T22:54:12.102Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T22:54:12.246Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T22:54:12.259Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T22:54:12.260Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:06:26.874Z] SERVER STARTING...
+[2026-03-31T23:06:27.034Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T23:06:27.035Z] [Mount] User API Routes -> /api
+[2026-03-31T23:06:42.259Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.290Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.292Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.293Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.350Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.351Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.353Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.354Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.354Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.354Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.356Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.357Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.359Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.360Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.361Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.362Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.637Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.826Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.849Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:06:42.850Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:09:26.565Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:26.566Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:26.581Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:26.582Z] [Projects] Creating new project: p-f12df-1774998566582
+[2026-03-31T23:09:27.070Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:09:27.160Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:09:27.164Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:27.165Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:27.166Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:27.285Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:27.285Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:27.286Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:29.089Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:29.090Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:29.091Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:29.092Z] [Projects] Updating project g-2dfcfd-1774998567061 (pct: 30%)
+[2026-03-31T23:09:29.171Z] [Projects] Update failed for g-2dfcfd-1774998567061, trying upsert as fallback: Cannot coerce the result to a single JSON object
+[2026-03-31T23:09:29.247Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:09:29.309Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:29.309Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:29.310Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:31.257Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:31.257Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:31.259Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:31.260Z] [Projects] Updating project g-2dfcfd-1774998567061 (pct: 55%)
+[2026-03-31T23:09:31.314Z] [Projects] Update failed for g-2dfcfd-1774998567061, trying upsert as fallback: Could not find the 'conflicts' column of 'projects' in the schema cache
+[2026-03-31T23:09:31.370Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:09:31.450Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:31.450Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:31.451Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:35.387Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:35.388Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:35.388Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:35.389Z] [Projects] Updating project g-2dfcfd-1774998567061 (pct: 85%)
+[2026-03-31T23:09:35.448Z] [Projects] Update failed for g-2dfcfd-1774998567061, trying upsert as fallback: Could not find the 'stats' column of 'projects' in the schema cache
+[2026-03-31T23:09:35.499Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:09:35.504Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:35.504Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:35.505Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:35.505Z] [Projects] Updating project g-2dfcfd-1774998567061 (pct: 100%)
+[2026-03-31T23:09:35.565Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:35.565Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:35.566Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:35.610Z] [Projects] Update failed for g-2dfcfd-1774998567061, trying upsert as fallback: Cannot coerce the result to a single JSON object
+[2026-03-31T23:09:35.678Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:09:35.737Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:35.738Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:35.739Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:36.684Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:09:36.753Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:36.753Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:36.754Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:09:54.206Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:09:54.314Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:09:54.315Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:09:54.315Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:10:42.079Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:10:42.080Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:10:42.091Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:10:42.092Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:22:28.213Z] SERVER STARTING...
+[2026-03-31T23:22:28.344Z] [Mount] Admin API Routes -> /api/admin
+[2026-03-31T23:22:28.345Z] [Mount] User API Routes -> /api
+[2026-03-31T23:22:46.213Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.253Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.256Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.258Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.297Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.663Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.665Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.668Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.670Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.672Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.673Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.674Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.679Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.680Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.681Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.684Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.771Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.904Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.952Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:22:46.954Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:24:45.404Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:45.405Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:45.418Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:24:45.419Z] [Projects] Creating new project: p-f12df-1774999485419
+[2026-03-31T23:24:45.968Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:24:46.205Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:24:46.212Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:46.213Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:46.213Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:24:46.383Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:46.384Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:46.385Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:24:47.986Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:47.987Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:47.988Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:24:47.989Z] [Projects] Updating project g-2dfcfd-1774999485960 (pct: 33%)
+[2026-03-31T23:24:48.101Z] [Projects] Update failed for g-2dfcfd-1774999485960, trying upsert as fallback: Cannot coerce the result to a single JSON object
+[2026-03-31T23:24:48.219Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:24:48.308Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:48.309Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:48.309Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:24:50.234Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:50.235Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:50.236Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:24:50.237Z] [Projects] Updating project g-2dfcfd-1774999485960 (pct: 55%)
+[2026-03-31T23:24:50.309Z] [Projects] Update failed for g-2dfcfd-1774999485960, trying upsert as fallback: Could not find the 'conflicts' column of 'projects' in the schema cache
+[2026-03-31T23:24:50.369Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:24:50.458Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:50.458Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:50.459Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:24:54.389Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:54.389Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:54.390Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:24:54.390Z] [Projects] Updating project g-2dfcfd-1774999485960 (pct: 85%)
+[2026-03-31T23:24:54.442Z] [Projects] Update failed for g-2dfcfd-1774999485960, trying upsert as fallback: Could not find the 'stats' column of 'projects' in the schema cache
+[2026-03-31T23:24:54.556Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:24:54.562Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:54.562Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:54.564Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:24:54.564Z] [Projects] Updating project g-2dfcfd-1774999485960 (pct: 100%)
+[2026-03-31T23:24:54.653Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:54.654Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:54.655Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:24:54.685Z] [Projects] Update failed for g-2dfcfd-1774999485960, trying upsert as fallback: Cannot coerce the result to a single JSON object
+[2026-03-31T23:24:54.776Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:24:54.852Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:54.853Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:54.854Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:24:55.784Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:24:55.857Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:24:55.858Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:24:55.858Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:25:27.415Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:25:27.576Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:25:27.576Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:25:27.577Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:28:14.543Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.587Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.592Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.593Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.603Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.604Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.605Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.606Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.608Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.609Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.610Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.611Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.613Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.614Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.615Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.630Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.749Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.776Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.800Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:28:14.801Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:30:07.434Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:07.434Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:07.435Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:07.436Z] [Projects] Creating new project: p-f12df-1774999807436
+[2026-03-31T23:30:07.647Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:30:07.738Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:30:07.784Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:07.785Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:07.785Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:07.920Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:07.921Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:07.922Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:09.668Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:09.668Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:09.669Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:09.670Z] [Projects] Updating project g-2dfcfd-1774999807639 (pct: 33%)
+[2026-03-31T23:30:09.735Z] [Projects] Update failed for g-2dfcfd-1774999807639, trying upsert as fallback: Cannot coerce the result to a single JSON object
+[2026-03-31T23:30:09.830Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:30:09.898Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:09.899Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:09.899Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:11.836Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:11.837Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:11.838Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:11.838Z] [Projects] Updating project g-2dfcfd-1774999807639 (pct: 55%)
+[2026-03-31T23:30:11.910Z] [Projects] Update failed for g-2dfcfd-1774999807639, trying upsert as fallback: Could not find the 'conflicts' column of 'projects' in the schema cache
+[2026-03-31T23:30:11.962Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:30:12.042Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:12.042Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:12.043Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:16.075Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:16.076Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:16.077Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:16.078Z] [Projects] Updating project g-2dfcfd-1774999807639 (pct: 85%)
+[2026-03-31T23:30:16.127Z] [Projects] Update failed for g-2dfcfd-1774999807639, trying upsert as fallback: Could not find the 'stats' column of 'projects' in the schema cache
+[2026-03-31T23:30:16.178Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:30:16.183Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:16.184Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:16.186Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:16.186Z] [Projects] Updating project g-2dfcfd-1774999807639 (pct: 100%)
+[2026-03-31T23:30:16.231Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:16.232Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:16.233Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:16.317Z] [Projects] Update failed for g-2dfcfd-1774999807639, trying upsert as fallback: Could not find the 'stats' column of 'projects' in the schema cache
+[2026-03-31T23:30:16.413Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:30:16.472Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:16.473Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:16.474Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:17.415Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:30:17.476Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:17.476Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:17.477Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:35.604Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:30:35.801Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:30:35.802Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:30:35.803Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:30:59.675Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:30:59.676Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:30:59.687Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:30:59.688Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:31:13.438Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.483Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.484Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.486Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.501Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.502Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.503Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.506Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.507Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.508Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.508Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.509Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.510Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.513Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.515Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.531Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.654Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.686Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.695Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:31:13.696Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:34:00.107Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.151Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.154Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.155Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.170Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.171Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.174Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.174Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.175Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.177Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.178Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.179Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.180Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.181Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.183Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.198Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.296Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.319Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.328Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:34:00.330Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:36:12.723Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:12.724Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:12.725Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:12.726Z] [Projects] Creating new project: p-f12df-1775000172726
+[2026-03-31T23:36:13.155Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:36:13.257Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:36:13.263Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:13.263Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:13.264Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:13.406Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:13.406Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:13.407Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:15.189Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:15.190Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:15.191Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:15.192Z] [Projects] Updating project g-2dfcfd-1775000173148 (pct: 33%)
+[2026-03-31T23:36:15.279Z] [Projects] Update failed for g-2dfcfd-1775000173148, trying upsert as fallback: Cannot coerce the result to a single JSON object
+[2026-03-31T23:36:15.387Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:36:15.461Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:15.461Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:15.462Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:17.389Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:17.389Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:17.390Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:17.391Z] [Projects] Updating project g-2dfcfd-1775000173148 (pct: 55%)
+[2026-03-31T23:36:17.453Z] [Projects] Update failed for g-2dfcfd-1775000173148, trying upsert as fallback: Could not find the 'conflicts' column of 'projects' in the schema cache
+[2026-03-31T23:36:17.513Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:36:17.574Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:17.575Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:17.575Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:21.525Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:21.525Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:21.526Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:21.526Z] [Projects] Updating project g-2dfcfd-1775000173148 (pct: 85%)
+[2026-03-31T23:36:21.586Z] [Projects] Update failed for g-2dfcfd-1775000173148, trying upsert as fallback: Could not find the 'stats' column of 'projects' in the schema cache
+[2026-03-31T23:36:21.648Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:36:21.652Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:21.653Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:21.654Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:21.655Z] [Projects] Updating project g-2dfcfd-1775000173148 (pct: 100%)
+[2026-03-31T23:36:21.726Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:21.727Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:21.727Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:21.786Z] [Projects] Update failed for g-2dfcfd-1775000173148, trying upsert as fallback: Could not find the 'stats' column of 'projects' in the schema cache
+[2026-03-31T23:36:21.849Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:36:21.927Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:21.928Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:21.928Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:22.850Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:36:22.906Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:22.907Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:22.907Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:38.700Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:36:38.798Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:38.798Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:38.799Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:36:52.733Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:36:52.821Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:36:52.822Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:36:52.822Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:04.092Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:04.092Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:04.094Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:04.095Z] [Projects] Creating new project: p-f12df-1775000524094
+[2026-03-31T23:42:04.853Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:42:04.934Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:42:04.939Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:04.940Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:04.941Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:05.023Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:05.024Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:05.025Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:06.869Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:06.870Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:06.871Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:06.872Z] [Projects] Updating project g-2dfcfd-1775000524846 (pct: 33%)
+[2026-03-31T23:42:06.924Z] [Projects] Update failed for g-2dfcfd-1775000524846, trying upsert as fallback: Cannot coerce the result to a single JSON object
+[2026-03-31T23:42:06.989Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:42:07.041Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:07.042Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:07.043Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:08.999Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:09.000Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:09.001Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:09.002Z] [Projects] Updating project g-2dfcfd-1775000524846 (pct: 55%)
+[2026-03-31T23:42:09.051Z] [Projects] Update failed for g-2dfcfd-1775000524846, trying upsert as fallback: Could not find the 'conflicts' column of 'projects' in the schema cache
+[2026-03-31T23:42:09.107Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:42:09.170Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:09.171Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:09.172Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:13.131Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:13.132Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:13.133Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:13.133Z] [Projects] Updating project g-2dfcfd-1775000524846 (pct: 85%)
+[2026-03-31T23:42:13.181Z] [Projects] Update failed for g-2dfcfd-1775000524846, trying upsert as fallback: Could not find the 'stats' column of 'projects' in the schema cache
+[2026-03-31T23:42:13.239Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:42:13.242Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:13.243Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:13.244Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:13.245Z] [Projects] Updating project g-2dfcfd-1775000524846 (pct: 100%)
+[2026-03-31T23:42:13.333Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:13.334Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:13.334Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:13.342Z] [Projects] Update failed for g-2dfcfd-1775000524846, trying upsert as fallback: Could not find the 'stats' column of 'projects' in the schema cache
+[2026-03-31T23:42:13.439Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:42:13.538Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:13.538Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:13.539Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:14.456Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:42:14.517Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:14.517Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:14.518Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:42:28.351Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:42:28.602Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-03-31T23:42:28.603Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-03-31T23:42:28.604Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-03-31T23:46:51.605Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:46:51.606Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:46:51.627Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:46:51.628Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:47:31.999Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.053Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.058Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.059Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.084Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.086Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.087Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.090Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.095Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.097Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.098Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.100Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.101Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.102Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.107Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.130Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.269Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.303Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.314Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:47:32.316Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:53:33.843Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:53:33.845Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:53:33.856Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:53:33.860Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:54:01.895Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.924Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.928Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.929Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.945Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.948Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.950Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.954Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.957Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.959Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.960Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.962Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.963Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.965Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.970Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:01.972Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T23:54:02.080Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T23:54:02.096Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:54:02.108Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:54:02.110Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:57:11.617Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:57:11.619Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:57:11.649Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:57:11.652Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:57:28.534Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.587Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.592Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.594Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.663Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.805Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.807Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.814Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.822Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.830Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.835Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.839Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.854Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.859Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.864Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.870Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.882Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:28.935Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.718Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.753Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.758Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.759Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.792Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.793Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.795Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.799Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.800Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.801Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.801Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.802Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.803Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.806Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.807Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:50.810Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T23:57:51.168Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T23:57:51.421Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:57:51.481Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:57:51.483Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-03-31T23:59:00.392Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.442Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.444Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.446Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.495Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.559Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.561Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.563Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.567Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.569Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.571Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.572Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.573Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.574Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.580Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.582Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.589Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.603Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.610Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-03-31T23:59:00.612Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico

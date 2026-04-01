@@ -62,47 +62,88 @@ function renderOverview(retryCount = 0) {
 
     // Update Stat Cards
     const stats = p.stats || p.budget || {};
+    const inputEps = input.episodes ? parseInt(input.episodes.toString().replace(/[^0-9]/g, '')) : 8;
+    const epCount = p.episodes_count || inputEps || (Array.isArray(p.episodes) ? p.episodes.length : 8);
+    
+    // Budget & PPL extraction with deep search
+    let budgetRaw = p.budget || stats.budget || stats.budgetRaw;
+    if (typeof budgetRaw === 'object' && budgetRaw !== null) budgetRaw = budgetRaw.total || budgetRaw.amount || budgetRaw.value;
+
+    let pplRaw = p.ppl_revenue || p.ppl || stats.ppl || stats.ppl_revenue || stats.pplRaw;
+    if (Array.isArray(pplRaw)) {
+       // sum it up if it's an array of objects
+       pplRaw = pplRaw.reduce((acc, curr) => acc + (parseInt(curr.revenue || curr.amount || 0)), 0);
+    }
+    
     const ovBudget = document.getElementById('ov-budget');
     const heroBudget = document.getElementById('stat-budget');
-    const budgetVal = stats.budget ? `₩${(typeof stats.budget === 'number' ? stats.budget : 0).toLocaleString()}` : '-';
-    if (ovBudget) ovBudget.textContent = budgetVal;
-    if (heroBudget) heroBudget.textContent = budgetVal;
+    
+    function formatCurrency(val) {
+      if (!val || val === '-' || val === 0) return '-';
+      if (typeof val === 'number') return `₩${val.toLocaleString()}만`;
+      if (typeof val === 'string') {
+        const num = parseInt(val.replace(/[^0-9]/g, ''));
+        if (!isNaN(num)) {
+          if (val.includes('억')) return val; // keep "12억"
+          return `₩${num.toLocaleString()}만`;
+        }
+        return val;
+      }
+      return '-';
+    }
+
+    const bDisp = formatCurrency(budgetRaw);
+    if (ovBudget) ovBudget.textContent = bDisp;
+    if (heroBudget) heroBudget.textContent = bDisp;
+    const input = p.input || {};
+    console.log('[Dashboard] Rendering project:', p.id, p.title);
+    console.log('[Dashboard] Data Structure:', { 
+      episodes: p.episodes, 
+      episodes_count: p.episodes_count, 
+      conflicts: p.conflicts, 
+      stats: p.stats 
+    });
     
     const ovPpl = document.getElementById('ov-ppl');
     const heroPpl = document.getElementById('stat-ppl');
-    const pplVal = stats.ppl_revenue ? `₩${(typeof stats.ppl_revenue === 'number' ? stats.ppl_revenue : 0).toLocaleString()}` : '-';
-    if (ovPpl) ovPpl.textContent = pplVal;
-    if (heroPpl) heroPpl.textContent = pplVal;
+    const pDisp = formatCurrency(pplRaw);
+    if (ovPpl) ovPpl.textContent = pDisp;
+    if (heroPpl) heroPpl.textContent = pDisp;
 
     const badge = document.getElementById('result-badge');
     if (badge) {
       const platform = p.platform || input.platform || 'OTT';
       const genre = p.genre || input.genre || '장르';
-      let epCount = 8;
-      if (Array.isArray(p.episodes)) epCount = p.episodes.length;
-      else if (typeof p.episodes === 'number') epCount = p.episodes;
-      else if (input.episodes) epCount = input.episodes;
       badge.innerHTML = `🌟 ${platform} · ${genre} · ${epCount}부작`;
       
       const heroScenes = document.getElementById('stat-scenes');
-      if (heroScenes) heroScenes.textContent = Array.isArray(p.episodes) ? `${p.episodes.length * 10}씬+` : '-';
+      if (heroScenes) {
+        let totalScenes = 0;
+        if (Array.isArray(p.episodes) && p.episodes.length > 0) {
+          p.episodes.forEach(e => totalScenes += (Array.isArray(e.scenes) ? e.scenes.length : 10));
+        } else {
+          totalScenes = epCount * 12; // Typical scene count estimate
+        }
+        heroScenes.textContent = totalScenes > 0 ? `${totalScenes}씬+` : '-';
+      }
     }
 
     // Update Conflicts
-    const conflicts = p.conflicts || [];
+    // Extremely robust search for conflicts: p.conflicts -> p.input.conflicts -> p.stats.conflicts -> p.input.logline_analysis.conflicts
+    const conflicts = p.conflicts || (p.input && p.input.conflicts) || (p.stats && p.stats.conflicts) || (p.input && p.input.logline_analysis && p.input.logline_analysis.conflicts) || [];
     const conflictGrid = document.getElementById('ov-conflicts');
     if (conflictGrid) {
-      if (conflicts && conflicts.length > 0) {
+      if (conflicts && Array.isArray(conflicts) && conflicts.length > 0) {
         conflictGrid.innerHTML = conflicts.map(c => `
           <div class="conflict-card ${c.color || 'ink'}">
-            <div class="conflict-label">${c.label}</div>
-            <div class="conflict-desc">${c.desc}</div>
+            <div class="conflict-label">${c.label || '갈등'}</div>
+            <div class="conflict-desc">${c.desc || ''}</div>
           </div>
         `).join('');
       } else {
         conflictGrid.innerHTML = `
-          <div class="conflict-card ink" style="grid-column: span 2; opacity: 0.6; border-style: dashed;">
-            <div class="conflict-desc">갈등 구조 정보가 아직 생성되지 않았습니다.</div>
+          <div class="conflict-card ink" style="grid-column: span 2; opacity: 0.6; border-style: dashed; background: var(--paper2);">
+            <div class="conflict-desc">갈등 구조 정보가 분석 중이거나 없습니다.</div>
           </div>
         `;
       }
@@ -196,49 +237,64 @@ export function buildRelationMap() {
   const female = chars.find(c => c.role === '여주' || (c.gender && c.gender.includes('여'))) || chars[0];
   const subs = chars.filter(c => c !== male && c !== female).slice(0, 4);
   
-  const W = 800, H = 340;
-  const cx = W / 2, cy = H / 2;
-  const mPos = { x: cx - 180, y: cy };
-  const fPos = { x: cx + 180, y: cy };
+  const W = 800, H = 400;
+  const cx = W / 2, cy = H / 2 + 20;
+  const mPos = { x: cx - 200, y: cy };
+  const fPos = { x: cx + 200, y: cy };
   
   const arcPositions = [
-    { x: cx - 300, y: cy - 100 }, { x: cx - 100, y: cy - 120 },
-    { x: cx + 100, y: cy - 120 }, { x: cx + 300, y: cy - 100 },
+    { x: cx - 320, y: cy - 120 }, { x: cx - 100, y: cy - 160 },
+    { x: cx + 100, y: cy - 160 }, { x: cx + 320, y: cy - 120 },
   ];
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto; overflow:visible" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur stdDeviation="3" result="blur" />
+      <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.2"/>
+      </filter>
+      <filter id="glow-gold" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="4" result="blur" />
         <feComposite in="SourceGraphic" in2="blur" operator="over" />
       </filter>
       <linearGradient id="gradGold" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" style="stop-color:#C9933A;stop-opacity:1" />
         <stop offset="100%" style="stop-color:#E8B45A;stop-opacity:1" />
       </linearGradient>
+      <linearGradient id="gradBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#5EAED4;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#82C5E5;stop-opacity:1" />
+      </linearGradient>
     </defs>`;
   
   // Links
-  svg += `<path d="M ${mPos.x} ${mPos.y} Q ${cx} ${cy - 60} ${fPos.x} ${fPos.y}" fill="none" stroke="url(#gradGold)" stroke-width="3" class="rel-link" opacity="0.9"/>`;
-  svg += `<text x="${cx}" y="${cy - 30}" class="rel-text" font-size="12" fill="var(--gold)" text-anchor="middle" filter="url(#glow)">♥ Main Relationship</text>`;
+  svg += `<path d="M ${mPos.x} ${mPos.y} Q ${cx} ${cy - 80} ${fPos.x} ${fPos.y}" fill="none" stroke="url(#gradGold)" stroke-width="5" class="rel-link" opacity="0.9" filter="url(#glow-gold)"/>`;
+  svg += `
+    <g transform="translate(${cx}, ${cy - 55})">
+      <rect x="-60" y="-12" width="120" height="24" rx="12" fill="#fff" stroke="var(--gold)" stroke-width="1"/>
+      <text font-size="12" fill="var(--gold)" text-anchor="middle" dominant-baseline="middle" font-weight="900">♥ 메인 관계</text>
+    </g>
+  `;
   
   subs.forEach((c, i) => {
     const pos = arcPositions[i];
     if (!pos) return;
-    svg += `<line x1="${pos.x}" y1="${pos.y}" x2="${cx}" y2="${cy}" stroke="#aaa" stroke-width="1.5" stroke-dasharray="4,4" class="rel-link" opacity="0.4"/>`;
+    svg += `<line x1="${pos.x}" y1="${pos.y}" x2="${cx}" y2="${cy}" stroke="#bbb" stroke-width="2" stroke-dasharray="6,4" class="rel-link" opacity="0.6"/>`;
   });
 
   // Nodes
-  const nodeHtml = (p, n, color, isMain = false) => `
-    <g class="rel-node ${isMain ? 'rel-node-main' : ''}" onclick="selectCharByName('${n}')">
-      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 32 : 24}" fill="#fff" stroke="${color}" stroke-width="2"/>
-      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 28 : 20}" fill="${color}" opacity="0.9"/>
-      <text x="${p.x}" y="${p.y}" font-size="${isMain ? 14 : 12}" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="900">${n[0]}</text>
-      <text x="${p.x}" y="${p.y + (isMain ? 50 : 40)}" class="rel-text" font-size="13" text-anchor="middle" font-weight="700">${n}</text>
+  const nodeHtml = (p, n, grad, isMain = false) => `
+    <g class="rel-node ${isMain ? 'rel-node-main' : ''}" onclick="selectCharByName('${n}')" style="cursor:pointer" filter="url(#shadow)">
+      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 42 : 32}" fill="#fff" stroke="${isMain ? 'var(--gold)' : '#ccc'}" stroke-width="2"/>
+      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 36 : 26}" fill="${grad}" opacity="1"/>
+      <text x="${p.x}" y="${p.y}" font-size="${isMain ? 20 : 16}" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="900">${n[0]}</text>
+      <g transform="translate(${p.x}, ${p.y + (isMain ? 65 : 55)})">
+        <rect x="-40" y="-12" width="80" height="24" rx="6" fill="rgba(255,255,255,0.9)" />
+        <text class="rel-text" font-size="14" fill="#111" text-anchor="middle" dominant-baseline="middle" font-weight="800">${n}</text>
+      </g>
     </g>`;
 
-  svg += nodeHtml(mPos, male.name, '#C9933A', true);
-  svg += nodeHtml(fPos, female.name, '#5EAED4', true);
+  svg += nodeHtml(mPos, male.name, 'url(#gradGold)', true);
+  svg += nodeHtml(fPos, female.name, 'url(#gradBlue)', true);
   subs.forEach((c, i) => {
     if (arcPositions[i]) svg += nodeHtml(arcPositions[i], c.name, '#888');
   });
