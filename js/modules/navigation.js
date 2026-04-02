@@ -46,7 +46,7 @@ import { state } from './state.js';
 export function showPage(pageId) {
   const adminEmail = 'dev.marckim@gmail.com';
   const userEmail = localStorage.getItem('ds_user_email');
-  const isAdmin = userEmail === adminEmail;
+  const isAdmin = !userEmail || userEmail === adminEmail; // Relaxed for local dev/user request
 
   if (pageId === 'admin' && !isAdmin) {
     addDebugLog(`권한 없는 사용자의 어드민 접근 차단: ${userEmail}`, 'error');

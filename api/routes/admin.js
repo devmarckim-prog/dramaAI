@@ -636,7 +636,22 @@ router.delete('/users/:id', async (req, res) => {
   }
 });
 
-// Sample Management (Write/Update only here)
+// Sample Management
+router.get('/samples', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('samples')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) throw error;
+    res.json(data);
+  } catch (err) {
+    console.error('[Admin API] Samples Fetch Error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.post('/samples', async (req, res) => {
   try {
     const { id, title, data } = req.body;
@@ -651,11 +666,43 @@ router.post('/samples', async (req, res) => {
         title,
         data,
         updated_at: new Date().toISOString()
-      });
+      }, { onConflict: 'id' });
 
     if (error) throw error;
     res.json({ success: true, message: 'Sample updated successfully' });
   } catch (err) {
+    console.error('[Admin API] Sample Save Error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post('/samples/batch', async (req, res) => {
+  try {
+    const { samples } = req.body;
+    if (!samples || !Array.isArray(samples)) {
+      return res.status(400).json({ error: 'Invalid batch data' });
+    }
+
+    // Upsert all samples in batch
+    const results = await Promise.all(samples.map(s => {
+      return supabase
+        .from('samples')
+        .upsert({
+          id: s.id,
+          title: s.title,
+          data: s.data,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'id' });
+    }));
+
+    const errors = results.filter(r => r.error);
+    if (errors.length > 0) {
+      throw new Error(errors[0].error.message);
+    }
+
+    res.json({ success: true, count: samples.length });
+  } catch (err) {
+    console.error('[Admin API] Batch Sample Save Error:', err);
     res.status(500).json({ error: err.message });
   }
 });

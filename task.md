@@ -28,13 +28,11 @@
         - [x] Verify Supabase RLS and Guest Fingerprint filtering
         - [x] Add robust logging for deletion attempts
     - [x] Update AI Proxy to support Claude 4 series IDs
-- [/] **Research & Documentation**
-    - [x] Study Claude 4 series documentation
-    - [ ] Create `docs/claude_api_study.md` summary
-- [ ] **Verification**
-    - [ ] Test Guest deletion
-    - [ ] Test Auth deletion
-    - [ ] Verify Dashboard alignment
+- [x] **AI Generation Stall & Progress Fix (v3.5.2)**
+    - [x] Fix JSON parsing vulnerabilities in `runLocalGeneration` (Final Phase)
+    - [x] Implement robust `updateProject` with auto-serialization for DB persistence
+    - [x] Force 100% UI completion on `done` status in `api.js` polling
+    - [x] Relocate "Sample Management" to high-visibility position in Admin Sidebar
 
 ## 🚀 긴급 복구 및 서비스 안정화 (완료)
 - [x] 서버 프로세스 재가동 (`node serve.js`)

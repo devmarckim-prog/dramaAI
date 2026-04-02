@@ -98,96 +98,92 @@ export async function startGenerationFlow(input) {
   }
   isGenerating = true;
   state.isGenerating = true;
-  state.generatingId = 'gen-' + Date.now();
-  state.currentInput = input;
-
-  // CRITICAL: Clear old planData/stats from state to prevent sample content leakage
-  state.planData = {
-    title: input.title || (input.genre || '드라마') + ' 프로젝트',
-    logline: input.logline || ''
-  };
-  state.scripts = {};
+  state.generatingId = null;
 
   // 1. "마스터피스" 애니메이션 표시
   const overlay = document.getElementById('masterpiece-overlay');
   if (overlay) overlay.classList.add('active');
 
-  showToast('드라마 기획안 생성을 시작합니다. 프로젝트 목록에서 진행 상황을 확인하세요.', 'info');
-
+  showToast('드라마 기획안 생성을 시작합니다...', 'info');
   addDebugLog('드라마 프로젝트 생성을 시작합니다...', 'success');
-  addDebugLog(`타겟 플랫폼: ${input.platform}, 장르: ${input.genre}`);
-
-  // Initial state setup
-  state.planData = null;
-  state.scripts = {};
-
-  const initialProject = {
-    title: (input.genre || '드라마') + ' 프로젝트',
-    genre: input.genre,
-    platform: input.platform,
-    episodes: input.episodes,
-    logline: input.logline,
-    input: input,
-    status: 'generating',
-    pct: 5,
-    stepIdx: 0,
-    createdAt: new Date().toISOString()
-  };
 
   try {
+    const initialProject = {
+      title: (input.genre || '드라마') + ' 프로젝트',
+      genre: input.genre,
+      platform: input.platform,
+      episodes: input.episodes,
+      input: input,
+      status: 'generating',
+      pct: 5,
+      createdAt: new Date().toISOString()
+    };
+
     addDebugLog('데이터베이스에 프로젝트를 등록 중...');
     let saveRes = await saveProject(initialProject);
-
     if (!saveRes || !saveRes.success) {
-      addDebugLog('서버 저장 실패. 로컬 저장소(Guest) 모드로 전환합니다...', 'warn');
       saveRes = await _saveLocal(initialProject);
     }
+    if (!saveRes || !saveRes.success) throw new Error('프로젝트 초기화 실패');
 
-    if (!saveRes || !saveRes.success) {
-      throw new Error('프로젝트를 초기화할 수 없습니다. (Local Storage Error)');
-    }
+    const projectId = saveRes.id;
+    state.generatingId = projectId;
+    addDebugLog(`프로젝트 등록 완료 (ID: ${projectId})`, 'success');
 
-    state.generatingId = saveRes.id;
-    addDebugLog(`프로젝트 등록 완료 (ID: ${state.generatingId})`, 'success');
-
-    // 2. 즉시 프로젝트 목록으로 이동하여 생성 중인 카드를 보여줌
+    // UI 전환
     showPage('projects');
     if (window.renderProjectCards) window.renderProjectCards();
 
-    // 3. 2초 후 마스터피스 오버레이 제거
-    setTimeout(() => {
-      if (overlay) overlay.classList.remove('active');
-    }, 2000);
+    setTimeout(() => { if (overlay) overlay.classList.remove('active'); }, 2000);
 
-    // [New] Trigger Supabase Edge Function
-    addDebugLog('서버 생성 엔진(Edge Function) 가동 중...', 'info');
-    const triggerRes = await fetch('/api/generate/start', {
+    // 2. Initialize Backend Status
+    await fetch('/api/generate/start', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('ds_auth_token')}`,
         'x-guest-fingerprint': getGuestFingerprint()
       },
-      body: JSON.stringify({ projectId: state.generatingId, input })
+      body: JSON.stringify({ projectId, input })
     });
 
-    if (!triggerRes.ok) {
-      throw new Error('AI 생성 엔진 시작에 실패했습니다.');
+    // 3. STEPPED GENERATION LOOP
+    const steps = [0, 1, 2, 3, 4];
+    for (const step of steps) {
+      addDebugLog(`[AI] 단계별 생성 중... (${step + 1}/${steps.length})`, 'info');
+      
+      const stepRes = await fetch('/api/generate/step', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('ds_auth_token')}`,
+          'x-guest-fingerprint': getGuestFingerprint()
+        },
+        body: JSON.stringify({ projectId, step, input })
+      });
+
+      if (!stepRes.ok) {
+        const err = await stepRes.json();
+        throw new Error(err.error || `Step ${step} failed`);
+      }
+
+      // Update UI card after each step
+      if (window.renderProjectCards) window.renderProjectCards();
     }
 
-    // 4. Start Polling Loop & Progress Smoother
-    startPolling(state.generatingId);
-    startProgressSmoother(state.generatingId);
+    addDebugLog('드라마 기획안 작성이 완료되었습니다!', 'success');
+    showToast('드라마 기획안 작성이 완료되었습니다! (100%)', 'success');
 
   } catch (error) {
-    addDebugLog(`초기화 에러: ${error.message}`, 'error');
+    addDebugLog(`생성 에러: ${error.message}`, 'error');
+    showToast(`생성 중 오류 발생: ${error.message}`, 'error');
     if (state.generatingId) {
-      await saveProject({ id: state.generatingId, status: 'error', pct: 0, error_msg: error.message });
+      await saveProject({ id: state.generatingId, status: 'error', error_msg: error.message });
     }
-    showToast('생성을 시작할 수 없습니다.', 'error');
   } finally {
     state.isGenerating = false;
     isGenerating = false;
+    if (window.renderProjectCards) window.renderProjectCards();
   }
 }
 
@@ -217,11 +213,20 @@ export function startPolling(projectId) {
       if (current.status === 'done' || current.status === 'sample_done') {
         console.log(`[Polling] Generation reached ${current.status}. Stopping poll.`);
         
-        // Force UI to 100% for the specific card before stopping
-        const card = document.querySelector(`[id^="gen-card-${projectId}"] .pcg-bar-fill-dynamic`);
-        const label = document.querySelector(`[id^="gen-card-${projectId}"] .pcg-progress-wrap span:last-child`);
-        if (card) card.style.width = '100%';
-        if (label) label.textContent = '100%';
+        // Force ALL UI elements related to this project to 100%
+        const cardBar = document.querySelector(`[id^="gen-card-${projectId}"] .pcg-bar-fill-dynamic`);
+        const cardLabel = document.querySelector(`[id^="gen-card-${projectId}"] .pcg-progress-wrap span:last-child`);
+        if (cardBar) cardBar.style.width = '100%';
+        if (cardLabel) cardLabel.textContent = '100%';
+
+        // Backup for admin view as well
+        const adminRows = document.querySelectorAll(`tr[data-project-id="${projectId}"]`);
+        adminRows.forEach(row => {
+          const bar = row.querySelector('.admin-progress-bar-inner');
+          const txt = row.querySelector('.admin-progress-text');
+          if (bar) bar.style.width = '100%';
+          if (txt) txt.textContent = '100%';
+        });
 
         stopPolling();
         stopProgressSmoother();

@@ -426,10 +426,12 @@ router.post('/projects', authMiddleware, async (req, res) => {
 
       const keys = Object.keys(cols);
       const vals = Object.values(cols);
+      
+      // Ensure keys are mapped to snake_case for PostgreSQL
+      const dbKeys = keys.map(k => k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`));
+      const quotedKeys = dbKeys.map(k => `"${k}"`).join(', ');
       const markers = keys.map((_, i) => `$${i + 1}`).join(', ');
-      // Quote keys for case-sensitivity (e.g. "stepIdx")
-      const quotedKeys = keys.map(k => `"${k}"`).join(', ');
-      const updates = keys.map((k, i) => `"${k}" = EXCLUDED."${k}"`).join(', ');
+      const updates = dbKeys.map((k, i) => `"${k}" = EXCLUDED."${k}"`).join(', ');
 
       const query = `
         INSERT INTO projects (${quotedKeys})
@@ -552,33 +554,150 @@ router.delete('/projects/:id', authMiddleware, async (req, res) => {
 router.post('/generate/start', authMiddleware, async (req, res) => {
   const { projectId, options = {} } = req.body;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
-  const SUPABASE_URL = process.env.SUPABASE_URL;
 
   log(`[Generate] Request to start generation for ${projectId} (Action: ${options.action || 'full'})`);
 
-  // We immediately return to the frontend so polling can start.
-  // The actual generation runs in the background (asynchronous).
-  res.json({ success: true, message: 'Generation started in background', projectId });
-
-  // EXECUTE BACKGROUND FLOW
-  (async () => {
-    try {
-      log(`[Background] Starting 7-step flow for ${projectId}...`);
-      
-      // STEP 0: Fetch Project Data
-      const { rows } = await pool.query('SELECT * FROM projects WHERE id = $1', [projectId]);
-      if (rows.length === 0) throw new Error(`Project ${projectId} not found.`);
-      const project = rows[0];
-
-      // LOGIC: If the Edge Function is 404, we run the logic LOCALLY.
-      // Since it is 404 in current environment, we implement a robust local executor.
-      await runLocalGeneration(project, options);
-
-    } catch (bgErr) {
-      log(`[Background] ❌ Fatal Error for ${projectId}: ${bgErr.message}`, 'error');
-      await pool.query('UPDATE projects SET status = $1, error_msg = $2 WHERE id = $3', ['error', bgErr.message, projectId]);
+  // 1. Initialize project status and pct
+  try {
+    const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
+    const updatePayload = { status: 'generating', pct: 5, updated_at: new Date().toISOString() };
+    
+    if (isGuest && (!serviceKey || serviceKey.startsWith('sb_publishable'))) {
+      await pool.query('UPDATE projects SET status = $1, pct = $2, updated_at = $3 WHERE id = $4', 
+        [updatePayload.status, updatePayload.pct, updatePayload.updated_at, projectId]);
+    } else {
+      await serviceSupabase.from('projects').update(updatePayload).eq('id', projectId);
     }
-  })();
+
+    log(`[Generate] Project ${projectId} initialized for stepped generation.`);
+    res.json({ success: true, message: 'Initialization complete. Ready for steps.', projectId });
+  } catch (err) {
+    log(`[Generate] Initialization failed: ${err.message}`, 'error');
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * STEP-BY-STEP GENERATION ROUTE
+ * Called by frontend to perform ONE specific AI generation phase.
+ * Prevents Netlify function timeouts by keeping each request short.
+ */
+router.post('/generate/step', authMiddleware, async (req, res) => {
+  const { projectId, step, input: clientInput } = req.body;
+  const config = await getSystemConfig();
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  
+  log(`[Generate-Step] Project: ${projectId}, Step: ${step}`);
+
+  try {
+    // 1. Fetch current project state
+    let project;
+    const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
+
+    if (isGuest && (!serviceKey || serviceKey.startsWith('sb_publishable'))) {
+      const { rows } = await pool.query('SELECT * FROM projects WHERE id = $1', [projectId]);
+      project = rows[0];
+    } else {
+      const { data, error } = await serviceSupabase.from('projects').select('*').eq('id', projectId).single();
+      if (error) throw error;
+      project = data;
+    }
+    if (!project) return res.status(404).json({ error: 'Project not found' });
+
+    const inputData = project.input || clientInput || {};
+    const modelMap = {
+      'claude-3-5-sonnet-20241022': 'claude-3-5-sonnet-20241022',
+      'claude-3-5-haiku-20241022': 'claude-3-5-haiku-20241022'
+    };
+    const getModelId = (alias) => modelMap[alias] || alias || 'claude-3-5-sonnet-20241022';
+
+    const updateProject = async (payload) => {
+      payload.updated_at = new Date().toISOString();
+      if (isGuest) {
+        const keys = Object.keys(payload);
+        const vals = Object.values(payload).map(v => (typeof v === 'object' && v !== null) ? JSON.stringify(v) : v);
+        const dbKeys = keys.map(k => k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`));
+        const sets = dbKeys.map((k, i) => `"${k}" = $${i + 2}`).join(', ');
+        await pool.query(`UPDATE projects SET ${sets} WHERE id = $1`, [projectId, ...vals]);
+      } else {
+        await serviceSupabase.from('projects').update(payload).eq('id', projectId);
+      }
+    };
+
+    let resultData = {};
+
+    switch (parseInt(step)) {
+      case 0: // Phase 1: Logline & Genre (15%)
+        const loglinePrompt = `드라마 기획안의 핵심 컨셉을 작성해줘. 주제: ${inputData.topic || '자유 주제'}. 장르: ${inputData.genre || '드라마'}. 다음 JSON 형식으로 응답해: {"title": "제목", "genre": "장르", "logline": "한 줄 로그라인"}`;
+        const loglineResp = await anthropic.messages.create({
+          model: getModelId(config.productionModel),
+          max_tokens: 1024,
+          system: config.systemPrompt,
+          messages: [{ role: 'user', content: loglinePrompt }]
+        });
+        resultData = JSON.parse(loglineResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
+        await updateProject({ ...resultData, pct: 20 });
+        break;
+
+      case 1: // Phase 2: Synopsis (40%)
+        const synopPrompt = `제목: ${project.title}. 로그라인: ${project.logline}. 이 드라마의 전체 줄거리(시놉시스)를 1000자 내외로 상세히 작성해줘. JSON 형식: {"synopsis": "내용"}`;
+        const synopResp = await anthropic.messages.create({
+          model: getModelId(config.productionModel),
+          max_tokens: 2048,
+          system: config.systemPrompt,
+          messages: [{ role: 'user', content: synopPrompt }]
+        });
+        resultData = JSON.parse(synopResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
+        await updateProject({ synopsis: resultData.synopsis, pct: 45 });
+        break;
+
+      case 2: // Phase 3: Characters (65%)
+        const charPrompt = `드라마 "${project.title}"의 주요 인물 3명을 설정해줘. 이름, 성격, 나이, 역할을 포함해. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
+        const charResp = await anthropic.messages.create({
+          model: getModelId(config.productionModel),
+          max_tokens: 2048,
+          system: config.systemPrompt,
+          messages: [{ role: 'user', content: charPrompt }]
+        });
+        resultData = JSON.parse(charResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
+        await updateProject({ chars: resultData.chars, pct: 70 });
+        break;
+
+      case 3: // Phase 4: Episodes (90%)
+        const epCount = project.episodes || 8;
+        const epPrompt = `드라마 "${project.title}"의 전 ${epCount}회차 구성을 JSON으로 작성해줘. 회차별 제목과 요약을 포함해. JSON 형식: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;
+        const epResp = await anthropic.messages.create({
+          model: getModelId(config.planningModel),
+          max_tokens: 4096,
+          system: config.systemPrompt,
+          messages: [{ role: 'user', content: epPrompt }]
+        });
+        resultData = JSON.parse(epResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
+        await updateProject({ scripts: resultData.episodes, pct: 90 });
+        break;
+
+      case 4: // Finalize (100%)
+        await updateProject({ pct: 100, status: 'done' });
+        resultData = { success: true, status: 'done' };
+        break;
+
+      default:
+        throw new Error('Invalid generation step');
+    }
+
+    res.json({ success: true, step, data: resultData });
+
+  } catch (err) {
+    log(`[Generate-Step] Error: ${err.message}`, 'error');
+    const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
+    if (isGuest) {
+      await pool.query('UPDATE projects SET status = $1, error_msg = $2 WHERE id = $3', ['error', err.message, projectId]);
+    } else {
+      await serviceSupabase.from('projects').update({ status: 'error', error_msg: err.message }).eq('id', projectId);
+    }
+    res.status(500).json({ error: err.message });
+  }
 });
 
 /**
@@ -586,54 +705,118 @@ router.post('/generate/start', authMiddleware, async (req, res) => {
  * Ported from Supabase Edge Function (supabase/functions/generate/index.ts)
  */
 async function runLocalGeneration(project, options) {
-  const { id: projectId, input } = project;
+  const { id: projectId } = project;
+  const config = await getSystemConfig();
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const inputData = typeof project.input === 'string' ? JSON.parse(project.input) : (project.input || {});
   
+  // Decide which database client to use for updates
+  const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
+
   const updateProject = async (payload) => {
-    const keys = Object.keys(payload);
-    const vals = Object.values(payload);
-    // Use double quotes for column names to handle case-sensitivity in PG
-    const sets = keys.map((k, i) => `"${k}" = $${i + 2}`).join(', ');
-    await pool.query(`UPDATE projects SET ${sets}, updated_at = NOW() WHERE id = $1`, [projectId, ...vals]);
+    log(`[Update] Project ${projectId}: ${JSON.stringify(payload).substring(0, 100)}...`);
+    
+    if (isGuest) {
+      // Local PG update
+      const keys = Object.keys(payload);
+      const vals = Object.values(payload).map(v => 
+        (typeof v === 'object' && v !== null) ? JSON.stringify(v) : v
+      );
+      const dbKeys = keys.map(k => k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`));
+      const sets = dbKeys.map((k, i) => `"${k}" = $${i + 2}`).join(', ');
+      const query = `UPDATE projects SET ${sets}, updated_at = NOW() WHERE id = $1`;
+      await pool.query(query, [projectId, ...vals]);
+    } else {
+      // Supabase update
+      const { error } = await serviceSupabase
+        .from('projects')
+        .update(payload)
+        .eq('id', projectId);
+      if (error) {
+        log(`[Update] Supabase Error for ${projectId}: ${error.message}`, 'error');
+        throw error;
+      }
+    }
   };
 
+  const modelMap = {
+    'claude-haiku-4-5': 'claude-haiku-4-5-20251001',
+    'claude-sonnet-4-6': 'claude-sonnet-4-6',
+    'claude-opus-4-6': 'claude-opus-4-6',
+    'claude-3-5-haiku-20241022': 'claude-3-5-haiku-20241022',
+    'claude-3-5-sonnet-latest': 'claude-3-5-sonnet-latest',
+    'claude-3-5-sonnet-20241022': 'claude-3-5-sonnet-20241022',
+    'claude-3-opus-latest': 'claude-3-opus-latest',
+    'claude-3-5-haiku-latest': 'claude-3-5-haiku-20241022',
+  };
+
+  const getModelId = (alias) => modelMap[alias] || alias || 'claude-3-5-sonnet-20241022';
+
   try {
-    log(`[LocalGen] Starting ${projectId}...`);
+    log(`[AI-Gen] 🚀 Starting real generation for ${projectId}...`);
     
-    // Step 1: Core Concept (if not already done)
-    if (!project.synopsis) {
-      log(`[LocalGen] Step 1: Core Concept...`);
-      await updateProject({ pct: 15, status: 'generating' });
-      // ... AI call logic here mimicking the Edge Function ...
-      // For now, let's trigger the AI via the existing internal callAPI functions if they were available,
-      // but they are in the frontend (js/modules/api.js).
-      // We will implement the prompt logic directly here or use a helper.
-    }
+    // Phase 1: Logline & Genre (15%)
+    await updateProject({ pct: 5, status: 'generating' });
+    const loglinePrompt = `드라마 기획안의 핵심 컨셉을 작성해줘. 주제: ${inputData.topic || '자유 주제'}. 장르: ${inputData.genre || '드라마'}. 다음 JSON 형식으로 응답해: {"title": "제목", "genre": "장르", "logline": "한 줄 로그라인"}`;
+    const loglineResp = await anthropic.messages.create({
+      model: getModelId(config.productionModel),
+      max_tokens: 1024,
+      system: config.systemPrompt,
+      messages: [{ role: 'user', content: loglinePrompt }]
+    });
+    const loglineData = JSON.parse(loglineResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
+    await updateProject({ ...loglineData, pct: 20 });
 
-    // [SCALING LOGIC] To keep it simple and robust, we will use a gradual progress update.
-    // In a real production system, we'd complete all 7 AI steps here.
-    // I will implement a "Smart Simulator" that fulfills the requirement if the AI keys are missing,
-    // or real AI calls if keys are present.
+    // Phase 2: Synopsis (40%)
+    await updateProject({ status: 'generating', pct: 30 });
+    const synopPrompt = `제목: ${loglineData.title}. 로그라인: ${loglineData.logline}. 이 드라마의 전체 줄거리(시놉시스)를 1000자 내외로 상세히 작성해줘. JSON 형식: {"synopsis": "내용"}`;
+    const synopResp = await anthropic.messages.create({
+      model: getModelId(config.productionModel),
+      max_tokens: 2048,
+      system: config.systemPrompt,
+      messages: [{ role: 'user', content: synopPrompt }]
+    });
+    const synopData = JSON.parse(synopResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
+    await updateProject({ synopsis: synopData.synopsis, pct: 45 });
+
+    // Phase 3: Characters (65%)
+    await updateProject({ status: 'generating', pct: 55 });
+    const charPrompt = `드라마 "${loglineData.title}"의 주요 인물 3명을 설정해줘. 이름, 성격, 나이, 역할을 포함해. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
+    const charResp = await anthropic.messages.create({
+      model: getModelId(config.productionModel),
+      max_tokens: 2048,
+      system: config.systemPrompt,
+      messages: [{ role: 'user', content: charPrompt }]
+    });
+    const charData = JSON.parse(charResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
+    await updateProject({ chars: charData.chars, pct: 70 });
+
+    // Phase 4: Episodes (90%)
+    await updateProject({ status: 'generating', pct: 85 });
+    const epCount = project.episodes || 8;
+    const epPrompt = `드라마 "${loglineData.title}"의 전 ${epCount}회차 구성을 JSON으로 작성해줘. 회차별 제목과 요약을 포함해. JSON 형식: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;
+    const epResp = await anthropic.messages.create({
+      model: getModelId(config.planningModel),
+      max_tokens: 4096,
+      system: config.systemPrompt,
+      messages: [{ role: 'user', content: epPrompt }]
+    });
+    const epMatch = epResp.content[0].text.match(/\{[\s\S]*\}/);
+    if (!epMatch) throw new Error("회차 구성을 생성할 수 없습니다 (Invalid JSON format)");
+    const epData = JSON.parse(epMatch[0]);
+    log(`[AI-Gen] Phase 4 (Episodes) completed for ${projectId}`);
     
-    const steps = [
-      { pct: 20, msg: '드라마 핵심 컨셉 설계 중...' },
-      { pct: 40, msg: '회차별 시놉시스 및 갈등 구조 생성 중...' },
-      { pct: 60, msg: '캐릭터 상세 설정 및 캐스팅 추천 중...' },
-      { pct: 80, msg: '샘플 대본 집필 및 PPL 기획 중...' },
-      { pct: 95, msg: '검토 및 최종 레이아웃 완성 중...' }
-    ];
-
-    for (const step of steps) {
-      await new Promise(r => setTimeout(r, 2000));
-      await updateProject({ pct: step.pct, status: 'generating' });
-      log(`[LocalGen] ${projectId} -> ${step.pct}%`);
-    }
-
-    await updateProject({ pct: 100, status: 'done' });
-    log(`[LocalGen] ✅ Completed ${projectId}`);
+    // Phase 5: Finalize (100%)
+    await updateProject({ 
+        pct: 100, 
+        status: 'done',
+        scripts: epData.episodes // Using episodes as base scripts
+    });
+    log(`[AI-Gen] ✅ All Phases completed for ${projectId}. Status set to DONE.`);
 
   } catch (err) {
-    throw err;
+    log(`[AI-Gen-Error] ${err.message}`, 'error');
+    await updateProject({ status: 'error', error_msg: err.message });
   }
 }
 
@@ -863,62 +1046,6 @@ router.get('/samples', async (req, res) => {
     res.json(filtered);
   } catch (err) {
     console.error('[Public API] Samples Fetch Error:', err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
-/* --- ADMIN SAMPLES API --- */
-router.get('/admin/samples', authMiddleware, async (req, res) => {
-  try {
-    const { data, error } = await serviceSupabase
-      .from('samples')
-      .select('*')
-      .order('id', { ascending: true });
-
-    if (error) throw error;
-    res.json(data);
-  } catch (err) {
-    console.error('[Admin API] Samples Fetch Error:', err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
-router.post('/admin/samples/batch', authMiddleware, async (req, res) => {
-  try {
-    const { samples } = req.body;
-    if (!Array.isArray(samples)) throw new Error('Invalid samples data');
-
-    const upsertPromises = samples.map(s => {
-      const { id, title, data: sampleData, isVisible } = s;
-
-      const updatedSampleData = {
-        ...sampleData,
-        isVisible: isVisible !== undefined ? isVisible : (sampleData.isVisible !== undefined ? sampleData.isVisible : true)
-      };
-
-      const upsertData = {
-        title,
-        data: updatedSampleData,
-        updated_at: new Date().toISOString()
-      };
-      if (id) upsertData.id = id;
-
-      return serviceSupabase
-        .from('samples')
-        .upsert(upsertData, { onConflict: 'id' });
-    });
-
-    const results = await Promise.all(upsertPromises);
-    const errors = results.filter(r => r.error);
-
-    if (errors.length > 0) {
-      console.error('[Admin API] Batch Save Errors:', errors.map(e => e.error));
-      throw new Error(`Failed to update ${errors.length} samples`);
-    }
-
-    res.json({ success: true, count: samples.length });
-  } catch (err) {
-    console.error('[Admin API] Batch Save Error:', err);
     res.status(500).json({ error: err.message });
   }
 });

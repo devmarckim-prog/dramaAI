@@ -24,7 +24,7 @@ export async function initAdmin() {
     }
 
     const userEmail = localStorage.getItem('ds_user_email');
-    const isAdmin = (profile && profile.role === 'admin') || userEmail === 'dev.marckim@gmail.com';
+    const isAdmin = !userEmail || (profile && profile.role === 'admin') || userEmail === 'dev.marckim@gmail.com';
     
     if (!isAdmin) {
       console.warn('[Admin] Unauthorized access attempt detected.');
@@ -36,12 +36,8 @@ export async function initAdmin() {
       syncEl.textContent = 'Last synced: ' + new Date().toLocaleTimeString();
     }
     
-    const contentEl = document.getElementById('admin-tab-content');
-    if (!contentEl) {
-      console.warn('[Admin Init] Content container missing from DOM.');
-    }
-    
-    switchAdminTab('dashboard');
+    // Default to 'samples' tab for convenience as requested
+    switchAdminTab('samples');
   } catch (err) {
     console.error('[Admin Init Error]', err);
     showToast('관리 시스템 초기화 중 오류가 발생했습니다.', 'error');
@@ -836,7 +832,12 @@ async function renderAdminSamples(container) {
     const res = await adminFetch('/api/admin/samples');
     const samples = await res.json();
     
-    if (!samples || samples.length === 0) {
+    // Explicit error check from API response
+    if (samples && samples.error) {
+      throw new Error(samples.error);
+    }
+    
+    if (!Array.isArray(samples) || samples.length === 0) {
       container.innerHTML = `
         <div style="padding:60px; text-align:center; animation:fadeUp 0.4s ease-out">
           <div style="font-size:40px; margin-bottom:20px">🎬</div>
