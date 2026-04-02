@@ -4,7 +4,7 @@ const path = require('path');
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const { supabase, createUserClient, serviceSupabase } = require('../supabaseClient');
-const { Pool } = require('pg');
+// pg dependency removed as it was redundant with serviceSupabase
 
 // 2. Constants & Helpers
 const GLOBAL_GUEST_UUID = 'e098bba0-8c4e-41c6-8149-41efd79854dc'; // Points to dev.marckim@gmail.com for database referral integrity
@@ -581,12 +581,8 @@ router.post('/generate/start', authMiddleware, async (req, res) => {
     const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
     const updatePayload = { status: 'generating', pct: 5, updated_at: new Date().toISOString() };
     
-    if (isGuest && (!serviceKey || serviceKey.startsWith('sb_publishable'))) {
-      await pool.query('UPDATE projects SET status = $1, pct = $2, updated_at = $3 WHERE id = $4', 
-        [updatePayload.status, updatePayload.pct, updatePayload.updated_at, projectId]);
-    } else {
-      await serviceSupabase.from('projects').update(updatePayload).eq('id', projectId);
-    }
+    // Always use serviceSupabase for internal status updates to bypass RLS safely
+    await serviceSupabase.from('projects').update(updatePayload).eq('id', projectId);
 
     // 2. Trigger asynchronous background generation
     log(`[Generate] Project ${projectId} initialized for stepped generation. Triggering background task.`);
@@ -619,9 +615,11 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
     const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
-    if (isGuest && (!serviceKey || serviceKey.startsWith('sb_publishable'))) {
-      const { rows } = await pool.query('SELECT * FROM projects WHERE id = $1', [projectId]);
-      project = rows[0];
+    if (isGuest && (!serviceKey || !serviceKey.startsWith('sk_'))) {
+      // serviceSupabase handles guest IDs as primary keys just like regular IDs
+      const { data, error } = await serviceSupabase.from('projects').select('*').eq('id', projectId).single();
+      if (error) throw error;
+      project = data;
     } else {
       const { data, error } = await serviceSupabase.from('projects').select('*').eq('id', projectId).single();
       if (error) throw error;
@@ -655,30 +653,11 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
       normalizedPayload.updated_at = new Date().toISOString();
       log(`[Update] Project ${projectId}: ${JSON.stringify(normalizedPayload).substring(0, 100)}...`);
       
-      if (isGuest) {
-        const keys = Object.keys(normalizedPayload);
-        const vals = Object.values(normalizedPayload).map(v => 
-          (typeof v === 'object' && v !== null) ? JSON.stringify(v) : v
-        );
-        const dbKeys = keys.map(k => {
-          if (k === 'stepIdx') return '"stepIdx"';
-          if (k === 'updatedAt') return 'updated_at';
-          return k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-        });
-        const sets = dbKeys.map((k, i) => `${k} = $${i + 2}`).join(', ');
-        const query = `UPDATE projects SET ${sets} WHERE id = $1`;
-        try {
-          await pool.query(query, [projectId, ...vals]);
-        } catch (err) {
-          log(`[Update-PG] Critical DB Error on ${projectId}: ${err.message}`, 'error');
-          throw err;
-        }
-      } else {
-        const { error: updErr } = await serviceSupabase.from('projects').update(normalizedPayload).eq('id', projectId);
-        if (updErr) {
-          log(`[Update-Supabase] Auth Error on ${projectId}: ${updErr.message}`, 'error');
-          throw updErr;
-        }
+      // Use serviceSupabase for all updates to bypass RLS and ensure consistency
+      const { error: updErr } = await serviceSupabase.from('projects').update(normalizedPayload).eq('id', projectId);
+      if (updErr) {
+        log(`[Update-Supabase] Error on ${projectId}: ${updErr.message}`, 'error');
+        throw updErr;
       }
     };
 
@@ -749,12 +728,8 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
 
   } catch (err) {
     log(`[Generate-Step] Error: ${err.message}`, 'error');
-    const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
-    if (isGuest) {
-      await pool.query('UPDATE projects SET status = $1, error_msg = $2 WHERE id = $3', ['error', err.message, projectId]);
-    } else {
-      await serviceSupabase.from('projects').update({ status: 'error', error_msg: err.message }).eq('id', projectId);
-    }
+    // Standardize error reporting via serviceSupabase
+    await serviceSupabase.from('projects').update({ status: 'error', error_msg: err.message }).eq('id', projectId);
     res.status(500).json({ error: err.message });
   }
  });
@@ -819,44 +794,29 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
    const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
  
     const updateProject = async (payload) => {
-     // ... Field mapping and database update logic
-     const aliasMap = {
-       'characters': 'chars',
-       'episodes_list': 'scripts',
-       'episodesList': 'scripts',
-       'budget_data': 'budget',
-       'budgetData': 'budget',
-       'production_data': 'stats',
-       'productionData': 'stats'
-     };
-     
-     const normalizedPayload = { ...payload };
-     Object.keys(aliasMap).forEach(alias => {
-       if (normalizedPayload[alias] !== undefined && normalizedPayload[aliasMap[alias]] === undefined) {
-         normalizedPayload[aliasMap[alias]] = normalizedPayload[alias];
-         delete normalizedPayload[alias];
-       }
-     });
+      const aliasMap = {
+        'characters': 'chars',
+        'episodes_list': 'scripts',
+        'episodesList': 'scripts',
+        'budget_data': 'budget',
+        'budgetData': 'budget',
+        'production_data': 'stats',
+        'productionData': 'stats'
+      };
+      
+      const normalizedPayload = { ...payload };
+      Object.keys(aliasMap).forEach(alias => {
+        if (normalizedPayload[alias] !== undefined && normalizedPayload[aliasMap[alias]] === undefined) {
+          normalizedPayload[aliasMap[alias]] = normalizedPayload[alias];
+          delete normalizedPayload[alias];
+        }
+      });
 
-     normalizedPayload.updated_at = new Date().toISOString();
-     
-     if (isGuest) {
-       const keys = Object.keys(normalizedPayload);
-       const vals = Object.values(normalizedPayload).map(v => 
-         (typeof v === 'object' && v !== null) ? JSON.stringify(v) : v
-       );
-       const dbKeys = keys.map(k => {
-         if (k === 'stepIdx') return '"stepIdx"';
-         if (k === 'updatedAt') return 'updated_at';
-         return k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-       });
-       const sets = dbKeys.map((k, i) => `${k} = $${i + 2}`).join(', ');
-       const query = `UPDATE projects SET ${sets} WHERE id = $1`;
-       await pool.query(query, [projectId, ...vals]);
-     } else {
-       await serviceSupabase.from('projects').update(payload).eq('id', projectId);
-     }
-   };
+      normalizedPayload.updated_at = new Date().toISOString();
+      
+      // Use serviceSupabase for consistent background updates
+      await serviceSupabase.from('projects').update(normalizedPayload).eq('id', projectId);
+    };
 
    try {
      log(`[AI-Gen] 🚀 Starting real generation for ${projectId}...`);
