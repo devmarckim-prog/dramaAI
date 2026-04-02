@@ -128,8 +128,10 @@ export async function doLogin(provider) {
   }
 
   if (provider === 'google') {
-    localStorage.removeItem('ds_guest_mode'); // Clear guest mode before trying to login
+    localStorage.removeItem('ds_guest_mode'); // Clear guest mode BEFORE trying to login
+    localStorage.removeItem('ds_auth_token'); // Clear any old token
     state.isGuestMode = false;
+    state.isLoggedIn = false;
     
     try {
       addDebugLog('구글 로그인 URL 요청 중...');
@@ -189,6 +191,7 @@ export function fetchUserProfile() {
         // Clear guest mode on successful server profile sync
         localStorage.removeItem('ds_guest_mode');
         state.isGuestMode = false;
+        state.isLoggedIn = true; // Confirm state is fully logged in
 
         renderNav();
         resolve(profile);

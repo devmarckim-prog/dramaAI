@@ -193,20 +193,18 @@ const authMiddleware = async (req, res, next) => {
     }
   }
 
-  // If no valid token but fingerprint exists -> GUEST (Unique ID based on fingerprint)
-  if (!token && guestFingerprint) {
-    // If it is a valid UUID, use it directly. Otherwise, stick with GLOBAL fallback for now.
-    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(guestFingerprint);
-    req.user = {
-      id: isUuid ? guestFingerprint : GLOBAL_GUEST_UUID,
-      fingerprint: guestFingerprint,
-      isGuest: true
-    };
-    log(`[Auth] Authorized Guest: ${guestFingerprint.substring(0, 8)}... (ID Type: ${isUuid ? 'Unique' : 'Shared'})`);
-    return next();
-  }
-
   if (!token) {
+    if (guestFingerprint) {
+      // If no valid token but fingerprint exists -> GUEST (Unique ID based on fingerprint)
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(guestFingerprint);
+      req.user = {
+        id: isUuid ? guestFingerprint : GLOBAL_GUEST_UUID,
+        fingerprint: guestFingerprint,
+        isGuest: true
+      };
+      log(`[Auth] Authorized Guest: ${guestFingerprint.substring(0, 8)}... (ID Type: ${isUuid ? 'Unique' : 'Shared'})`);
+      return next();
+    }
     log(`[Auth] Rejecting: No valid token or fingerprint. Headers: auth=${!!authHeader}, guest=${!!guestFingerprint}`);
     return res.status(401).json({ error: 'No token or fingerprint provided' });
   }
@@ -218,19 +216,22 @@ const authMiddleware = async (req, res, next) => {
     return res.status(500).json({ error: '인증 서버 설정 오류' });
   }
 
-  const { data: { user }, error } = await supabase.auth.getUser(token);
-
-  if (error || !user) {
-    // If it's a guest request with a bad token, try falling back to fingerprint
-    if (guestFingerprint) {
-      req.user = { id: GLOBAL_GUEST_UUID, fingerprint: guestFingerprint, isGuest: true };
-      return next();
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+    
+    if (error || !user) {
+      log(`[Auth] Token validation failed: ${error ? error.message : 'User not found'}. Path: ${req.path}`);
+      // DANGER: Do NOT fallback to guest here if they provided a token. 
+      // If we fall back, a logged-in user with an expired token will unknowingly see "Guest Mode".
+      return res.status(401).json({ error: 'Invalid or expired token' });
     }
-    return res.status(401).json({ error: 'Invalid or expired token' });
-  }
 
-  req.user = user;
-  next();
+    req.user = user;
+    next();
+  } catch (err) {
+    log(`[Auth] Critical check error: ${err.message}`, 'error');
+    res.status(500).json({ error: 'Internal Auth Error' });
+  }
 };
 
 router.get('/user', authMiddleware, (req, res) => {

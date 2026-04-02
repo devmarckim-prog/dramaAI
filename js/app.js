@@ -135,6 +135,7 @@ async function initApp() {
     const accessToken = params.get('access_token');
     if (accessToken) {
       localStorage.setItem('ds_auth_token', accessToken);
+      localStorage.removeItem('ds_guest_mode'); // Force clear guest mode on OAuth return
       try {
         const payload = JSON.parse(atob(accessToken.split('.')[1]));
         if (payload.email) localStorage.setItem('ds_user_email', payload.email);
@@ -152,6 +153,7 @@ async function initApp() {
     }
   } else if (localStorage.getItem('ds_auth_token')) {
     Nav.addDebugLog("기존 세션 발견. 자동 로그인됨.");
+    localStorage.removeItem('ds_guest_mode'); // Ensure guest mode stays off
     state.isLoggedIn = true;
     state.isGuestMode = false;
     await Auth.fetchUserProfile();
