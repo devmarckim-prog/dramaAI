@@ -795,16 +795,13 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
   * Ported from Supabase Edge Function (supabase/functions/generate/index.ts)
   */
  async function runLocalGeneration(project, options) {
-   const { id: projectId } = project;
-   const config = await getSystemConfig();
-   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-   const inputData = typeof project.input === 'string' ? JSON.parse(project.input) : (project.input || {});
-   
-   log(`[AI-Gen] Debug: API Key exists: ${!!process.env.ANTHROPIC_API_KEY}, Length: ${process.env.ANTHROPIC_API_KEY?.length}`);
-   
-   // Decide which database client to use for updates
-   const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
- 
+    const { id: projectId } = project;
+    const config = await getSystemConfig();
+    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const inputData = typeof project.input === 'string' ? JSON.parse(project.input) : (project.input || {});
+    
+    log(`[AI-Gen] Debug: API Key exists: ${!!process.env.ANTHROPIC_API_KEY}, Length: ${process.env.ANTHROPIC_API_KEY?.length}`);
+    
     const updateProject = async (payload) => {
       const aliasMap = {
         'characters': 'chars',
@@ -825,72 +822,10 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
       });
 
       normalizedPayload.updated_at = new Date().toISOString();
-      
-      // Use serviceSupabase for consistent background updates
       await serviceSupabase.from('projects').update(normalizedPayload).eq('id', projectId);
     };
 
    try {
-     log(`[AI-Gen] 🚀 Starting real generation for ${projectId}...`);
-     
-     // Phase 1: Logline & Genre
-     await updateProject({ pct: 5, status: 'generating', stepIdx: 0 });
-     const loglinePrompt = `드라마 기획안 핵심 컨셉 작성. 시드: ${inputData.logline || inputData.topic}. 장르: ${inputData.genre}. JSON: {"title": "제목", "genre": "장르", "logline": "로그라인"}`;
-     const loglineRespText = await callUnifiedAI({
-       prompt: loglinePrompt,
-       modelAlias: config.productionModel,
-       max_tokens: 1024
-     }, config, anthropic);
-     const loglineData = JSON.parse(loglineRespText.match(/\{[\s\S]*\}/)[0]);
-     await updateProject({ ...loglineData, pct: 20, stepIdx: 1 });
-
-     // Phase 2: Outline
-     const outlinePrompt = `제목: ${loglineData.title}. 전체 ${inputData.episodes || 8}회차의 제목과 각 회차별 1줄 줄거리 요약. JSON: {"episodes": [{"title": "제목", "logline": "내용"}]}`;
-     const outlineRespText = await callUnifiedAI({
-       prompt: outlinePrompt,
-       modelAlias: config.planningModel,
-       max_tokens: 2048
-     }, config, anthropic);
-     const outlineData = JSON.parse(outlineRespText.match(/\{[\s\S]*\}/)[0]);
-     await updateProject({ outline: outlineData.episodes || outlineData, pct: 35, stepIdx: 2 });
-
-     // Phase 3: Synopsis
-     const synopPrompt = `제목: ${loglineData.title}. 시놉시스 작성. JSON: {"synopsis": "줄거리"}`;
-     const synopRespText = await callUnifiedAI({
-       prompt: synopPrompt,
-       modelAlias: config.productionModel,
-       max_tokens: 2048
-     }, config, anthropic);
-     const synopData = JSON.parse(synopRespText.match(/\{[\s\S]*\}/)[0]);
-     await updateProject({ synopsis: synopData.synopsis, pct: 50, stepIdx: 3 });
-
-     // Phase 4: Conflicts
-     const conflictPrompt = `드라마 "${loglineData.title}"의 주요 갈등 구조 분석. 내적, 대인, 사회적 갈등을 포함해. JSON: {"conflicts": [{"type": "내적/대인/사회", "character": "핵심인물", "desc": "상세내용"}]}`;
-     const conflictRespText = await callUnifiedAI({
-       prompt: conflictPrompt,
-       modelAlias: config.productionModel,
-       max_tokens: 1024
-     }, config, anthropic);
-     const conflictData = JSON.parse(conflictRespText.match(/\{[\s\S]*\}/)[0]);
-     await updateProject({ conflicts: conflictData.conflicts, pct: 65, stepIdx: 4 });
-
-     // Phase 5: Characters
-     const charPrompt = `주요 인물 3명 설정. JSON: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
-     const charRespText = await callUnifiedAI({
-       prompt: charPrompt,
-       modelAlias: config.productionModel,
-       max_tokens: 2048
-     }, config, anthropic);
-     const charData = JSON.parse(charRespText.match(/\{[\s\S]*\}/)[0]);
-     // Phase 4: Episodes
-     const epCount = project.episodes || 8;
-     const epPrompt = `${epCount}회차 구성. JSON: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;
-     const epRespText = await callUnifiedAI({
-       prompt: epPrompt,
-       modelAlias: config.planningModel,
-       max_tokens: 4096
-     }, config, anthropic);
-     const epMatch = epRespText.match(/\{[\s\S]*\}/);
      const epData = JSON.parse(epMatch[0]);
      
      await updateProject({ 

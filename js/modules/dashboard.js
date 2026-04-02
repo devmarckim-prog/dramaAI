@@ -23,9 +23,29 @@ export function buildResultPanels() {
   renderOverview();
   buildCharCards();
   buildEpList();
+  buildConflictPanel();
   buildBudget();
   buildPplPanel();
   renderScript();
+}
+
+export function buildConflictPanel() {
+  const el = document.getElementById('ov-conflicts');
+  if (!el) return;
+
+  const conflicts = state.planData?.conflicts || state.currentInput?.conflicts || [];
+  if (!conflicts.length) {
+    el.innerHTML = '<div class="project-empty-desc">갈등 분석 데이터가 없습니다.</div>';
+    return;
+  }
+
+  el.innerHTML = conflicts.map(c => `
+    <div class="conflict-card">
+      <div class="conflict-type">${c.type}</div>
+      <div class="conflict-character">${c.character}</div>
+      <div class="conflict-desc">${c.desc}</div>
+    </div>
+  `).join('');
 }
 
 function renderOverview(retryCount = 0) {
