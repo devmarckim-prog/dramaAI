@@ -1,6 +1,6 @@
-v0.1.107: Data Integrity & UI Persistence Final
-- Fixed "isGuest" and "hasToken" reference errors (Restored project listing)
-- Fixed "8부작" badge in project cards (Removed [object Object])
-- Fixed "Title Overwrite" bug (New projects no longer inherit sample names)
-- Enhanced Robust Deep-Search for Conflicts and Stats in Overview tab
-- Correct persistence of episodes_count and stats in database
+v0.1.108: Final Stabilization & Cleanup
+- Unified AI Model Mapping for Claude 4 series (Sonnet 4.6/Haiku 4.5)
+- Robust Project Deletion (Fixed numeric/UUID cross-access for guests)
+- Complete removal of unused Netlify (.toml and /netlify folder)
+- Verified Server Health and Port 8081 connectivity
+- Enhanced AI Proxy JSON recovery logic stability

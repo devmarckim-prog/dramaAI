@@ -11225,3 +11225,23 @@
 [2026-04-02T07:15:52.565Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
 [2026-04-02T07:15:52.570Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
 [2026-04-02T07:15:52.572Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T08:41:34.145Z] SERVER STARTING...
+[2026-04-02T08:41:34.305Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T08:41:34.305Z] [Mount] User API Routes -> /api
+[2026-04-02T08:41:39.645Z] [REQUEST] DELETE /api/projects/999999 | Auth: NO | Guest: YES
+[2026-04-02T08:41:39.646Z] [DEBUG] Guest ID: test-fingerprint-123
+[2026-04-02T08:41:39.650Z] [Auth] Authorized Guest: test-fin... (ID Type: Shared)
+[2026-04-02T08:41:39.651Z] [Projects] DELETE request for project: 999999 (User: 00000000-0000-0000-0000-000000000000, Guest: true)
+[2026-04-02T08:41:39.651Z] [Projects] Target ID: 999999 (Type: number, isNumeric: true, isUuid: false)
+[2026-04-02T08:41:40.860Z] [Projects] Delete result: 0 rows removed.
+[2026-04-02T08:41:40.860Z] [Projects] No rows deleted for 999999. Trying opposite type fallback...
+[2026-04-02T08:41:40.971Z] [Projects] FINAL NOTICE: No project found to delete for ID: 999999
+[2026-04-02T08:41:40.978Z] [REQUEST] POST /api/generate | Auth: NO | Guest: YES
+[2026-04-02T08:41:40.978Z] [DEBUG] Guest ID: test-fingerprint-123
+[2026-04-02T08:41:41.085Z] [Config] Loaded from Supabase Cloud: claude-haiku-4-5
+[2026-04-02T08:41:41.086Z] [AI Proxy] Task: 'script' (Heavy) → Model: claude-haiku-4-5-20251001
+[2026-04-02T08:41:43.370Z] [AI Proxy] ⚠️ max_tokens 한도 도달 - 응답이 잘렸을 수 있음. 자동 복구 시도합니다.
+[2026-04-02T08:41:43.371Z] [AI Proxy] ✅ Request SUCCESS | Model: claude-haiku-4-5-20251001 | Duration: 2285ms
+[2026-04-02T08:41:43.371Z] [AI Proxy] JSON Parse Error - 자동 복구 시도 중...
+[2026-04-02T08:41:43.372Z] [AI Proxy] JSON Parse Error: Unexpected token '#', "# 방구석 로맨스" is not valid JSON
+[2026-04-02T08:41:43.372Z] [AI Proxy] Raw Response Snippet: # 방구석 로맨스...
