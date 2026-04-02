@@ -23,16 +23,17 @@ async function testSupabase() {
     console.log('✅ Connection stable.');
 
     // 2. Projects Table Check
-    console.log('\n2. Verifying "projects" table access...');
+    console.log('\n2. Verifying "projects" table access and columns...');
     const { data: projects, error: projectsError } = await serviceSupabase
       .from('projects')
-      .select('id, title, status')
-      .limit(5);
+      .select('*')
+      .limit(1);
 
     if (projectsError) {
       console.error('❌ "projects" table error:', projectsError.message);
     } else {
-      console.log(`✅ Successfully fetched ${projects.length} sample projects:`);
+      console.log(`✅ Successfully fetched ${projects.length} sample projects. Columns:`);
+      console.log(Object.keys(projects[0]).join(', '));
       projects.forEach(p => console.log(`   - [ID: ${p.id}] ${p.title} (${p.status})`));
     }
 

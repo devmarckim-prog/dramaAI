@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
+const { Anthropic: AnthropicSDK } = Anthropic || {}; 
 const { supabase, createUserClient, serviceSupabase } = require('../supabaseClient');
 // pg dependency removed as it was redundant with serviceSupabase
 
@@ -59,29 +60,22 @@ async function getSystemConfig() {
   // 1. Try Supabase Cloud Config First
   try {
     const { data, error } = await serviceSupabase
-      .from('system_settings')
+      .from('admin_config')
       .select('*')
-      .eq('id', 'global')
-      .single();
+      .eq('key', 'system_config')
+      .maybeSingle();
 
-    if (!error && data) {
-      log(`[Config] Loaded from Supabase Cloud: ${data.production_model}`);
-      return {
-        planningModel: data.planning_model || defaults.planningModel,
-        productionModel: data.production_model || defaults.productionModel,
-        systemPrompt: data.system_prompt || defaults.systemPrompt
-      };
+    if (!error && data && data.value) {
+      log('[Config] Loaded from Supabase Cloud: ' + data.value.productionModel);
+      return { ...defaults, ...data.value };
     }
   } catch (dbErr) {
-    console.warn('[Config] Supabase fetch failed, falling back to local file.');
+    log('[Config] Cloud load failed, using local fallback.', 'error');
   }
 
-  // 2. Fallback to Local JSON
+  // 2. Fallback to local file if cloud fails
   try {
     if (fs.existsSync(configPath)) {
-      const local = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-      // log('[Config] Loaded from local system.json');
-      return { ...defaults, ...local };
     }
   } catch (err) {
     console.error('[Config] Failed to read system.json:', err);
@@ -795,50 +789,97 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
   * Ported from Supabase Edge Function (supabase/functions/generate/index.ts)
   */
  async function runLocalGeneration(project, options) {
-    const { id: projectId } = project;
-    const config = await getSystemConfig();
-    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-    const inputData = typeof project.input === 'string' ? JSON.parse(project.input) : (project.input || {});
-    
-    log(`[AI-Gen] Debug: API Key exists: ${!!process.env.ANTHROPIC_API_KEY}, Length: ${process.env.ANTHROPIC_API_KEY?.length}`);
-    
-    const updateProject = async (payload) => {
-      const aliasMap = {
-        'characters': 'chars',
-        'episodes_list': 'scripts',
-        'episodesList': 'scripts',
-        'budget_data': 'budget',
-        'budgetData': 'budget',
-        'production_data': 'stats',
-        'productionData': 'stats'
-      };
-      
-      const normalizedPayload = { ...payload };
-      Object.keys(aliasMap).forEach(alias => {
-        if (normalizedPayload[alias] !== undefined && normalizedPayload[aliasMap[alias]] === undefined) {
-          normalizedPayload[aliasMap[alias]] = normalizedPayload[alias];
-          delete normalizedPayload[alias];
-        }
-      });
-
-      normalizedPayload.updated_at = new Date().toISOString();
-      await serviceSupabase.from('projects').update(normalizedPayload).eq('id', projectId);
+  const { id: projectId } = project;
+  const config = await getSystemConfig();
+  const AnthropicClass = AnthropicSDK || Anthropic;
+  const anthropic = new AnthropicClass({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const inputData = typeof project.input === 'string' ? JSON.parse(project.input) : (project.input || {});
+  
+  log(`[AI-Gen] 🚀 Starting Full Pipeline for ${projectId} (v0.1.131)`);
+  
+  const updateProject = async (payload) => {
+    const aliasMap = {
+      'characters': 'chars',
+      'episodes_list': 'scripts',
+      'episodesList': 'scripts',
+      'budget_data': 'budget',
+      'budgetData': 'budget',
+      'production_data': 'stats',
+      'productionData': 'stats'
     };
+    
+    const normalizedPayload = { ...payload };
+    Object.keys(aliasMap).forEach(alias => {
+      if (normalizedPayload[alias] !== undefined && normalizedPayload[aliasMap[alias]] === undefined) {
+        normalizedPayload[aliasMap[alias]] = normalizedPayload[alias];
+        delete normalizedPayload[alias];
+      }
+    });
 
-   try {
-     const epData = JSON.parse(epMatch[0]);
-     
-     await updateProject({ 
-         pct: 100, 
-         status: 'done',
-         stepIdx: 5,
-         scripts: epData.episodes
-     });
-     log(`[AI-Gen] ✅ Done ${projectId}`);
-     log(`[AI-Gen] ✅ All Phases completed for ${projectId}. Status set to DONE.`);
+    normalizedPayload.updated_at = new Date().toISOString();
+    const { error } = await serviceSupabase.from('projects').update(normalizedPayload).eq('id', projectId);
+    if (error) log(`[AI-Gen-DB] Update Error: ${error.message}`, 'error');
+  };
+
+  try {
+    // PHASE 1: CORE DRAFT (5%)
+    log(`[AI-Gen] Phase 1: Core Drafting...`);
+    await updateProject({ status: 'generating', pct: 5, stepIdx: 1 });
+    const corePrompt = `드라마 제목, 로그라인, 전체 줄거리(1500자 이상), 주인공 4인의 프로필을 구상해. JSON 출력: { "title": "제목", "logline": "한줄요약", "synopsis": "줄거리", "characters": [{ "name": "이름", "desc": "설명" }] }. 기획안: ${JSON.stringify(inputData)}`;
+    const coreData = await callAI(corePrompt, 'claude-sonnet-4-6', config, anthropic);
+    await updateProject({ 
+        title: coreData.title, 
+        logline: coreData.logline, 
+        synopsis: coreData.synopsis, 
+        chars: coreData.characters || coreData.chars,
+        pct: 20 
+    });
+
+    // PHASE 2: OUTLINE (30%)
+    log(`[AI-Gen] Phase 2: Structural Outline...`);
+    await updateProject({ pct: 25, stepIdx: 2 });
+    const outPrompt = `전체 ${inputData.episodes || 16}회차의 회차별 제목과 한 줄 줄거리를 작성해. JSON 출력: { "episodes": [{ "title": "제목", "logline": "내용" }] }. 로그라인: ${coreData.logline}`;
+    const outlineData = await callAI(outPrompt, 'claude-haiku-4-5-20251001', config, anthropic);
+    await updateProject({ outline: outlineData.episodes || outlineData, pct: 40 });
+
+    // PHASE 3: SYNOPSIS EXPANSION (50%)
+    log(`[AI-Gen] Phase 3: Detailed Synopsis...`);
+    await updateProject({ pct: 45, stepIdx: 3 });
+    const synPrompt = `기승전결 4단 구성을 포함한 심층 시놉시스(3000자 이상)를 작성해. JSON 출력: { "synopsis": "..." }. 원안: ${coreData.synopsis}`;
+    const synData = await callAI(synPrompt, 'claude-sonnet-4-6', config, anthropic);
+    await updateProject({ synopsis: synData.synopsis, pct: 55 });
+
+    // PHASE 4: CONFLICT ANALYSIS (New - 65%)
+    log(`[AI-Gen] Phase 4: Conflict Analysis...`);
+    await updateProject({ pct: 60, stepIdx: 4 });
+    const conPrompt = `작품의 핵심 갈등 3종(내적, 인물간, 사회적)을 분석해. JSON 출력: { "conflicts": [{ "type": "...", "desc": "...", "impact": "..." }] }. 대상: ${synData.synopsis}`;
+    const conData = await callAI(conPrompt, 'claude-haiku-4-5-20251001', config, anthropic);
+    await updateProject({ conflicts: conData.conflicts || conData, pct: 75 });
+
+    // PHASE 5: CHARACTER PERSONA (85%)
+    log(`[AI-Gen] Phase 5: Persona Profiles...`);
+    await updateProject({ pct: 80, stepIdx: 5 });
+    const charPrompt = `주연 캐릭터들의 심층 프로필과 예상 대사를 작성해. JSON 출력: { "characters": [...] }. 갈등구조: ${JSON.stringify(conData)}`;
+    const charData = await callAI(charPrompt, 'claude-haiku-4-5-20251001', config, anthropic);
+    await updateProject({ chars: charData.characters || charData.chars, pct: 90 });
+
+    // PHASE 6: FINAL EPISODES (100%)
+    log(`[AI-Gen] Phase 6: Final Episodes Beats...`);
+    await updateProject({ pct: 95, stepIdx: 6 });
+    const epPrompt = `전체 회차의 제목과 상세 줄거리를 최종 확정해. JSON 출력: { "episodes": [...] }. 요약안: ${JSON.stringify(outlineData)}`;
+    const lastData = await callAI(epPrompt, 'claude-sonnet-4-6', config, anthropic);
+    
+    await updateProject({ 
+        scripts: lastData.episodes || lastData,
+        status: 'done',
+        pct: 100,
+        stepIdx: 7
+    });
+    
+    log(`[AI-Gen] ✅ Pipeline Finished for ${projectId}`);
 
   } catch (err) {
-    log(`[AI-Gen-Error] ${err.message}`, 'error');
+    log(`[AI-Gen-Error] ${projectId}: ${err.message}`, 'error');
     await updateProject({ status: 'error', error_msg: err.message });
   }
 }
