@@ -163,15 +163,25 @@ export function nextStep() {
     }
 
     if (window.startGenerate) {
-      window.startGenerate();
+      (async () => {
+        try {
+          await window.startGenerate();
+        } catch (err) {
+          console.error('[Wizard] Generation Error:', err);
+          if (btnNext) {
+            btnNext.disabled = false;
+            btnNext.innerHTML = '🎬 시나리오 마스터피스 생성하기';
+            btnNext.classList.remove('btn-loading-state');
+          }
+        }
+      })();
     } else {
       console.error('[Wizard] startGenerate function not found in global scope.');
       showToast('생성 엔진을 불러오지 못했습니다. 페이지를 새로고침해 주세요.', 'error');
       if (btnNext) {
         btnNext.disabled = false;
         btnNext.innerHTML = '🎬 시나리오 마스터피스 생성하기';
-        btnNext.style.opacity = '1';
-        btnNext.style.cursor = 'pointer';
+        btnNext.classList.remove('btn-loading-state');
       }
     }
   }

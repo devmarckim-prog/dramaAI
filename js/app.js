@@ -67,7 +67,7 @@ window.confirmDeleteProject = Projects.confirmDeleteProject;
 window.fetchProjects = fetchProjects;
 window.saveProject = saveProject;
 window.deleteProject = deleteProject;
-window.startGenerate = startGenerationFlow;
+window.startGenerate = startGenerate; // Pointing to our unified wrapper at bottom
 window.generateScriptForEp = generateScriptForEp;
 
 // Settings
@@ -155,12 +155,17 @@ async function initApp() {
     }
   } else if (localStorage.getItem('ds_auth_token')) {
     Nav.addDebugLog("기존 세션 발견. 자동 로그인됨.");
-    localStorage.removeItem('ds_guest_mode'); // Ensure guest mode cleaned up
     state.isLoggedIn = true;
     state.isGuestMode = false;
     await Auth.fetchUserProfile();
+  } else if (localStorage.getItem('ds_guest_mode') === 'true') {
+    Nav.addDebugLog("게스트 모드 활성화됨.");
+    state.isLoggedIn = false;
+    state.isGuestMode = true;
   } else {
-    Nav.addDebugLog("비로그인 상태 (게스트 모드 대기)");
+    Nav.addDebugLog("비로그인 상태 (홈 진입)");
+    state.isLoggedIn = false;
+    state.isGuestMode = false;
   }
 
   // 2. Initial UI Render
@@ -180,22 +185,18 @@ async function initApp() {
     console.log("[Init] Admin route. Validating...");
     Nav.showPage('admin');
     Nav.addDebugLog("관리자 페이지 진입.");
-  } else if (state.isLoggedIn) {
+  } else if (state.isLoggedIn || state.isGuestMode) {
+    // Both LoggedIn and Guest can access Projects/Wizard/Settings
     if (isSettings) Nav.showPage('settings');
     else if (isWizard) Nav.showPage('wizard');
-    else if (isProjects) Nav.showPage('projects');
     else {
+      // Default to projects list if already authenticated/guest
       Nav.showPage('projects');
-      Nav.addDebugLog("로그인 확인 -> 프로젝트 목록으로 이동");
     }
   } else {
-    // Guest or Home
-    if (state.isGuestMode && isWizard) {
-      Nav.showPage('wizard');
-    } else {
-      Nav.showPage('home');
-      Nav.addDebugLog("홈 페이지 로드 완료.");
-    }
+    // Non-authenticated, Non-guest users stay at home
+    Nav.showPage('home');
+    Nav.addDebugLog("미로그인 상태 -> 홈 로드 완료.");
   }
 
   Nav.addDebugLog("API 설정 로드 중...");

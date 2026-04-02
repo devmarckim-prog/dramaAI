@@ -75,7 +75,7 @@ export async function renderProjectCards() {
       ${era ? `<span class="project-flag">${era}</span>` : ''}
     </div>`;
 
-    if (isGen || isErr || p.status === 'sample_done') {
+    if (isGen || isErr || p.status === 'sample_done' || p.status === 'done') {
       const statusText = statusLabels[p.status] || '진행 중';
       const isPaused = p.status === 'sample_done';
 
@@ -86,10 +86,10 @@ export async function renderProjectCards() {
             <div class="project-card-img-overlay" style="${isErr ? 'background: rgba(255,0,0,0.1);' : (isPaused ? 'background: rgba(0,255,0,0.05);' : '')}"></div>
             ${flagHtml}
             <div class="project-card-body-slate">
-              <div class="pcg-badge-premium ${isErr ? 'pcg-badge-error' : ''} ${isPaused ? 'pcg-badge-paused' : ''}" 
-                   style="${isErr ? 'background: #ff4d4d; color: #fff;' : (isPaused ? 'background: var(--gold); color: #000;' : '')}">
-                <div class="pcg-badge-dot ${isErr ? 'pcg-badge-dot-error' : ''} ${isPaused ? 'pcg-badge-dot-paused' : ''}"></div>
-                ${isErr ? 'AI 생성 실패' : (isPaused ? '기획안 검토 가능' : 'AI 작가 집필 중')}
+              <div class="pcg-badge-premium ${isErr ? 'pcg-badge-error' : ''} ${isPaused ? 'pcg-badge-paused' : ''} ${p.status === 'done' ? 'pcg-badge-done' : ''}" 
+                   style="${isErr ? 'background: #ff4d4d; color: #fff;' : (isPaused ? 'background: var(--gold); color: #000;' : (p.status === 'done' ? 'background: #4ade80; color: #000;' : ''))}">
+                <div class="pcg-badge-dot ${isErr ? 'pcg-badge-dot-error' : ''} ${isPaused ? 'pcg-badge-dot-paused' : ''} ${p.status === 'done' ? 'pcg-badge-dot-done' : ''}"></div>
+                ${isErr ? 'AI 생성 실패' : (isPaused ? '기획안 검토 가능' : (p.status === 'done' ? '드라마 완성' : 'AI 작가 집필 중'))}
               </div>
               <div class="project-card-title-slate" style="${isErr ? 'color: #ffcccc;' : ''}">${p.title || '새 드라마'}</div>
               <div class="pcg-progress-wrap">

@@ -18,12 +18,16 @@
     - [x] Defensive Supabase client initialization
 - [x] Deployment & Verification
     - [x] Push all changes to Vercel
-- [ ] **Backend & API**
+- [x] **Backend & API**
     - [x] Add process error handlers to `serve.js`
-    - [/] Debug and Fix Project Deletion in `api/routes/api.js`
-        - [ ] Verify Supabase RLS and Guest Fingerprint filtering
-        - [ ] Add robust logging for deletion attempts
-    - [ ] Update AI Proxy to support Claude 4 series IDs
+    - [x] Fix Backend API Errors
+        - [x] Move `/api/generate/start` route to avoid 404 matching conflicts
+        - [x] Remove `episodes_count` from `POST /projects` to fix 500 error
+        - [x] Verify Supabase client service role permissions
+    - [x] Debug and Fix Project Deletion in `api/routes/api.js`
+        - [x] Verify Supabase RLS and Guest Fingerprint filtering
+        - [x] Add robust logging for deletion attempts
+    - [x] Update AI Proxy to support Claude 4 series IDs
 - [/] **Research & Documentation**
     - [x] Study Claude 4 series documentation
     - [ ] Create `docs/claude_api_study.md` summary

@@ -6,6 +6,7 @@ import { renderProjectCards } from './projects_list.js';
 import { DIRECTORS_ARENA_SAMPLE, SEOUL_NIGHT_SAMPLE } from './samples.js';
 
 let isGenerating = false;
+let pollingInterval = null;
 
 // Generate a proper UUID v4 for stable guest identification (DB requires valid UUID format)
 function _generateUUID() {
@@ -91,6 +92,11 @@ export async function openProject(id) {
 window.openProject = openProject;
 
 export async function startGenerationFlow(input) {
+  if (isGenerating) {
+    console.warn('[API] Generation already in progress. Skipping duplicate call.');
+    return;
+  }
+  isGenerating = true;
   state.isGenerating = true;
   state.generatingId = 'gen-' + Date.now();
   state.currentInput = input;
@@ -102,36 +108,11 @@ export async function startGenerationFlow(input) {
   };
   state.scripts = {};
 
-  showPage('generating');
-
-  if (isGenerating) {
-    console.warn('[API] Generation already in progress. Skipping duplicate call.');
-    return;
-  }
-  isGenerating = true;
-
-  const inputData = collectWizardInput();
-  if (!inputData || !inputData.logline) {
-    showToast('로그라인을 입력해 주세요.', 'warn');
-    isGenerating = false;
-    return;
-  }
-  state.currentInput = input;
-
   // 1. "마스터피스" 애니메이션 표시
   const overlay = document.getElementById('masterpiece-overlay');
   if (overlay) overlay.classList.add('active');
 
-  showToast('드라마 기획안 생성을 시작합니다. 잠시 후 프로젝트 목록으로 이동합니다.', 'info');
-
-  if (state.isGenerating) {
-    addDebugLog('이미 프로젝트가 생성 중입니다. 잠시만 기다려 주세요.', 'warn');
-    return;
-  }
-  state.isGenerating = true;
-
-  // 개발 로그 자동 오픈 중단 (사용자 요청으로 UI 카드로 대체)
-  // showDebugLog();
+  showToast('드라마 기획안 생성을 시작합니다. 프로젝트 목록에서 진행 상황을 확인하세요.', 'info');
 
   addDebugLog('드라마 프로젝트 생성을 시작합니다...', 'success');
   addDebugLog(`타겟 플랫폼: ${input.platform}, 장르: ${input.genre}`);
@@ -159,7 +140,7 @@ export async function startGenerationFlow(input) {
 
     if (!saveRes || !saveRes.success) {
       addDebugLog('서버 저장 실패. 로컬 저장소(Guest) 모드로 전환합니다...', 'warn');
-      saveRes = await saveProject({ ...initialProject, fallback: true });
+      saveRes = await _saveLocal(initialProject);
     }
 
     if (!saveRes || !saveRes.success) {
@@ -194,8 +175,9 @@ export async function startGenerationFlow(input) {
       throw new Error('AI 생성 엔진 시작에 실패했습니다.');
     }
 
-    // 4. Start Polling Loop
+    // 4. Start Polling Loop & Progress Smoother
     startPolling(state.generatingId);
+    startProgressSmoother(state.generatingId);
 
   } catch (error) {
     addDebugLog(`초기화 에러: ${error.message}`, 'error');
@@ -209,9 +191,16 @@ export async function startGenerationFlow(input) {
   }
 }
 
-let pollingInterval = null;
+export function stopPolling() {
+  if (pollingInterval) {
+    clearInterval(pollingInterval);
+    pollingInterval = null;
+    addDebugLog('진행 상태 모니터링 종료.', 'info');
+  }
+}
+
 export function startPolling(projectId) {
-  if (pollingInterval) clearInterval(pollingInterval);
+  if (pollingInterval) stopPolling();
   
   addDebugLog('진행 상태 모니터링 시작...', 'info');
   
@@ -227,7 +216,15 @@ export function startPolling(projectId) {
 
       if (current.status === 'done' || current.status === 'sample_done') {
         console.log(`[Polling] Generation reached ${current.status}. Stopping poll.`);
+        
+        // Force UI to 100% for the specific card before stopping
+        const card = document.querySelector(`[id^="gen-card-${projectId}"] .pcg-bar-fill-dynamic`);
+        const label = document.querySelector(`[id^="gen-card-${projectId}"] .pcg-progress-wrap span:last-child`);
+        if (card) card.style.width = '100%';
+        if (label) label.textContent = '100%';
+
         stopPolling();
+        stopProgressSmoother();
         
         if (current.status === 'done') {
            showToast('드라마 마스터피스가 완성되었습니다!', 'success');
@@ -237,6 +234,7 @@ export function startPolling(projectId) {
       } else if (current.status === 'error') {
         console.error('[Polling] Error detected in project status');
         stopPolling();
+        stopProgressSmoother();
         showToast('생성 중 오류가 발생했습니다: ' + (current.error_msg || 'Unknown'), 'error');
       }
     } catch (e) {
@@ -642,19 +640,18 @@ export async function fetchProjects() {
       serverProjects = Array.isArray(data) ? data : (data.projects || []);
 
       // PASSIVE MIGRATION: If we have local guest projects, sync them to cloud
-      const hasToken = !!localStorage.getItem('ds_token');
-      if (localData.length > 0 && (state.isGuest || hasToken)) {
-        console.log('[API] Found local projects. Initiating passive migration...');
+      if (localData.length > 0) {
+        console.log(`[API] Found ${localData.length} local projects. Initiating passive migration...`);
         for (const p of localData) {
-          // If not already on server (by title match or ID)
-          if (!serverProjects.some(sp => sp.id.toString() === p.id.toString() || sp.title === p.title)) {
-            await saveProject({ ...p, fallback: true }); // save to cloud
+          // If not already on server (by ID)
+          if (!serverProjects.some(sp => sp.id.toString() === p.id.toString())) {
+            await saveProject({ ...p, fallback: true }); // attempt cloud save
           }
         }
-        // Success: Clear guest projects so we don't duplicate next time
+        // Partial cleanup: only remove what we tried to sync
         localStorage.removeItem('ds_guest_projects');
         localStorage.removeItem('ds_projects_local');
-        console.log('[API] Migration complete. Local storage cleared.');
+        console.log('[API] Migration check complete.');
       }
     }
 

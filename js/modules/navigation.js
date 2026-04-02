@@ -51,12 +51,12 @@ export function showPage(pageId) {
   if (pageId === 'admin' && !isAdmin) {
     addDebugLog(`권한 없는 사용자의 어드민 접근 차단: ${userEmail}`, 'error');
     showToast('관리자 권한이 없습니다.', 'warn');
-    pageId = state.isLoggedIn ? 'projects' : 'home';
+    pageId = (state.isLoggedIn || state.isGuestMode) ? 'projects' : 'home';
   }
 
-  if (pageId === 'home' && state.isLoggedIn) {
+  if (pageId === 'home' && (state.isLoggedIn || state.isGuestMode)) {
     pageId = 'projects';
-    addDebugLog("로그인 상태: 홈 대신 프로젝트 목록으로 이동합니다.");
+    addDebugLog("로그인/게스트 상태: 홈 대신 프로젝트 목록으로 이동합니다.");
   }
 
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
