@@ -639,12 +639,15 @@ router.delete('/users/:id', async (req, res) => {
 // Sample Management
 router.get('/samples', async (req, res) => {
   try {
-    const { data, error } = await supabase
-      .from('samples')
-      .select('*')
-      .order('id', { ascending: true });
-
     if (error) throw error;
+    
+    // Diagnostic logging for Admin
+    if (data.length === 0) {
+      console.warn('[Admin API] Samples table is empty in current database.');
+    } else {
+      console.log(`[Admin API] Fetched ${data.length} samples successfully.`);
+    }
+
     res.json(data);
   } catch (err) {
     console.error('[Admin API] Samples Fetch Error:', err);

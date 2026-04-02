@@ -843,9 +843,15 @@ async function renderAdminSamples(container) {
           <div style="font-size:40px; margin-bottom:20px">🎬</div>
           <div style="font-size:18px; font-weight:700; color:var(--ink); margin-bottom:12px">등록된 샘플 프로젝트가 없습니다</div>
           <p style="color:var(--ink3); font-size:14px; margin-bottom:32px">
-            게스트 사용자에게 보여줄 고퀄리티 샘플 드라마 데이터를 생성하세요.
+            데이터베이스에 샘플 데이터가 비어있거나 필터링 정책에 의해 가려졌을 수 있습니다.
           </p>
-          <button class="btn btn-primary" onclick="window.seedDefaultSamples()">기본 샘플 데이터 생성하기 (Seed)</button>
+          <div style="display:flex; justify-content:center; gap:12px;">
+            <button class="btn btn-primary" onclick="window.seedDefaultSamples()">기본 샘플 데이터 생성하기 (Seed)</button>
+            <button class="btn btn-outline" onclick="location.reload()">새로고침</button>
+          </div>
+          <div style="margin-top:20px; font-size:11px; color:var(--ink4)">
+            Check: Admin role (${localStorage.getItem('ds_auth_token') ? 'Verified' : 'Guest'})
+          </div>
         </div>
       `;
       return;

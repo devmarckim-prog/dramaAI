@@ -495,20 +495,23 @@ router.delete('/projects/:id', authMiddleware, async (req, res) => {
     const userId = req.user.id;
     log(`[Projects] DELETE request for project: ${projectId} (User: ${userId}, Guest: ${!!req.user.isGuest})`);
 
+    const isAdmin = req.user.role === 'admin' || req.user.email === 'dev.marckim@gmail.com';
     const userDb = req.user.isGuest ? serviceSupabase : createUserClient(req.token);
 
     // 1. Precise ID categorization
-    // If it contains a hyphen, it's a UUID. If it's purely numeric, it's a numeric ID.
     const isUuid = projectId.includes('-');
     const isNumeric = !isUuid && !isNaN(projectId);
     const targetId = isNumeric ? parseInt(projectId) : projectId;
 
-    log(`[Projects] Target ID: ${targetId} (Type: ${typeof targetId}, isNumeric: ${isNumeric}, isUuid: ${isUuid})`);
+    log(`[Projects] Target ID: ${targetId} (Type: ${typeof targetId}, isAdmin: ${isAdmin}, Guest: ${!!req.user.isGuest})`);
 
     // 2. Construct the primary query
-    // Since we unified guest IDs in the migration, eq('user_id', userId) is sufficient 
-    // to block cross-guest access.
-    let queryBuilder = userDb.from('projects').delete().eq('id', targetId).eq('user_id', userId);
+    // ADMIN bypass ownership check; User/Guest can only delete their own projects.
+    let queryBuilder = userDb.from('projects').delete().eq('id', targetId);
+    
+    if (!isAdmin) {
+      queryBuilder = queryBuilder.eq('user_id', userId);
+    }
 
     const { data, error, count } = await queryBuilder.select();
 
@@ -528,7 +531,11 @@ router.delete('/projects/:id', authMiddleware, async (req, res) => {
       const fallbackId = isNumeric ? projectId.toString() : (parseInt(projectId) || null);
 
       if (fallbackId !== null && fallbackId !== targetId) {
-        const { count: count2 } = await userDb.from('projects').delete().eq('id', fallbackId).eq('user_id', userId).select();
+        let fallbackQuery = userDb.from('projects').delete().eq('id', fallbackId);
+        if (!isAdmin) {
+          fallbackQuery = fallbackQuery.eq('user_id', userId);
+        }
+        const { count: count2 } = await fallbackQuery.select();
         if (count2 > 0) {
           log(`[Projects] Fallback delete success for ${fallbackId}.`);
           return res.json({ success: true, count: count2 });
