@@ -24,6 +24,19 @@ const log = (msg, level = 'info') => {
   else console.log(msg);
 };
 
+// 3. Global Configuration & Model Map
+const modelMap = {
+  'claude-haiku-4-5': 'claude-haiku-4-5-20251001',
+  'claude-sonnet-4-6': 'claude-sonnet-4-6',
+  'claude-opus-4-6': 'claude-opus-4-6',
+  'claude-3-5-sonnet-latest': 'claude-sonnet-4-6',
+  'claude-3-5-haiku-latest': 'claude-haiku-4-5-20251001',
+  'claude-3-5-sonnet-20241022': 'claude-sonnet-4-6',
+  'claude-3-5-haiku-20241022': 'claude-haiku-4-5-20251001'
+};
+
+const getModelId = (alias) => modelMap[alias] || alias || 'claude-sonnet-4-6';
+
 /**
  * Loads system configuration for AI models and prompts
  * Prioritizes Supabase Cloud DB, falls back to local JSON
@@ -628,7 +641,6 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
     if (!project) return res.status(404).json({ error: 'Project not found' });
 
     const inputData = project.input || clientInput || {};
-     const getModelId = (alias) => modelMap[alias] || alias || 'claude-sonnet-4-6';
 
     const updateProject = async (payload) => {
       // 1. FIELD ALIAS MAPPING (Defense against mixed AI response formats)
@@ -746,18 +758,6 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
   }
  });
  
- /**
-  * Global Model Map
-  */
- const modelMap = {
-   'claude-haiku-4-5': 'claude-haiku-4-5-20251001',
-   'claude-sonnet-4-6': 'claude-sonnet-4-6',
-   'claude-opus-4-6': 'claude-opus-4-6',
-   'claude-3-5-sonnet-latest': 'claude-sonnet-4-6',
-   'claude-3-5-haiku-latest': 'claude-haiku-4-5-20251001',
-   'claude-3-5-sonnet-20241022': 'claude-sonnet-4-6',
-   'claude-3-5-haiku-20241022': 'claude-haiku-4-5-20251001'
- };
  
  /**
   * Unified AI Calling Helper
