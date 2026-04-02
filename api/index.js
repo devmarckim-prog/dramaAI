@@ -25,15 +25,19 @@ let adminRoutes;
 let loadError = null;
 
 try {
+  log(`[System] Loading API routes from ${path.join(__dirname, 'routes/api.js')}`);
   apiRoutes = require('./routes/api');
+  log(`[System] Loading Admin routes from ${path.join(__dirname, 'routes/admin.js')}`);
   adminRoutes = require('./routes/admin');
+  log('[System] All modules loaded successfully.');
 } catch (err) {
   loadError = err;
-  console.error('Failed to load apiRoutes:', err);
+  log(`CRITICAL MODULE LOAD ERROR: ${err.message}`, 'error');
+  console.error(err.stack);
 }
 
+// 2. Environment (Load after logging helper)
 if (process.env.NODE_ENV !== 'production') {
-  const path = require('path');
   require('dotenv').config({ path: path.join(__dirname, '.env') });
 }
 
@@ -68,20 +72,21 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
     routers: {
       admin: !!adminRoutes,
-      user: !!apiRoutes
+      user: !!apiRoutes,
+      admin: !!adminRoutes
     },
-    loadError: loadError ? { message: loadError.message } : null
+    loadError: loadError ? loadError.message : null
   });
 });
 
-// Routes - Specific first
-if (adminRoutes) {
-  log('[Mount] Admin API Routes -> /api/admin');
-  app.use('/api/admin', adminRoutes);
-}
 if (apiRoutes) {
   log('[Mount] User API Routes -> /api');
   app.use('/api', apiRoutes);
+}
+
+if (adminRoutes) {
+  log('[Mount] Admin API Routes -> /api/admin');
+  app.use('/api/admin', adminRoutes);
 }
 if (!apiRoutes) {
   app.use('/api', (req, res) => {

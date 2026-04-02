@@ -136,8 +136,8 @@ export async function startGenerationFlow(input) {
 
     setTimeout(() => { if (overlay) overlay.classList.remove('active'); }, 2000);
 
-    // 2. Initialize Backend Status
-    await fetch('/api/generate/start', {
+    // 2. Initialize Backend Status and Start Background Generation
+    const startRes = await fetch('/api/generate/start', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -147,32 +147,17 @@ export async function startGenerationFlow(input) {
       body: JSON.stringify({ projectId, input })
     });
 
-    // 3. STEPPED GENERATION LOOP
-    const steps = [0, 1, 2, 3, 4];
-    for (const step of steps) {
-      addDebugLog(`[AI] 단계별 생성 중... (${step + 1}/${steps.length})`, 'info');
-      
-      const stepRes = await fetch('/api/generate/step', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('ds_auth_token')}`,
-          'x-guest-fingerprint': getGuestFingerprint()
-        },
-        body: JSON.stringify({ projectId, step, input })
-      });
-
-      if (!stepRes.ok) {
-        const err = await stepRes.json();
-        throw new Error(err.error || `Step ${step} failed`);
-      }
-
-      // Update UI card after each step
-      if (window.renderProjectCards) window.renderProjectCards();
+    if (!startRes.ok) {
+      const err = await startRes.json().catch(()=>({}));
+      throw new Error(err.error || '백엔드 서버에서 생성을 시작할 수 없습니다.');
     }
 
-    addDebugLog('드라마 기획안 작성이 완료되었습니다!', 'success');
-    showToast('드라마 기획안 작성이 완료되었습니다! (100%)', 'success');
+    addDebugLog('백그라운드에서 AI 기획안 생성이 시작되었습니다. (진행 상태 모니터링 중)', 'info');
+    showToast('AI 기획안 생성을 시작합니다.', 'info');
+
+    // 3. START BACKGROUND POLLING
+    startPolling(projectId);
+    startProgressSmoother(projectId);
 
   } catch (error) {
     addDebugLog(`생성 에러: ${error.message}`, 'error');
@@ -427,7 +412,7 @@ export async function callAPI_Core(input) {
 
 export async function callAPI_Plan_Detail(input, coreData) {
   const prompt = `${_buildBaseContext(input)}\n\n기존 핵심 컨셉:\n제목: ${coreData.title}\n줄거리: ${coreData.synopsis}\n\n위 데이터를 바탕으로 나머지 ${input.episodes || 8}화 전체의 상세 씬 묘사(desc)와 갈등 구조, 유사 레퍼런스를 완성해주세요.\n순수 JSON만 반환.`;
-  return await _callAPI('plan_detail', SYSTEM_PROMPTS.PLAN_DETAIL, prompt, 15000);
+  return await _callAPI('plan_detail', SYSTEM_PROMPTS.PLAN_DETAIL, prompt, 8192);
 }
 
 export async function callAPI_Production(input) {
@@ -621,7 +606,7 @@ export async function fetchProjects() {
 
   // If no token AND no fingerprint we have nothing to identify the user
   if (!hasToken && !gid) {
-    return [...activeSamples, ...localData].map(p => _sanitizeProject(p));
+    return [...activeSamples, ...localData].map(p => normalizeProject(p));
   }
 
   try {
@@ -670,7 +655,7 @@ export async function fetchProjects() {
     });
 
     // 샘플 추가 및 정렬 (샘플은 항상 상단)
-    return [...activeSamples, ...combined].map(p => _sanitizeProject(p));
+    return [...activeSamples, ...combined].map(p => normalizeProject(p));
   } catch (err) {
     console.error('[API] fetchProjects error:', err);
     // 에러 시에도 최소한 로컬 데이터와 샘플은 보여줌
@@ -679,28 +664,65 @@ export async function fetchProjects() {
 }
 
 /**
- * 전역 데이터 정제 헬퍼 (오염된 데이터 복구)
+ * 전역 데이터 정규화 헬퍼 (DB 데이터와 UI 데이터의 규격 통일)
  */
-function _sanitizeProject(p) {
-  if (!p) return p;
+export function normalizeProject(p) {
+  if (!p) return null;
 
-  const _fix = (val) => {
-    if (typeof val === 'string' && val.includes('[object Object]')) return null;
-    return val;
+  const _safeJSON = (val, fallback = {}) => {
+    if (!val) return fallback;
+    if (typeof val === 'object' && !Array.isArray(val)) return val;
+    if (typeof val === 'string') {
+      if (val.includes('[object Object]')) return fallback;
+      try { return JSON.parse(val); } catch (e) { return fallback; }
+    }
+    return fallback;
   };
 
-  return {
+  const _safeArray = (val) => {
+    if (Array.isArray(val)) return val;
+    if (typeof val === 'string') {
+      try { const res = JSON.parse(val); return Array.isArray(res) ? res : []; } catch (e) { return []; }
+    }
+    return [];
+  };
+
+  const _fixTitle = (val) => {
+    if (typeof val === 'string' && val.includes('[object Object]')) return '무제 프로젝트';
+    return val || '무제 프로젝트';
+  };
+
+  // DB 필드와 UI 필드를 1:1 매핑 (하위 호환성 유지)
+  const normalized = {
     ...p,
-    title: _fix(p.title) || '무제 프로젝트',
-    logline: _fix(p.logline) || '',
-    synopsis: _fix(p.synopsis) || '',
-    input: _fix(p.input),
-    characters: _fix(p.characters || p.chars),
-    ppl: _fix(p.ppl),
-    stats: _fix(p.stats),
-    scripts: _fix(p.scripts),
-    createdAt: p.createdAt || p.created_at || ''
+    id: p.id,
+    title: _fixTitle(p.title),
+    logline: p.logline || '',
+    synopsis: p.synopsis || '',
+    platform: p.platform || 'OTT',
+    genre: p.genre || '드라마',
+    status: p.status || 'planning',
+    pct: parseInt(p.pct) || 0,
+    stepIdx: parseInt(p.stepIdx || p.step_idx) || 0,
+    createdAt: p.createdAt || p.created_at || new Date().toISOString(),
+    
+    // 복합 데이터 타입 처리
+    input: _safeJSON(p.input),
+    stats: _safeJSON(p.stats),
+    budget: _safeJSON(p.budget),
+    
+    // 배열 데이터 타입 처리 (Aliasing characters/chars)
+    characters: _safeArray(p.characters || p.chars),
+    chars: _safeArray(p.chars || p.characters),
+    ppl: _safeArray(p.ppl),
+    
+    // 대본 데이터 처리 (Aliasing episodes_list/scripts)
+    scripts: _safeJSON(p.scripts || p.episodes_list, {}),
+    
+    is_sample: p.is_sample === true || (p.id && (p.id.toString().startsWith('sample-') || p.id === 'sample1' || p.id === 'sample2' || p.id === 'arena-sample'))
   };
+
+  return normalized;
 }
 
 export async function deleteProject(id) {

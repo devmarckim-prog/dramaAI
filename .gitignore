@@ -8,3 +8,5 @@ server/.env
 api/server.log
 split.js
 .DS_Store
+
+.vercel

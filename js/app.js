@@ -17,10 +17,7 @@ import { syncSamplesFromServer } from './modules/samples.js';
 // ==========================================
 // 1. GLOBAL EXPORTS (Critical for Legacy HTML support)
 // ==========================================
-// ==========================================
-// 1. GLOBAL EXPORTS (Critical for Legacy HTML support)
-// ==========================================
-// Moved to top for consistency, but we'll ensure they are reassigned here for clarity
+// We assign these immediately so they are available as soon as the module loads
 window.showPage = Nav.showPage;
 window.showPanel = Nav.showPanel;
 window.showToast = Nav.showToast;
@@ -67,7 +64,7 @@ window.confirmDeleteProject = Projects.confirmDeleteProject;
 window.fetchProjects = fetchProjects;
 window.saveProject = saveProject;
 window.deleteProject = deleteProject;
-window.startGenerate = startGenerate; // Pointing to our unified wrapper at bottom
+window.startGenerate = startGenerate; 
 window.generateScriptForEp = generateScriptForEp;
 
 // Settings

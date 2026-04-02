@@ -44,7 +44,7 @@ serve(async (req: Request) => {
              title: core.title,
              synopsis: core.synopsis,
              logline: core.logline,
-             characters: core.characters || core.chars,
+             chars: core.chars || core.characters,
              pct: 20,
              stepIdx: 1,
              status: 'core_done'
@@ -235,6 +235,11 @@ async function callAI(step: string, input: any, params: any = {}) {
   }
 
   try {
+    let modelName = "claude-haiku-4-5-20251001";
+    if (step === 'CORE' || step === 'SCRIPT') {
+      modelName = "claude-sonnet-4-6";
+    }
+
     const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
@@ -243,8 +248,8 @@ async function callAI(step: string, input: any, params: any = {}) {
         "content-type": "application/json",
         },
         body: JSON.stringify({
-        model: step === 'CORE' ? "claude-3-haiku-20240307" : "claude-3-5-sonnet-20240620",
-        max_tokens: 4000,
+        model: modelName,
+        max_tokens: 8192,
         system: systemPrompt,
         messages: [{ role: "user", content: userPrompt }],
         }),

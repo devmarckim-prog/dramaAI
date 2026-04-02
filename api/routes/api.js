@@ -1,15 +1,18 @@
+// 1. Core Modules
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
 const { supabase, createUserClient, serviceSupabase } = require('../supabaseClient');
 const { Pool } = require('pg');
 
-const fs = require('fs');
-const path = require('path');
+// 2. Constants & Helpers
+const GLOBAL_GUEST_UUID = 'e098bba0-8c4e-41c6-8149-41efd79854dc'; // Points to dev.marckim@gmail.com for database referral integrity
 
-// Logging helper consistent with api/index.js
 const logFile = path.resolve(__dirname, '../../api/server.log');
-const log = (msg) => {
-  const entry = `[${new Date().toISOString()}] ${msg}\n`;
+const log = (msg, level = 'info') => {
+  const prefix = level === 'error' ? ' [ERROR]' : '';
+  const entry = `[${new Date().toISOString()}]${prefix} ${msg}\n`;
   try {
     if (process.env.NODE_ENV !== 'production') {
       fs.appendFileSync(logFile, entry);
@@ -17,7 +20,8 @@ const log = (msg) => {
   } catch (e) {
     // Ignore FS errors
   }
-  console.log(msg);
+  if (level === 'error') console.error(msg);
+  else console.log(msg);
 };
 
 /**
@@ -27,9 +31,11 @@ const log = (msg) => {
 async function getSystemConfig() {
   const configPath = path.join(__dirname, '../config/system.json');
   const defaults = {
-    planningModel: 'claude-3-5-haiku-20241022',
-    productionModel: 'claude-3-5-sonnet-20241022',
-    systemPrompt: "당신은 세계적인 K-드라마 전문 작가입니다."
+    planningModel: 'claude-haiku-4-5',
+    productionModel: 'claude-sonnet-4-6',
+    systemPrompt: "당신은 세계적인 K-드라마 전문 작가이자 제작 전문가입니다. 창의적이고 탄탄한 구성, 매력적인 캐릭터 다이얼로그를 작성하는 데 특화되어 있습니다.",
+    pricingPro: 29900,
+    creditsFree: 10
   };
 
   if (!serviceSupabase) {
@@ -171,9 +177,6 @@ router.get('/auth/google', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-// Global Guest UUID for anonymous projects
-const GLOBAL_GUEST_UUID = '00000000-0000-0000-0000-000000000000';
 
 // Middleware to verify Supabase Token OR Guest Fingerprint
 const authMiddleware = async (req, res, next) => {
@@ -399,20 +402,23 @@ router.post('/projects', authMiddleware, async (req, res) => {
       log(`[Projects] Using PG Fallback for Guest Project: ${id || 'NEW'}`);
       
       const cols = {
-        user_id: req.user.id,
+        user_id: (req.user && req.user.id) || GLOBAL_GUEST_UUID,
         title: title || '드라마 프로젝트',
-        genre, platform, logline, synopsis,
-        chars: JSON.stringify(Array.isArray(chars) ? chars : []),
-        episodes: JSON.stringify(epOutput),
-        ppl: JSON.stringify(Array.isArray(ppl) ? ppl : []),
-        budget: JSON.stringify(typeof budget === 'object' ? budget : {}),
+        genre: genre || '드라마', 
+        platform: platform || 'OTT', 
+        logline: logline || '', 
+        synopsis: synopsis || '',
+        chars: (Array.isArray(chars) ? chars : []),
+        episodes: (epOutput),
+        ppl: (Array.isArray(ppl) ? ppl : []),
+        budget: (typeof budget === 'object' ? budget : {}),
         status: status || 'generating',
         pct: pct || 0,
-        step_idx: stepIdx || 0,
-        input: JSON.stringify(mergedInput),
-        conflicts: JSON.stringify(Array.isArray(conflicts) ? conflicts : []),
-        stats: JSON.stringify(typeof stats === 'object' ? stats : {}),
-        scripts: JSON.stringify(typeof scripts === 'object' ? scripts : {}),
+        stepIdx: stepIdx || 0,
+        input: (mergedInput),
+        conflicts: (Array.isArray(conflicts) ? conflicts : []),
+        stats: (typeof stats === 'object' ? stats : {}),
+        scripts: (typeof scripts === 'object' ? scripts : {}),
         error_msg: String(error_msg || ''),
         updated_at: new Date().toISOString()
       };
@@ -425,13 +431,19 @@ router.post('/projects', authMiddleware, async (req, res) => {
       }
 
       const keys = Object.keys(cols);
-      const vals = Object.values(cols);
+      const dbKeys = keys.map(k => {
+        if (k === 'stepIdx') return '"stepIdx"';
+        return k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+      });
       
-      // Ensure keys are mapped to snake_case for PostgreSQL
-      const dbKeys = keys.map(k => k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`));
-      const quotedKeys = dbKeys.map(k => `"${k}"`).join(', ');
+      const quotedKeys = dbKeys.map(k => k.includes('"') ? k : `"${k}"`).join(', ');
       const markers = keys.map((_, i) => `$${i + 1}`).join(', ');
-      const updates = dbKeys.map((k, i) => `"${k}" = EXCLUDED."${k}"`).join(', ');
+      const updates = dbKeys.map((k, i) => {
+        const col = k.includes('"') ? k : `"${k}"`;
+        return `${col} = EXCLUDED.${col}`;
+      }).join(', ');
+      
+      const vals = keys.map(k => (typeof cols[k] === 'object' && cols[k] !== null) ? JSON.stringify(cols[k]) : cols[k]);
 
       const query = `
         INSERT INTO projects (${quotedKeys})
@@ -576,8 +588,13 @@ router.post('/generate/start', authMiddleware, async (req, res) => {
       await serviceSupabase.from('projects').update(updatePayload).eq('id', projectId);
     }
 
-    log(`[Generate] Project ${projectId} initialized for stepped generation.`);
-    res.json({ success: true, message: 'Initialization complete. Ready for steps.', projectId });
+    // 2. Trigger asynchronous background generation
+    log(`[Generate] Project ${projectId} initialized for stepped generation. Triggering background task.`);
+    runLocalGeneration({ id: projectId, input: req.body.input || {} }, options).catch(err => {
+      log(`[Generate Async] Failed for ${projectId}: ${err.message}`, 'error');
+    });
+
+    res.json({ success: true, message: 'Background generation started.', projectId });
   } catch (err) {
     log(`[Generate] Initialization failed: ${err.message}`, 'error');
     res.status(500).json({ error: err.message });
@@ -613,25 +630,55 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
     if (!project) return res.status(404).json({ error: 'Project not found' });
 
     const inputData = project.input || clientInput || {};
-    const modelMap = {
-      'claude-haiku-4-5': 'claude-haiku-4-5-20251001',
-      'claude-sonnet-4-6': 'claude-sonnet-4-6',
-      'claude-opus-4-6': 'claude-opus-4-6',
-      'claude-3-5-sonnet-20241022': 'claude-3-5-sonnet-20241022',
-      'claude-3-5-haiku-20241022': 'claude-3-5-haiku-20241022'
-    };
-    const getModelId = (alias) => modelMap[alias] || alias || 'claude-3-5-sonnet-20241022';
+     const getModelId = (alias) => modelMap[alias] || alias || 'claude-sonnet-4-6';
 
     const updateProject = async (payload) => {
-      payload.updated_at = new Date().toISOString();
+      // 1. FIELD ALIAS MAPPING (Defense against mixed AI response formats)
+      const aliasMap = {
+        'characters': 'chars',
+        'episodes_list': 'scripts',
+        'episodesList': 'scripts',
+        'budget_data': 'budget',
+        'budgetData': 'budget',
+        'production_data': 'stats',
+        'productionData': 'stats'
+      };
+      
+      const normalizedPayload = { ...payload };
+      Object.keys(aliasMap).forEach(alias => {
+        if (normalizedPayload[alias] !== undefined && normalizedPayload[aliasMap[alias]] === undefined) {
+          normalizedPayload[aliasMap[alias]] = normalizedPayload[alias];
+          delete normalizedPayload[alias];
+        }
+      });
+
+      normalizedPayload.updated_at = new Date().toISOString();
+      log(`[Update] Project ${projectId}: ${JSON.stringify(normalizedPayload).substring(0, 100)}...`);
+      
       if (isGuest) {
-        const keys = Object.keys(payload);
-        const vals = Object.values(payload).map(v => (typeof v === 'object' && v !== null) ? JSON.stringify(v) : v);
-        const dbKeys = keys.map(k => k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`));
-        const sets = dbKeys.map((k, i) => `"${k}" = $${i + 2}`).join(', ');
-        await pool.query(`UPDATE projects SET ${sets} WHERE id = $1`, [projectId, ...vals]);
+        const keys = Object.keys(normalizedPayload);
+        const vals = Object.values(normalizedPayload).map(v => 
+          (typeof v === 'object' && v !== null) ? JSON.stringify(v) : v
+        );
+        const dbKeys = keys.map(k => {
+          if (k === 'stepIdx') return '"stepIdx"';
+          if (k === 'updatedAt') return 'updated_at';
+          return k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+        });
+        const sets = dbKeys.map((k, i) => `${k} = $${i + 2}`).join(', ');
+        const query = `UPDATE projects SET ${sets} WHERE id = $1`;
+        try {
+          await pool.query(query, [projectId, ...vals]);
+        } catch (err) {
+          log(`[Update-PG] Critical DB Error on ${projectId}: ${err.message}`, 'error');
+          throw err;
+        }
       } else {
-        await serviceSupabase.from('projects').update(payload).eq('id', projectId);
+        const { error: updErr } = await serviceSupabase.from('projects').update(normalizedPayload).eq('id', projectId);
+        if (updErr) {
+          log(`[Update-Supabase] Auth Error on ${projectId}: ${updErr.message}`, 'error');
+          throw updErr;
+        }
       }
     };
 
@@ -639,19 +686,20 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
 
     switch (parseInt(step)) {
       case 0: // Phase 1: Logline & Genre (15%)
-        const loglinePrompt = `드라마 기획안의 핵심 컨셉을 작성해줘. 주제: ${inputData.topic || '자유 주제'}. 장르: ${inputData.genre || '드라마'}. 다음 JSON 형식으로 응답해: {"title": "제목", "genre": "장르", "logline": "한 줄 로그라인"}`;
-        const loglineResp = await anthropic.messages.create({
+        const loglinePrompt = `드라마 기획안의 핵심 컨셉을 작성해줘. 로그라인 시드: ${inputData.logline || inputData.topic || '자유 주제'}. 장르: ${inputData.genre || '드라마'}. 다음 JSON 형식으로 응답해: {"title": "제목", "genre": "장르", "logline": "한 줄 로그라인"}`;
+        const res0 = await anthropic.messages.create({
           model: getModelId(config.productionModel),
           max_tokens: 1024,
           system: config.systemPrompt,
           messages: [{ role: 'user', content: loglinePrompt }]
         });
-        resultData = JSON.parse(loglineResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
-        await updateProject({ ...resultData, pct: 20 });
+        const text0 = res0.content[0].text;
+        resultData = JSON.parse(text0.match(/\{[\s\S]*\}/)?.[0] || text0.substring(text0.indexOf('{'), text0.lastIndexOf('}') + 1));
+        await updateProject({ ...resultData, pct: 20, stepIdx: 1 });
         break;
 
       case 1: // Phase 2: Synopsis (40%)
-        const synopPrompt = `제목: ${project.title}. 로그라인: ${project.logline}. 이 드라마의 전체 줄거리(시놉시스)를 1000자 내외로 상세히 작성해줘. JSON 형식: {"synopsis": "내용"}`;
+        const synopPrompt = `제목: ${project.title || resultData.title}. 로그라인: ${project.logline || resultData.logline}. 이 드라마의 전체 줄거리(시놉시스)를 1000자 내외로 상세히 작성해줘. JSON 형식: {"synopsis": "내용"}`;
         const synopResp = await anthropic.messages.create({
           model: getModelId(config.productionModel),
           max_tokens: 2048,
@@ -659,11 +707,11 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
           messages: [{ role: 'user', content: synopPrompt }]
         });
         resultData = JSON.parse(synopResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
-        await updateProject({ synopsis: resultData.synopsis, pct: 45 });
+        await updateProject({ synopsis: resultData.synopsis, pct: 45, stepIdx: 2 });
         break;
 
       case 2: // Phase 3: Characters (65%)
-        const charPrompt = `드라마 "${project.title}"의 주요 인물 3명을 설정해줘. 이름, 성격, 나이, 역할을 포함해. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
+        const charPrompt = `드라마 "${project.title || resultData.title}"의 주요 인물 3명을 설정해줘. 이름, 성격, 나이, 역할을 포함해. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
         const charResp = await anthropic.messages.create({
           model: getModelId(config.productionModel),
           max_tokens: 2048,
@@ -671,24 +719,25 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
           messages: [{ role: 'user', content: charPrompt }]
         });
         resultData = JSON.parse(charResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
-        await updateProject({ chars: resultData.chars, pct: 70 });
+        await updateProject({ chars: resultData.chars, pct: 70, stepIdx: 3 });
         break;
 
       case 3: // Phase 4: Episodes (90%)
         const epCount = project.episodes || 8;
         const epPrompt = `드라마 "${project.title}"의 전 ${epCount}회차 구성을 JSON으로 작성해줘. 회차별 제목과 요약을 포함해. JSON 형식: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;
-        const epResp = await anthropic.messages.create({
+        const res3 = await anthropic.messages.create({
           model: getModelId(config.planningModel),
           max_tokens: 4096,
           system: config.systemPrompt,
           messages: [{ role: 'user', content: epPrompt }]
         });
-        resultData = JSON.parse(epResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
-        await updateProject({ scripts: resultData.episodes, pct: 90 });
+        const text3 = res3.content[0].text;
+        resultData = JSON.parse(text3.match(/\{[\s\S]*\}/)?.[0] || text3.substring(text3.indexOf('{'), text3.lastIndexOf('}') + 1));
+        await updateProject({ scripts: resultData.episodes, pct: 90, stepIdx: 4 });
         break;
 
       case 4: // Finalize (100%)
-        await updateProject({ pct: 100, status: 'done' });
+        await updateProject({ pct: 100, status: 'done', stepIdx: 5 });
         resultData = { success: true, status: 'done' };
         break;
 
@@ -708,121 +757,170 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
     }
     res.status(500).json({ error: err.message });
   }
-});
+ });
+ 
+ /**
+  * Global Model Map
+  */
+ const modelMap = {
+   'claude-haiku-4-5': 'claude-haiku-4-5-20251001',
+   'claude-sonnet-4-6': 'claude-sonnet-4-6',
+   'claude-opus-4-6': 'claude-opus-4-6',
+   'claude-3-5-sonnet-latest': 'claude-sonnet-4-6',
+   'claude-3-5-haiku-latest': 'claude-haiku-4-5-20251001',
+   'claude-3-5-sonnet-20241022': 'claude-sonnet-4-6',
+   'claude-3-5-haiku-20241022': 'claude-haiku-4-5-20251001'
+ };
+ 
+ /**
+  * Unified AI Calling Helper
+  */
+ const callUnifiedAI = async (params, config, anthropicClient) => {
+   const { prompt, system, max_tokens, modelAlias, customApiKey } = params;
+   
+   // Use custom key if provided (from user header), otherwise use the provided client or the default global one
+   const localAnthropic = customApiKey ? new Anthropic({ apiKey: customApiKey }) : anthropicClient;
+ 
+   if (customApiKey || process.env.ANTHROPIC_API_KEY) {
+     try {
+       const modelId = modelMap[modelAlias] || modelAlias || 'claude-sonnet-4-6';
+       log(`[AI-Call] Attempting Anthropic (${modelId})...`);
+       
+       const resp = await localAnthropic.messages.create({
+         model: modelId,
+         max_tokens: max_tokens || 8192,
+         system: system || config.systemPrompt,
+         messages: [{ role: 'user', content: prompt }]
+       });
+       
+       return resp.content[0].text;
+     } catch (err) {
+       log(`[AI-Call] Anthropic failed: ${err.message}`, 'error');
+       throw err;
+     }
+   }
+ 
+   throw new Error('No AI Providers available (Missing or restricted keys)');
+ };
+ 
+ /**
+  * Local implementation of the 7-step generation flow
+  * Ported from Supabase Edge Function (supabase/functions/generate/index.ts)
+  */
+ async function runLocalGeneration(project, options) {
+   const { id: projectId } = project;
+   const config = await getSystemConfig();
+   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+   const inputData = typeof project.input === 'string' ? JSON.parse(project.input) : (project.input || {});
+   
+   log(`[AI-Gen] Debug: API Key exists: ${!!process.env.ANTHROPIC_API_KEY}, Length: ${process.env.ANTHROPIC_API_KEY?.length}`);
+   
+   // Decide which database client to use for updates
+   const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
+ 
+    const updateProject = async (payload) => {
+     // ... Field mapping and database update logic
+     const aliasMap = {
+       'characters': 'chars',
+       'episodes_list': 'scripts',
+       'episodesList': 'scripts',
+       'budget_data': 'budget',
+       'budgetData': 'budget',
+       'production_data': 'stats',
+       'productionData': 'stats'
+     };
+     
+     const normalizedPayload = { ...payload };
+     Object.keys(aliasMap).forEach(alias => {
+       if (normalizedPayload[alias] !== undefined && normalizedPayload[aliasMap[alias]] === undefined) {
+         normalizedPayload[aliasMap[alias]] = normalizedPayload[alias];
+         delete normalizedPayload[alias];
+       }
+     });
 
-/**
- * Local implementation of the 7-step generation flow
- * Ported from Supabase Edge Function (supabase/functions/generate/index.ts)
- */
-async function runLocalGeneration(project, options) {
-  const { id: projectId } = project;
-  const config = await getSystemConfig();
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const inputData = typeof project.input === 'string' ? JSON.parse(project.input) : (project.input || {});
-  
-  // Decide which database client to use for updates
-  const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
+     normalizedPayload.updated_at = new Date().toISOString();
+     
+     if (isGuest) {
+       const keys = Object.keys(normalizedPayload);
+       const vals = Object.values(normalizedPayload).map(v => 
+         (typeof v === 'object' && v !== null) ? JSON.stringify(v) : v
+       );
+       const dbKeys = keys.map(k => {
+         if (k === 'stepIdx') return '"stepIdx"';
+         if (k === 'updatedAt') return 'updated_at';
+         return k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+       });
+       const sets = dbKeys.map((k, i) => `${k} = $${i + 2}`).join(', ');
+       const query = `UPDATE projects SET ${sets} WHERE id = $1`;
+       await pool.query(query, [projectId, ...vals]);
+     } else {
+       await serviceSupabase.from('projects').update(payload).eq('id', projectId);
+     }
+   };
 
-  const updateProject = async (payload) => {
-    log(`[Update] Project ${projectId}: ${JSON.stringify(payload).substring(0, 100)}...`);
-    
-    if (isGuest) {
-      // Local PG update
-      const keys = Object.keys(payload);
-      const vals = Object.values(payload).map(v => 
-        (typeof v === 'object' && v !== null) ? JSON.stringify(v) : v
-      );
-      const dbKeys = keys.map(k => k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`));
-      const sets = dbKeys.map((k, i) => `"${k}" = $${i + 2}`).join(', ');
-      const query = `UPDATE projects SET ${sets}, updated_at = NOW() WHERE id = $1`;
-      await pool.query(query, [projectId, ...vals]);
-    } else {
-      // Supabase update
-      const { error } = await serviceSupabase
-        .from('projects')
-        .update(payload)
-        .eq('id', projectId);
-      if (error) {
-        log(`[Update] Supabase Error for ${projectId}: ${error.message}`, 'error');
-        throw error;
-      }
-    }
-  };
+   try {
+     log(`[AI-Gen] 🚀 Starting real generation for ${projectId}...`);
+     
+     // Phase 1: Logline & Genre
+     await updateProject({ pct: 5, status: 'generating', stepIdx: 0 });
+     const loglinePrompt = `드라마 기획안 핵심 컨셉 작성. 시드: ${inputData.logline || inputData.topic}. 장르: ${inputData.genre}. JSON: {"title": "제목", "genre": "장르", "logline": "로그라인"}`;
+     const loglineRespText = await callUnifiedAI({
+       prompt: loglinePrompt,
+       modelAlias: config.productionModel,
+       max_tokens: 1024
+     }, config, anthropic);
+     const loglineData = JSON.parse(loglineRespText.match(/\{[\s\S]*\}/)[0]);
+     await updateProject({ ...loglineData, pct: 20, stepIdx: 1 });
 
-  const modelMap = {
-    'claude-haiku-4-5': 'claude-haiku-4-5-20251001',
-    'claude-sonnet-4-6': 'claude-sonnet-4-6',
-    'claude-opus-4-6': 'claude-opus-4-6',
-    'claude-3-5-haiku-20241022': 'claude-3-5-haiku-20241022',
-    'claude-3-5-sonnet-latest': 'claude-3-5-sonnet-latest',
-    'claude-3-5-sonnet-20241022': 'claude-3-5-sonnet-20241022',
-    'claude-3-opus-latest': 'claude-3-opus-latest',
-    'claude-3-5-haiku-latest': 'claude-3-5-haiku-20241022',
-  };
+     // Phase 2: Outline
+     const outlinePrompt = `제목: ${loglineData.title}. 전체 ${inputData.episodes || 8}회차의 제목과 각 회차별 1줄 줄거리 요약. JSON: {"episodes": [{"title": "제목", "logline": "내용"}]}`;
+     const outlineRespText = await callUnifiedAI({
+       prompt: outlinePrompt,
+       modelAlias: config.planningModel,
+       max_tokens: 2048
+     }, config, anthropic);
+     const outlineData = JSON.parse(outlineRespText.match(/\{[\s\S]*\}/)[0]);
+     await updateProject({ outline: outlineData.episodes || outlineData, pct: 35, stepIdx: 2 });
 
-  const getModelId = (alias) => modelMap[alias] || alias || 'claude-3-5-sonnet-20241022';
+     // Phase 3: Synopsis
+     const synopPrompt = `제목: ${loglineData.title}. 시놉시스 작성. JSON: {"synopsis": "줄거리"}`;
+     const synopRespText = await callUnifiedAI({
+       prompt: synopPrompt,
+       modelAlias: config.productionModel,
+       max_tokens: 2048
+     }, config, anthropic);
+     const synopData = JSON.parse(synopRespText.match(/\{[\s\S]*\}/)[0]);
+     await updateProject({ synopsis: synopData.synopsis, pct: 45, stepIdx: 3 });
 
-  try {
-    log(`[AI-Gen] 🚀 Starting real generation for ${projectId}...`);
-    
-    // Phase 1: Logline & Genre (15%)
-    await updateProject({ pct: 5, status: 'generating' });
-    const loglinePrompt = `드라마 기획안의 핵심 컨셉을 작성해줘. 주제: ${inputData.topic || '자유 주제'}. 장르: ${inputData.genre || '드라마'}. 다음 JSON 형식으로 응답해: {"title": "제목", "genre": "장르", "logline": "한 줄 로그라인"}`;
-    const loglineResp = await anthropic.messages.create({
-      model: getModelId(config.productionModel),
-      max_tokens: 1024,
-      system: config.systemPrompt,
-      messages: [{ role: 'user', content: loglinePrompt }]
-    });
-    const loglineData = JSON.parse(loglineResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
-    await updateProject({ ...loglineData, pct: 20 });
+     // Phase 4: Characters
+     const charPrompt = `주요 인물 3명 설정. JSON: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
+     const charRespText = await callUnifiedAI({
+       prompt: charPrompt,
+       modelAlias: config.productionModel,
+       max_tokens: 2048
+     }, config, anthropic);
+     const charData = JSON.parse(charRespText.match(/\{[\s\S]*\}/)[0]);
+     await updateProject({ chars: charData.chars, pct: 70, stepIdx: 3 });
 
-    // Phase 2: Synopsis (40%)
-    await updateProject({ status: 'generating', pct: 30 });
-    const synopPrompt = `제목: ${loglineData.title}. 로그라인: ${loglineData.logline}. 이 드라마의 전체 줄거리(시놉시스)를 1000자 내외로 상세히 작성해줘. JSON 형식: {"synopsis": "내용"}`;
-    const synopResp = await anthropic.messages.create({
-      model: getModelId(config.productionModel),
-      max_tokens: 2048,
-      system: config.systemPrompt,
-      messages: [{ role: 'user', content: synopPrompt }]
-    });
-    const synopData = JSON.parse(synopResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
-    await updateProject({ synopsis: synopData.synopsis, pct: 45 });
-
-    // Phase 3: Characters (65%)
-    await updateProject({ status: 'generating', pct: 55 });
-    const charPrompt = `드라마 "${loglineData.title}"의 주요 인물 3명을 설정해줘. 이름, 성격, 나이, 역할을 포함해. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
-    const charResp = await anthropic.messages.create({
-      model: getModelId(config.productionModel),
-      max_tokens: 2048,
-      system: config.systemPrompt,
-      messages: [{ role: 'user', content: charPrompt }]
-    });
-    const charData = JSON.parse(charResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
-    await updateProject({ chars: charData.chars, pct: 70 });
-
-    // Phase 4: Episodes (90%)
-    await updateProject({ status: 'generating', pct: 85 });
-    const epCount = project.episodes || 8;
-    const epPrompt = `드라마 "${loglineData.title}"의 전 ${epCount}회차 구성을 JSON으로 작성해줘. 회차별 제목과 요약을 포함해. JSON 형식: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;
-    const epResp = await anthropic.messages.create({
-      model: getModelId(config.planningModel),
-      max_tokens: 4096,
-      system: config.systemPrompt,
-      messages: [{ role: 'user', content: epPrompt }]
-    });
-    const epMatch = epResp.content[0].text.match(/\{[\s\S]*\}/);
-    if (!epMatch) throw new Error("회차 구성을 생성할 수 없습니다 (Invalid JSON format)");
-    const epData = JSON.parse(epMatch[0]);
-    log(`[AI-Gen] Phase 4 (Episodes) completed for ${projectId}`);
-    
-    // Phase 5: Finalize (100%)
-    await updateProject({ 
-        pct: 100, 
-        status: 'done',
-        scripts: epData.episodes // Using episodes as base scripts
-    });
-    log(`[AI-Gen] ✅ All Phases completed for ${projectId}. Status set to DONE.`);
+     // Phase 4: Episodes
+     const epCount = project.episodes || 8;
+     const epPrompt = `${epCount}회차 구성. JSON: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;
+     const epRespText = await callUnifiedAI({
+       prompt: epPrompt,
+       modelAlias: config.planningModel,
+       max_tokens: 4096
+     }, config, anthropic);
+     const epMatch = epRespText.match(/\{[\s\S]*\}/);
+     const epData = JSON.parse(epMatch[0]);
+     
+     await updateProject({ 
+         pct: 100, 
+         status: 'done',
+         stepIdx: 5,
+         scripts: epData.episodes
+     });
+     log(`[AI-Gen] ✅ Done ${projectId}`);
+     log(`[AI-Gen] ✅ All Phases completed for ${projectId}. Status set to DONE.`);
 
   } catch (err) {
     log(`[AI-Gen-Error] ${err.message}`, 'error');
@@ -893,11 +991,11 @@ router.post('/generate', async (req, res) => {
       'claude-sonnet-4-6': 'claude-sonnet-4-6',          // Mapped as requested
       'claude-opus-4-6': 'claude-opus-4-6',            // Mapped as requested
       // -- Claude 3.5 series (Legacy) --
-      'claude-3-5-haiku-20241022': 'claude-3-5-haiku-20241022',
+      'claude-3-5-haiku-20241022': 'claude-3-5-sonnet-20241022',
       'claude-3-5-sonnet-latest': 'claude-3-5-sonnet-latest',
       'claude-3-5-sonnet-20241022': 'claude-3-5-sonnet-20241022',
       'claude-3-opus-latest': 'claude-3-opus-latest',
-      'claude-3-5-haiku-latest': 'claude-3-5-haiku-20241022',
+      'claude-3-5-haiku-latest': 'claude-3-5-sonnet-20241022',
     };
 
     if (modelMap[modelId]) {
@@ -916,19 +1014,14 @@ router.post('/generate', async (req, res) => {
     const userPrompt = content.userPrompt || (typeof content === 'string' ? content : JSON.stringify(content));
 
     try {
-      // 4. Call Anthropic
-      const response = await anthropic.messages.create({
-        model: modelId,
-        max_tokens: content.maxTokens || 16000,
+      // 4. Call Unified AI (Anthropic -> Gemini Fallback)
+      const raw = await callUnifiedAI({
+        prompt: userPrompt,
         system: systemPrompt,
-        messages: [{ role: 'user', content: userPrompt }],
-      });
-
-      if (response.stop_reason === 'max_tokens') {
-        log(`[AI Proxy] ⚠️ max_tokens 한도 도달 - 응답이 잘렸을 수 있음. 자동 복구 시도합니다.`);
-      }
-
-      const raw = response.content[0].text;
+        max_tokens: Math.min(content.maxTokens || 8192, 8192),
+        modelAlias: modelId,
+        customApiKey: userApiKey
+      }, config, anthropic);
       const elapsed = Date.now() - startTime;
       log(`[AI Proxy] ✅ Request SUCCESS | Model: ${modelId} | Duration: ${elapsed}ms`);
 
@@ -999,7 +1092,7 @@ router.post('/generate', async (req, res) => {
 
       if (err.status) {
         return res.status(err.status).json({
-          error: `Anthropic API Error (${err.status})`,
+          error: `AI Provider Error (${err.status})`,
           details: err.message,
           type: err.type
         });

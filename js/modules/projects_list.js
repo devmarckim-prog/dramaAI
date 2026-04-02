@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { fetchProjects, deleteProject } from './api.js';
+import { fetchProjects, deleteProject, normalizeProject } from './api.js';
 import { showPage, showDebugLog, showToast } from './navigation.js';
 
 export async function renderProjectCards() {
@@ -50,11 +50,11 @@ export async function renderProjectCards() {
     return da - db;
   }).forEach(rawP => {
 
-    const p = _normalizeProject(rawP);
+    const p = normalizeProject(rawP);
     const isErr = p.status === 'error';
     const isGen = p.status === 'generating';
     const pct = isErr ? 100 : (p.pct || 0);
-    const stepIdx = isErr ? 0 : (p.stepIdx || 0);
+    const stepIdx = p.stepIdx;
 
     // Shared delete button HTML (Hidden for samples)
     const delBtnHtml = p.is_sample
@@ -185,7 +185,7 @@ export async function openProject(id) {
   }
 
   try {
-    const p = _normalizeProject(rawP);
+    const p = normalizeProject(rawP);
 
     state.currentInput = p.input;
     state.planData = {
@@ -217,42 +217,7 @@ window.openProject = openProject;
 /**
  * 데이터를 안전하게 정리하고 기본값을 채워넣는 헬퍼 함수
  */
-function _normalizeProject(p) {
-  const _safeJSON = (val, fallback = {}) => {
-    if (!val) return fallback;
-    if (typeof val === 'object') return val;
-    if (typeof val === 'string') {
-      if (val.includes('[object Object]')) return fallback;
-      try { return JSON.parse(val); } catch (e) { return fallback; }
-    }
-    return fallback;
-  };
-
-  const _safeArray = (val) => {
-    const res = _safeJSON(val, []);
-    return Array.isArray(res) ? res : [];
-  };
-
-  return {
-    ...p,
-    id: p.id,
-    title: p.title || '제목 없음',
-    logline: p.logline || '',
-    synopsis: p.synopsis || '',
-    platform: p.platform || 'OTT',
-    genre: p.genre || '드라마',
-    episodes: _getCleanEps(p.episodes, p),
-    input: _safeJSON(p.input),
-    stats: _safeJSON(p.stats),
-    characters: _safeArray(p.characters || p.chars),
-    ppl: _safeArray(p.ppl),
-    scripts: _safeJSON(p.scripts || (p.input && p.input.scripts), []),
-    pct: p.pct || 0,
-    stepIdx: p.stepIdx || 0,
-    createdAt: p.createdAt || p.created_at || '',
-    is_sample: p.is_sample === true || p.isSample === true || (p.id && (p.id.toString().startsWith('sample-') || p.id === 'sample1' || p.id === 'sample2'))
-  };
-}
+// Remove redundant local _normalizeProject
 
 export async function confirmDeleteProject(id) {
   // Prevent sample deletion (redundant but safe)

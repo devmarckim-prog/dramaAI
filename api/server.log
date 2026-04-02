@@ -11245,3 +11245,798 @@
 [2026-04-02T08:41:43.371Z] [AI Proxy] JSON Parse Error - 자동 복구 시도 중...
 [2026-04-02T08:41:43.372Z] [AI Proxy] JSON Parse Error: Unexpected token '#', "# 방구석 로맨스" is not valid JSON
 [2026-04-02T08:41:43.372Z] [AI Proxy] Raw Response Snippet: # 방구석 로맨스...
+[2026-04-02T08:54:12.692Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.710Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.711Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.712Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.730Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.731Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.733Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.734Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.735Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.737Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.741Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.742Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.742Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.743Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.744Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.749Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T08:54:12.969Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:13.073Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T08:54:13.103Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T08:54:13.105Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T08:54:15.394Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-02T08:54:15.395Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-02T08:54:15.396Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-02T08:54:35.424Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.445Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.448Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.449Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.462Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.464Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.467Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.468Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.469Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.469Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.470Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.474Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.476Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.477Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.477Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.483Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.709Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.834Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.844Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T08:54:35.845Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T08:54:38.372Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-02T08:54:38.373Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-02T08:54:38.373Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-02T09:00:06.584Z] SERVER STARTING...
+[2026-04-02T09:00:06.587Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-02T09:00:06.825Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-02T09:00:06.829Z] [System] All modules loaded successfully.
+[2026-04-02T09:00:06.832Z] [Mount] User API Routes -> /api
+[2026-04-02T09:00:06.832Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T09:00:13.995Z] [REQUEST] GET /api/health | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.544Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.574Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.576Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.578Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.596Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.597Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.599Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.604Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.607Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.609Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.610Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.611Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.617Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.619Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.621Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.622Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T09:08:41.943Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T09:08:42.035Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T09:08:42.140Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T09:08:42.144Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T09:08:44.686Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-02T09:08:44.688Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-02T09:08:44.690Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-02T10:43:18.996Z] SERVER STARTING...
+[2026-04-02T10:43:18.997Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-02T10:43:19.137Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-02T10:43:19.139Z] [System] All modules loaded successfully.
+[2026-04-02T10:43:19.141Z] [Mount] User API Routes -> /api
+[2026-04-02T10:43:19.141Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T10:43:37.161Z] SERVER STARTING...
+[2026-04-02T10:43:37.163Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-02T10:43:37.329Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-02T10:43:37.332Z] [System] All modules loaded successfully.
+[2026-04-02T10:43:37.333Z] [Mount] User API Routes -> /api
+[2026-04-02T10:43:37.334Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T10:44:51.564Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.570Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-02T10:44:51.588Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.591Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.594Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.617Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.874Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.875Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.877Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.882Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.884Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.884Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.885Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.886Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.886Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.891Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.894Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:51.952Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T10:44:52.019Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T10:44:52.080Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T10:44:52.082Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T10:44:53.246Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-02T10:46:48.881Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-02T10:46:50.194Z] [REQUEST] GET /api/admin/projects | Auth: YES | Guest: NO
+[2026-04-02T10:46:51.027Z] [REQUEST] GET /api/admin/users | Auth: YES | Guest: NO
+[2026-04-02T10:46:51.029Z] [REQUEST] GET /api/admin/projects | Auth: YES | Guest: NO
+[2026-04-02T10:46:51.785Z] [REQUEST] GET /api/admin/projects | Auth: YES | Guest: NO
+[2026-04-02T10:46:52.317Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.318Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-02T10:46:52.342Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.345Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.347Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.355Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.356Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.357Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.360Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.362Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.363Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.364Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.366Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.367Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.369Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.370Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.377Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.450Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.467Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.473Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T10:46:52.474Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T10:46:52.776Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-02T10:46:54.125Z] [REQUEST] GET /api/admin/projects | Auth: YES | Guest: NO
+[2026-04-02T10:47:25.005Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.007Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-02T10:47:25.044Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.049Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.051Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.070Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.072Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.076Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.078Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.080Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.082Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.083Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.089Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.092Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.096Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.098Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.102Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.152Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.184Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.192Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T10:47:25.194Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T10:47:25.455Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-02T10:47:30.695Z] [REQUEST] GET /api/admin/projects | Auth: YES | Guest: NO
+[2026-04-02T10:47:36.908Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-02T10:47:36.910Z] [Auth] Google Login requested from: http://localhost:8081/admin
+[2026-04-02T10:47:36.911Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-02T11:08:23.588Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.610Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.611Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.612Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.629Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.631Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.632Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.633Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.636Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.637Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.638Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.639Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.640Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.641Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.644Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.650Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.915Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T11:08:23.999Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:08:24.007Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T11:08:24.009Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T11:08:26.391Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-02T11:08:26.393Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-02T11:08:26.394Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-02T11:13:19.294Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.331Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.334Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.336Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.372Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.374Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.375Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.377Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.379Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.380Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.381Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.384Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.385Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.387Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.389Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.392Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.709Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.884Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.918Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T11:13:19.919Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T11:13:20.808Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:13:20.819Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:13:20.822Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:13:20.824Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:13:20.954Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:13:21.158Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:13:21.160Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:13:21.162Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:28.356Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:14:28.357Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:28.401Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:28.405Z] [Projects] Creating new project: p-f12df-1775128468405 for user: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:28.756Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:14:28.762Z] [REQUEST] POST /api/generate/start | Auth: YES | Guest: YES
+[2026-04-02T11:14:28.764Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:28.767Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:28.768Z] [Generate] Request to start generation for g-2dfcfd-1775128468742 (Action: full)
+[2026-04-02T11:14:28.869Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:14:28.895Z] [Generate] Project g-2dfcfd-1775128468742 initialized for stepped generation.
+[2026-04-02T11:14:28.993Z] [REQUEST] POST /api/generate/step | Auth: YES | Guest: YES
+[2026-04-02T11:14:28.994Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:28.997Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:29.004Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:14:29.006Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:29.007Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:29.086Z] [Config] Loaded from Supabase Cloud: claude-haiku-4-5
+[2026-04-02T11:14:29.089Z] [Generate-Step] Project: g-2dfcfd-1775128468742, Step: 0
+[2026-04-02T11:14:29.168Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:14:29.171Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:29.173Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:29.182Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:14:29.183Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:29.187Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:29.188Z] [Projects] Saving project g-2dfcfd-1775128468742 (pct: 5%, Status: generating)
+[2026-04-02T11:14:29.199Z] [ERROR] [Generate-Step] Error: Cannot coerce the result to a single JSON object
+[2026-04-02T11:14:29.276Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:14:29.278Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:29.280Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:29.282Z] [Projects] Saving project g-2dfcfd-1775128468742 (pct: 5%, Status: generating)
+[2026-04-02T11:14:29.360Z] [ERROR] [Projects] Upsert failed for g-2dfcfd-1775128468742: new row violates row-level security policy for table "projects" (Code: 42501)
+[2026-04-02T11:14:29.378Z] [ERROR] [Projects] Upsert failed for g-2dfcfd-1775128468742: new row violates row-level security policy for table "projects" (Code: 42501)
+[2026-04-02T11:14:29.400Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:14:29.402Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:29.404Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:29.405Z] [Projects] Saving project g-2dfcfd-1775128468742 (pct: 0%, Status: error)
+[2026-04-02T11:14:29.480Z] [ERROR] [Projects] Upsert failed for g-2dfcfd-1775128468742: new row violates row-level security policy for table "projects" (Code: 42501)
+[2026-04-02T11:14:29.586Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:14:29.670Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:14:29.671Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:29.672Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:29.750Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:14:29.752Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:29.754Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:29.755Z] [Projects] Saving project g-2dfcfd-1775128468742 (pct: 0%, Status: error)
+[2026-04-02T11:14:29.819Z] [ERROR] [Projects] Upsert failed for g-2dfcfd-1775128468742: new row violates row-level security policy for table "projects" (Code: 42501)
+[2026-04-02T11:14:51.238Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-02T11:14:51.240Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-02T11:14:51.312Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T11:14:51.318Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T11:14:51.321Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:51.403Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.178Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.180Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.182Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.184Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.188Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.190Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.193Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.197Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.199Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.201Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.207Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.448Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.825Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.993Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T11:14:52.996Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:14:53.000Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T11:14:53.014Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:14:53.015Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:14:53.017Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:14:53.391Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-02T11:15:03.989Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.048Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.051Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.054Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.119Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.328Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.331Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.333Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.334Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.337Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.339Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.340Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.343Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.345Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.346Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.351Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.364Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.383Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.406Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.408Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T11:15:04.475Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.664Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:15:04.665Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:15:04.666Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:15:04.670Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:15:04.826Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:15:04.827Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:15:04.828Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:15:25.265Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-02T11:15:25.338Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T11:15:25.346Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T11:15:25.348Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:25.454Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.184Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.187Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.189Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.194Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.197Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.204Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.206Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.209Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.214Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.216Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.222Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.428Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.759Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.827Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.829Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T11:15:26.846Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:15:26.852Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:15:26.853Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:15:26.855Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:15:27.030Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:15:27.147Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:15:27.148Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:15:27.149Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:16:36.746Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-02T11:16:36.785Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T11:16:36.791Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T11:16:36.793Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:36.839Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.243Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.245Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.248Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.249Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.250Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.251Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.254Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.256Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.257Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.259Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.260Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.373Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.480Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.513Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.515Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T11:16:37.671Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.674Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:16:37.675Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:16:37.676Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:16:37.779Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:16:37.865Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:16:37.866Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:16:37.867Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:16:40.568Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T11:16:40.620Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:16:40.621Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-02T11:16:40.623Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-02T11:16:45.777Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-02T11:16:45.779Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-02T11:16:45.779Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-02T11:30:48.945Z] SERVER STARTING...
+[2026-04-02T11:30:48.947Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-02T11:30:49.089Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-02T11:30:49.091Z] [System] All modules loaded successfully.
+[2026-04-02T11:30:49.093Z] [Mount] User API Routes -> /api
+[2026-04-02T11:30:49.093Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T11:36:27.103Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:36:27.104Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:36:27.124Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:36:27.125Z] [Projects] Creating new project: p-e098b-1775129787125 for user: e098bba0-8c4e-41c6-8149-41efd79854dc
+[2026-04-02T11:38:34.271Z] SERVER STARTING...
+[2026-04-02T11:38:34.272Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-02T11:38:34.451Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-02T11:38:34.454Z] [System] All modules loaded successfully.
+[2026-04-02T11:38:34.456Z] [Mount] User API Routes -> /api
+[2026-04-02T11:38:34.457Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T11:38:43.157Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:38:43.158Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:38:43.167Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:38:43.168Z] [Projects] Creating new project: p-e098b-1775129923168 for user: e098bba0-8c4e-41c6-8149-41efd79854dc
+[2026-04-02T11:38:58.218Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:38:58.218Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:38:58.219Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:38:58.219Z] [Projects] Creating new project: p-e098b-1775129938219 for user: e098bba0-8c4e-41c6-8149-41efd79854dc
+[2026-04-02T11:38:58.540Z] [REQUEST] POST /api/generate/start | Auth: NO | Guest: YES
+[2026-04-02T11:38:58.540Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:38:58.541Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:38:58.541Z] [Generate] Request to start generation for undefined (Action: full)
+[2026-04-02T11:38:58.697Z] [Generate] Project undefined initialized for stepped generation. Triggering background task.
+[2026-04-02T11:38:58.805Z] [Config] Loaded from Supabase Cloud: claude-haiku-4-5
+[2026-04-02T11:38:58.806Z] [AI-Gen] 🚀 Starting real generation for undefined...
+[2026-04-02T11:38:58.806Z] [Update-Loop] Project undefined: {"pct":5,"status":"generating","stepIdx":0,"updated_at":"2026-04-02T11:38:58.806Z"}...
+[2026-04-02T11:38:59.623Z] [ERROR] [AI-Gen-Error] 404 {"type":"error","error":{"type":"not_found_error","message":"model: claude-3-5-haiku-20241022"},"request_id":"req_011CZesxzEwDuRwceKj7QLPh"}
+[2026-04-02T11:38:59.623Z] [Update-Loop] Project undefined: {"status":"error","error_msg":"404 {\"type\":\"error\",\"error\":{\"type\":\"not_found_error\",\"mes...
+[2026-04-02T11:39:00.719Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:00.720Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:00.721Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:02.833Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:02.834Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:02.835Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:04.914Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:04.915Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:04.915Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:06.991Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:06.992Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:06.993Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:09.067Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:09.067Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:09.068Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:11.157Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:11.158Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:11.159Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:13.241Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:13.242Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:13.242Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:15.451Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:15.452Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:15.453Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:17.534Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:17.535Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:17.536Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:19.628Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:19.628Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:19.628Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:21.726Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:21.726Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:21.727Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:23.815Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:23.816Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:23.817Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:25.913Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:25.914Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:25.914Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:28.001Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:28.002Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:28.002Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:30.089Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:39:30.090Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:30.091Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:59.239Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:39:59.240Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:59.240Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:59.241Z] [Projects] Creating new project: p-e098b-1775129999241 for user: e098bba0-8c4e-41c6-8149-41efd79854dc
+[2026-04-02T11:39:59.646Z] [REQUEST] POST /api/generate/start | Auth: NO | Guest: YES
+[2026-04-02T11:39:59.646Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:39:59.647Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:39:59.647Z] [Generate] Request to start generation for undefined (Action: full)
+[2026-04-02T11:39:59.754Z] [Generate] Project undefined initialized for stepped generation. Triggering background task.
+[2026-04-02T11:39:59.848Z] [Config] Loaded from Supabase Cloud: claude-haiku-4-5
+[2026-04-02T11:39:59.849Z] [AI-Gen] 🚀 Starting real generation for undefined...
+[2026-04-02T11:39:59.849Z] [Update-Loop] Project undefined: {"pct":5,"status":"generating","stepIdx":0,"updated_at":"2026-04-02T11:39:59.849Z"}...
+[2026-04-02T11:40:00.269Z] [ERROR] [AI-Gen-Error] 404 {"type":"error","error":{"type":"not_found_error","message":"model: claude-3-5-haiku-20241022"},"request_id":"req_011CZet3UzviSkvzYFK7yjmy"}
+[2026-04-02T11:40:00.270Z] [Update-Loop] Project undefined: {"status":"error","error_msg":"404 {\"type\":\"error\",\"error\":{\"type\":\"not_found_error\",\"mes...
+[2026-04-02T11:40:01.767Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:01.767Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:01.768Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:03.855Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:03.857Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:03.858Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:05.972Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:05.973Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:05.973Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:08.052Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:08.053Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:08.054Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:10.129Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:10.130Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:10.130Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:12.204Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:12.205Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:12.206Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:14.288Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:14.288Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:14.289Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:16.353Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:16.353Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:16.354Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:18.425Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:18.425Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:18.426Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:20.488Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:20.491Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:20.492Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:22.578Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:22.578Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:22.579Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:24.642Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:24.643Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:24.643Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:26.719Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:26.720Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:26.721Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:28.775Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:28.776Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:28.776Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:40:30.825Z] [REQUEST] GET /api/projects?id=undefined | Auth: NO | Guest: YES
+[2026-04-02T11:40:30.826Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:40:30.826Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:17.095Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:41:17.096Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:17.096Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:17.096Z] [Projects] Creating new project: p-e098b-1775130077096 for user: e098bba0-8c4e-41c6-8149-41efd79854dc
+[2026-04-02T11:41:17.444Z] [REQUEST] POST /api/generate/start | Auth: NO | Guest: YES
+[2026-04-02T11:41:17.444Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:17.445Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:17.445Z] [Generate] Request to start generation for p-e098b-1775130077096 (Action: full)
+[2026-04-02T11:41:17.541Z] [Generate] Project p-e098b-1775130077096 initialized for stepped generation. Triggering background task.
+[2026-04-02T11:41:17.629Z] [Config] Loaded from Supabase Cloud: claude-haiku-4-5
+[2026-04-02T11:41:17.630Z] [AI-Gen] 🚀 Starting real generation for p-e098b-1775130077096...
+[2026-04-02T11:41:17.630Z] [Update-Loop] Project p-e098b-1775130077096: {"pct":5,"status":"generating","stepIdx":0,"updated_at":"2026-04-02T11:41:17.630Z"}...
+[2026-04-02T11:41:18.024Z] [ERROR] [AI-Gen-Error] 404 {"type":"error","error":{"type":"not_found_error","message":"model: claude-3-5-haiku-20241022"},"request_id":"req_011CZet9DRUA63icRw2TPmr6"}
+[2026-04-02T11:41:18.025Z] [Update-Loop] Project p-e098b-1775130077096: {"status":"error","error_msg":"404 {\"type\":\"error\",\"error\":{\"type\":\"not_found_error\",\"mes...
+[2026-04-02T11:41:19.554Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:19.555Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:19.555Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:21.657Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:21.658Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:21.658Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:23.731Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:23.733Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:23.733Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:25.839Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:25.840Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:25.840Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:27.914Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:27.915Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:27.915Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:29.989Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:29.990Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:29.990Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:32.061Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:32.061Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:32.062Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:34.137Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:34.137Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:34.138Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:36.301Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:36.302Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:36.303Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:38.376Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:38.377Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:38.377Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:40.469Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:40.470Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:40.470Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:42.550Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:42.550Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:42.551Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:44.627Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:44.627Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:44.628Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:46.719Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:46.719Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:46.720Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:41:48.806Z] [REQUEST] GET /api/projects?id=p-e098b-1775130077096 | Auth: NO | Guest: YES
+[2026-04-02T11:41:48.807Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:41:48.807Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:43:19.396Z] SERVER STARTING...
+[2026-04-02T11:43:19.398Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-02T11:43:19.542Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-02T11:43:19.545Z] [System] All modules loaded successfully.
+[2026-04-02T11:43:19.547Z] [Mount] User API Routes -> /api
+[2026-04-02T11:43:19.547Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T11:45:26.852Z] SERVER STARTING...
+[2026-04-02T11:45:26.854Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-02T11:45:26.989Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-02T11:45:26.992Z] [System] All modules loaded successfully.
+[2026-04-02T11:45:26.993Z] [Mount] User API Routes -> /api
+[2026-04-02T11:45:26.994Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T11:45:37.402Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T11:45:37.403Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:37.413Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:45:37.414Z] [Projects] Creating new project: p-e098b-1775130337414 for user: e098bba0-8c4e-41c6-8149-41efd79854dc
+[2026-04-02T11:45:38.119Z] [REQUEST] POST /api/generate/start | Auth: NO | Guest: YES
+[2026-04-02T11:45:38.119Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:38.120Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:45:38.121Z] [Generate] Request to start generation for p-e098b-1775130337414 (Action: full)
+[2026-04-02T11:45:38.267Z] [Generate] Project p-e098b-1775130337414 initialized for stepped generation. Triggering background task.
+[2026-04-02T11:45:38.424Z] [Config] Loaded from Supabase Cloud: claude-haiku-4-5
+[2026-04-02T11:45:38.425Z] [AI-Gen] 🚀 Starting real generation for p-e098b-1775130337414...
+[2026-04-02T11:45:38.425Z] [Update-Loop] Project p-e098b-1775130337414: {"pct":5,"status":"generating","stepIdx":0,"updated_at":"2026-04-02T11:45:38.425Z"}...
+[2026-04-02T11:45:38.801Z] [ERROR] [AI-Gen-Error] 404 {"type":"error","error":{"type":"not_found_error","message":"model: claude-3-5-sonnet-20241022"},"request_id":"req_011CZetUSTpc6nfPBXNjGDq8"}
+[2026-04-02T11:45:38.801Z] [Update-Loop] Project p-e098b-1775130337414: {"status":"error","error_msg":"404 {\"type\":\"error\",\"error\":{\"type\":\"not_found_error\",\"mes...
+[2026-04-02T11:45:40.281Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:45:40.281Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:40.282Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:45:42.372Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:45:42.373Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:42.373Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:45:44.448Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:45:44.449Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:44.450Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:45:46.543Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:45:46.544Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:46.544Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:45:48.634Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:45:48.634Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:48.635Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:45:50.720Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:45:50.721Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:50.721Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:45:52.806Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:45:52.807Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:52.808Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:45:54.898Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:45:54.898Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:54.898Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:45:56.978Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:45:56.979Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:56.979Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:45:59.066Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:45:59.067Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:45:59.067Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:46:01.163Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:46:01.164Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:46:01.164Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:46:03.226Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:46:03.227Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:46:03.227Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:46:05.294Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:46:05.295Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:46:05.296Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:46:07.373Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:46:07.374Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:46:07.374Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T11:46:09.467Z] [REQUEST] GET /api/projects?id=p-e098b-1775130337414 | Auth: NO | Guest: YES
+[2026-04-02T11:46:09.468Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T11:46:09.468Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:17.935Z] SERVER STARTING...
+[2026-04-02T12:40:17.936Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-02T12:40:18.045Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-02T12:40:18.048Z] [System] All modules loaded successfully.
+[2026-04-02T12:40:18.049Z] [Mount] User API Routes -> /api
+[2026-04-02T12:40:18.050Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T12:40:27.971Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-02T12:40:27.971Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:27.980Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:27.981Z] [Projects] Creating new project: p-e098b-1775133627981 for user: e098bba0-8c4e-41c6-8149-41efd79854dc
+[2026-04-02T12:40:28.226Z] [REQUEST] POST /api/generate/start | Auth: NO | Guest: YES
+[2026-04-02T12:40:28.226Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:28.227Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:28.228Z] [Generate] Request to start generation for p-e098b-1775133627981 (Action: full)
+[2026-04-02T12:40:28.333Z] [Generate] Project p-e098b-1775133627981 initialized for stepped generation. Triggering background task.
+[2026-04-02T12:40:28.456Z] [Config] Loaded from Supabase Cloud: claude-3-5-sonnet-20241022
+[2026-04-02T12:40:28.457Z] [AI-Gen] Debug: API Key exists: true, Length: 108
+[2026-04-02T12:40:28.457Z] [AI-Gen] 🚀 Starting real generation for p-e098b-1775133627981...
+[2026-04-02T12:40:28.457Z] [Update-Loop] Project p-e098b-1775133627981: {"pct":5,"status":"generating","stepIdx":0,"updated_at":"2026-04-02T12:40:28.457Z"}...
+[2026-04-02T12:40:28.833Z] [ERROR] [AI-Gen-Error] 404 {"type":"error","error":{"type":"not_found_error","message":"model: claude-3-5-sonnet-20241022"},"request_id":"req_011CZexexijVQFHJHjpYezrL"}
+[2026-04-02T12:40:28.834Z] [Update-Loop] Project p-e098b-1775133627981: {"status":"error","error_msg":"404 {\"type\":\"error\",\"error\":{\"type\":\"not_found_error\",\"mes...
+[2026-04-02T12:40:30.341Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:30.341Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:30.342Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:32.468Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:32.469Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:32.470Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:34.595Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:34.596Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:34.597Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:36.690Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:36.691Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:36.692Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:38.806Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:38.807Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:38.807Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:40.901Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:40.902Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:40.902Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:43.009Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:43.009Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:43.010Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:45.085Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:45.085Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:45.086Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:47.201Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:47.201Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:47.201Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:49.299Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:49.300Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:49.301Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:51.399Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:51.400Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:51.401Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:53.498Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:53.498Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:53.499Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:55.597Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:55.597Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:55.597Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:57.699Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:57.700Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:57.701Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:40:59.792Z] [REQUEST] GET /api/projects?id=p-e098b-1775133627981 | Auth: NO | Guest: YES
+[2026-04-02T12:40:59.793Z] [DEBUG] Guest ID: test-guest-123
+[2026-04-02T12:40:59.793Z] [Auth] Authorized Guest: test-gue... (ID Type: Shared)
+[2026-04-02T12:48:30.796Z] SERVER STARTING...
+[2026-04-02T12:48:30.797Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-02T12:48:30.898Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-02T12:48:30.900Z] [System] All modules loaded successfully.
+[2026-04-02T12:48:30.901Z] [Mount] User API Routes -> /api
+[2026-04-02T12:48:30.902Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T12:48:38.776Z] [REQUEST] GET /api/health | Auth: NO | Guest: NO
+[2026-04-02T13:09:06.956Z] SERVER STARTING...
+[2026-04-02T13:09:06.958Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-02T13:09:07.100Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-02T13:09:07.104Z] [System] All modules loaded successfully.
+[2026-04-02T13:09:07.106Z] [Mount] User API Routes -> /api
+[2026-04-02T13:09:07.106Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T13:12:51.430Z] SERVER STARTING...
+[2026-04-02T13:12:51.432Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-02T13:12:51.618Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-02T13:12:51.622Z] [System] All modules loaded successfully.
+[2026-04-02T13:12:51.624Z] [Mount] User API Routes -> /api
+[2026-04-02T13:12:51.625Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-02T13:14:56.026Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.061Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.063Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.065Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.409Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.411Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.412Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.414Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.418Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.421Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.422Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.423Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.425Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.425Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.431Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.435Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.663Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.739Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.878Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T13:14:56.881Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T13:17:48.293Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.318Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.319Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.322Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.662Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.957Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.960Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.963Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.965Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.967Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.968Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.969Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.972Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.976Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.978Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:48.979Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:49.059Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:49.150Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T13:17:49.246Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T13:17:49.249Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T13:17:59.315Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.376Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.377Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.381Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.419Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.813Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.815Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.817Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.819Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.820Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.822Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.823Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.824Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.829Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.831Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.833Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-02T13:17:59.926Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-02T13:18:00.044Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-02T13:18:00.057Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-02T13:18:00.059Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-02T13:18:02.069Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-02T13:18:02.071Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-02T13:18:02.073Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...

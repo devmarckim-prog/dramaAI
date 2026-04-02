@@ -97,8 +97,8 @@ router.get('/stats', async (req, res) => {
     const fs = require('fs');
     const path = require('path');
     const configPath = path.join(__dirname, '../config/system.json');
-    let activeModels = 'Claude 3.5 Sonnet & Haiku';
-    let config = { productionModel: 'claude-3-5-sonnet-latest', planningModel: 'claude-3-5-haiku-latest' };
+    let activeModels = 'Claude 4.5 Haiku & 4.6 Sonnet';
+    let config = { productionModel: 'claude-sonnet-4-6', planningModel: 'claude-haiku-4-5-20251001' };
     
     if (fs.existsSync(configPath)) {
       try {
@@ -368,8 +368,8 @@ router.get('/config', async (req, res) => {
       });
     } else {
       res.json({ 
-        planningModel: 'claude-3-5-haiku-20241022',
-        productionModel: 'claude-3-5-sonnet-20241022',
+        planningModel: 'claude-haiku-4-5-20251001',
+        productionModel: 'claude-sonnet-4-6',
         systemPrompt: '',
         pricingPro: 29900,
         creditsFree: 10,
@@ -483,25 +483,32 @@ router.get('/health', async (req, res) => {
   }
 });
 
-// Recent Projects
 router.get('/projects', async (req, res) => {
   try {
+    // Fetch with profiles to get true emails for admin display
     const { data, error } = await supabase
       .from('projects')
-      .select('id, title, genre, created_at, status, user_id, pct, step_idx')
+      .select(`
+        id, title, genre, created_at, status, user_id, pct, "stepIdx",
+        user_profiles ( email )
+      `)
       .order('created_at', { ascending: false })
-      .limit(50);
+      .limit(100);
 
     if (error) throw error;
     
     const projects = data.map(p => {
-      let userDisplay = 'Guest';
-      if (p.user_id) {
-        userDisplay = typeof p.user_id === 'string' 
-          ? `User-${p.user_id.slice(0, 8)}` 
-          : `User-${p.user_id}`;
+      let email = 'Guest';
+      if (p.user_profiles && p.user_profiles.email) {
+        email = p.user_profiles.email;
+      } else if (p.user_id === 'e098bba0-8c4e-41c6-8149-41efd79854dc') {
+        email = 'Guest (System)';
       }
-      return { ...p, user_email: userDisplay };
+      return { 
+        ...p, 
+        user_email: email,
+        step_idx: p.stepIdx // Backward compatibility for UI
+      };
     });
 
     res.json(projects);
@@ -636,9 +643,13 @@ router.delete('/users/:id', async (req, res) => {
   }
 });
 
-// Sample Management
 router.get('/samples', async (req, res) => {
   try {
+    const { data, error } = await supabase
+      .from('samples')
+      .select('*')
+      .order('updated_at', { ascending: false });
+
     if (error) throw error;
     
     // Diagnostic logging for Admin

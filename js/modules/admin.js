@@ -3,6 +3,7 @@
  */
 
 import { showToast, addDebugLog } from './navigation.js';
+import { normalizeProject } from './api.js';
 
 export async function initAdmin() {
   try {
@@ -473,18 +474,15 @@ window.filterAdminProjects = (val) => {
 window.viewAdminProjectDetail = async (id) => {
   try {
     const res = await adminFetch(`/api/admin/projects/${id}`);
-    const project = await res.json();
+    const rawProject = await res.json();
     
-    // Improved Mapping: Root fields are priority (Real generated projects)
-    // Legacy support for projects using 'plan_data'
-    const plan = project.plan_data || {};
+    // Use the unified normalization helper
+    const project = normalizeProject(rawProject);
     
-    const logline = project.logline || plan.logline || '로그라인 정보가 없습니다.';
-    const synopsis = project.synopsis || plan.synopsis || '시놉시스 정보가 없습니다.';
-    const characters = project.chars || plan.characters || [];
-    const scenes = project.episodes || plan.scenes || []; // episodes is now an array of story objects
+    const characters = project.chars || [];
+    const scenes = project.scripts || []; 
     
-    const epCount = Array.isArray(scenes) ? scenes.length : (typeof project.episodes === 'number' ? project.episodes : 8);
+    const epCount = scenes.length > 0 ? scenes.length : (project.episodes || 8);
     const genre = project.genre || '장르 미지정';
     const platform = project.platform || 'Platform';
     const status = project.status || 'Draft';
@@ -499,7 +497,7 @@ window.viewAdminProjectDetail = async (id) => {
           <div class="admin-auth-icon" style="font-size:20px; width:40px; height:40px">📜</div>
           <div>
             <h3 style="color:var(--gold); font-family:var(--serif); margin:0">${project.title}</h3>
-            <div style="font-size:11px; color:#aaa">${project.user_email || 'Anonymous Guest'} • ${new Date(project.created_at).toLocaleDateString()}</div>
+            <div style="font-size:11px; color:#aaa">${project.user_email || rawProject.user_email || 'Anonymous Guest'} • ${new Date(project.created_at).toLocaleDateString()}</div>
           </div>
         </div>
         <button class="btn btn-ghost" onclick="this.parentElement.parentElement.remove()" style="color:#fff; font-size:20px">✕</button>
@@ -516,12 +514,12 @@ window.viewAdminProjectDetail = async (id) => {
 
           <div class="viewer-section">
             <h4 class="viewer-label">LOGLINE</h4>
-            <div class="viewer-text">${logline}</div>
+            <div class="viewer-text">${project.logline || '로그라인 정보가 없습니다.'}</div>
           </div>
 
           <div class="viewer-section">
             <h4 class="viewer-label">SYNOPSIS</h4>
-            <div class="viewer-text" style="white-space: pre-wrap;">${synopsis}</div>
+            <div class="viewer-text" style="white-space: pre-wrap;">${project.synopsis || '시놉시스 정보가 없습니다.'}</div>
           </div>
 
           <div class="viewer-section">
@@ -655,22 +653,31 @@ async function renderAdminConfig(container) {
     const res = await adminFetch('/api/admin/config');
     const config = await res.json();
     container.innerHTML = `
-      <div class="admin-config-card" style="max-width: 800px; margin: 0 auto; animation: fadeUp 0.4s ease-out">
-        <div class="admin-section-title">🤖 AI 모델 엔진 설정</div>
-        <p style="color:#888; font-size:13px; margin-bottom:24px">
-          드라마 제작 단계별로 최적의 AI 모델을 지정합니다. 모든 변경사항은 실시간으로 사용자 대본 생성에 반영됩니다.
-        </p>
+      <div class="admin-config-card" style="max-width: 900px; margin: 0 auto; animation: fadeUp 0.4s ease-out; border: 1px solid rgba(255,255,255,0.1); padding: 32px; border-radius: 24px; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); box-shadow: 0 20px 50px rgba(0,0,0,0.5)">
+        <div style="background:linear-gradient(135deg, rgba(212,175,55,0.15), rgba(0,0,0,0)); border-radius:16px; padding:32px; border:1px solid rgba(212,175,55,0.3); border-left:6px solid var(--gold); margin-bottom:40px; position:relative; overflow:hidden">
+          <div style="position:absolute; top:-10px; right:-10px; font-size:80px; opacity:0.05; pointer-events:none">⚙️</div>
+          <h2 style="font-family:var(--serif); color:var(--gold); margin-bottom:12px; font-size:22px; display:flex; align-items:center; gap:12px">
+            <span style="background:var(--gold); color:#000; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:50%; font-size:16px">⚙️</span>
+            AI 인텔리전스 엔진 운영 가이드
+          </h2>
+          <div style="color:#fff; font-size:15px; line-height:1.8; opacity:0.9">
+             <p style="margin-bottom:10px">본 시스템은 <b style="color:var(--gold)">Anthropic Claude 4</b> 최신 아키텍처를 기반으로 구동됩니다.</p>
+             <p style="margin:0; font-size:14px; color:#ccc">기획 단계(4.5 Haiku)와 집필 단계(4.6 Sonnet)에 최적화된 모델을 교차 배치하여 속도와 퀄리티의 균형을 맞춥니다. 설정 변경 시 즉시 전역 반영됩니다.</p>
+          </div>
+        </div>
+
+        <div class="admin-section-title" style="margin-top:0">🤖 AI 모델 엔진 설정</div>
 
         <div class="admin-config-group">
           <label class="admin-config-label">
             Planning & Analysis Model
             <span style="font-weight:normal; color:#666; font-size:11px; margin-left:8px">(기획안, 로그라인, 캐릭터 분석용)</span>
           </label>
-          <select id="config-planning-model" class="admin-config-input">
-            <option value="claude-haiku-4-5" ${config.planningModel === 'claude-haiku-4-5' || config.planningModel === 'claude-3-5-haiku-20241022' || config.planningModel === 'claude-3-5-haiku-latest' ? 'selected' : ''}>⚡ Claude Haiku 4.5 (초고속 / 기획 & 분석 추천)</option>
-            <option value="claude-sonnet-4-6" ${config.planningModel === 'claude-sonnet-4-6' || config.planningModel === 'claude-3-5-sonnet-latest' ? 'selected' : ''}>🧠 Claude Sonnet 4.6 (균형 / 복잡한 기획안)</option>
-            <option value="claude-opus-4-6" ${config.planningModel === 'claude-opus-4-6' || config.planningModel === 'claude-3-opus-latest' ? 'selected' : ''}>👑 Claude Opus 4.6 (최고 지능 / 고비용)</option>
-          </select>
+           <select id="config-planning-model" class="admin-config-input">
+             <option value="claude-haiku-4-5" ${config.planningModel === 'claude-haiku-4-5' ? 'selected' : ''}>⚡ Claude 4.5 Haiku (초고속 / 기획 & 분석 추천)</option>
+             <option value="claude-sonnet-4-6" ${config.planningModel === 'claude-sonnet-4-6' ? 'selected' : ''}>🧠 Claude 4.6 Sonnet (균형 / 복잡한 기획안)</option>
+             <option value="claude-opus-4-6" ${config.planningModel === 'claude-opus-4-6' ? 'selected' : ''}>👑 Claude 4.6 Opus (최고 지능 / 고비용)</option>
+           </select>
         </div>
 
         <div class="admin-config-group" style="margin-top:20px">
@@ -678,11 +685,11 @@ async function renderAdminConfig(container) {
             Writing & Production Model
             <span style="font-weight:normal; color:#666; font-size:11px; margin-left:8px">(메인 시나리오 및 대본 집필용)</span>
           </label>
-          <select id="config-production-model" class="admin-config-input">
-            <option value="claude-sonnet-4-6" ${config.productionModel === 'claude-sonnet-4-6' || config.productionModel === 'claude-3-5-sonnet-latest' ? 'selected' : ''}>⭐ Claude Sonnet 4.6 (추천 / 드라마 집필 핵심)</option>
-            <option value="claude-opus-4-6" ${config.productionModel === 'claude-opus-4-6' || config.productionModel === 'claude-3-opus-latest' ? 'selected' : ''}>👑 Claude Opus 4.6 (최고 지능 / 프리미엄 창작)</option>
-            <option value="claude-haiku-4-5" ${config.productionModel === 'claude-haiku-4-5' || config.productionModel === 'claude-3-5-haiku-20241022' ? 'selected' : ''}>⚡ Claude Haiku 4.5 (경량 / 비용 절감)</option>
-          </select>
+           <select id="config-production-model" class="admin-config-input">
+             <option value="claude-sonnet-4-6" ${config.productionModel === 'claude-sonnet-4-6' ? 'selected' : ''}>⭐ Claude 4.6 Sonnet (추천 / 드라마 집필 핵심)</option>
+             <option value="claude-opus-4-6" ${config.productionModel === 'claude-opus-4-6' ? 'selected' : ''}>👑 Claude 4.6 Opus (최고 지능 / 프리미엄 창작)</option>
+             <option value="claude-haiku-4-5" ${config.productionModel === 'claude-haiku-4-5' ? 'selected' : ''}>⚡ Claude 4.5 Haiku (경량 / 비용 절감)</option>
+           </select>
           <div style="font-size:11px; color:var(--gold); margin-top:6px; opacity:0.8">
             * 메인 모델은 작가의 어조와 창의성에 직접적인 영향을 미칩니다.
           </div>
@@ -837,8 +844,37 @@ async function renderAdminSamples(container) {
       throw new Error(samples.error);
     }
     
+    const header = document.createElement('div');
+    header.className = 'admin-section-header';
+    header.innerHTML = `
+      <div style="background:rgba(20,20,20,0.6); border:1px solid rgba(212,175,55,0.3); border-left:6px solid var(--gold); border-radius:20px; padding:32px; margin-bottom:40px; box-shadow:0 15px 40px rgba(0,0,0,0.4); position:relative; overflow:hidden; backdrop-filter:blur(10px)">
+        <div style="position:absolute; top:-20px; right:-20px; font-size:110px; opacity:0.04; pointer-events:none">🎞️</div>
+        <h2 style="font-family:var(--serif); color:var(--gold); margin-bottom:16px; display:flex; align-items:center; gap:12px; font-size:24px">
+          <span style="background:var(--gold); color:#000; width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:10px; font-size:20px">🎬</span> 
+          샘플 시나리오 라이브러리 가이드
+        </h2>
+        <div style="color:#fff; font-size:16px; line-height:1.8; max-width:920px; margin:0; font-weight:400">
+          <p style="margin-bottom:15px; color:#ddd">메인 화면 <b style="color:var(--gold)">'샘플 프로젝트로 시작하기'</b> 섹션에 실시간 노출될 마스터 시나리오를 관리합니다.</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; background:rgba(255,255,255,0.03); padding:20px; border-radius:12px; border:1px solid rgba(255,255,255,0.05)">
+            <div style="font-size:14px; color:#ccc">
+              <b style="color:#fff; display:block; margin-bottom:5px">💡 노출 최적화</b>
+              개별 카드의 스위치를 통해 메인 페이지 노출 여부를 제어합니다. (반드시 하단 저장 필요)
+            </div>
+            <div style="font-size:14px; color:#ccc">
+              <b style="color:#fff; display:block; margin-bottom:5px">📝 데이터 일관성</b>
+              제목과 로그라인, 캐릭터 등 JSON 데이터를 수정하여 시나리오 완성도를 높이세요.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; margin-bottom:24px">
+        <button class="btn btn-gold" onclick="addAdminSample()" style="padding:12px 32px; font-weight:700; letter-spacing:0.5px">+ 신규 샘플 프로젝트 등록</button>
+      </div>
+    `;
+    container.appendChild(header);
+
     if (!Array.isArray(samples) || samples.length === 0) {
-      container.innerHTML = `
+      container.innerHTML += `
         <div style="padding:60px; text-align:center; animation:fadeUp 0.4s ease-out">
           <div style="font-size:40px; margin-bottom:20px">🎬</div>
           <div style="font-size:18px; font-weight:700; color:var(--ink); margin-bottom:12px">등록된 샘플 프로젝트가 없습니다</div>
@@ -860,7 +896,7 @@ async function renderAdminSamples(container) {
     // We'll store the IDs of the samples currently rendered for batch saving
     window._adminSampleIds = samples.map(s => s.id);
 
-    container.innerHTML = `
+    container.innerHTML += `
       <div style="padding:20px; animation:fadeUp 0.4s ease-out">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px">
           <div>
@@ -986,39 +1022,51 @@ window.saveAllAdminSamples = async function(btn) {
 };
 
 window.seedDefaultSamples = async function() {
-  if (!confirm('기본 샘플 데이터로 초기화하시겠습니까? (기존 데이터가 덮어씌워집니다)')) return;
+  if (!confirm('기본 샘플 데이터(디렉터즈 아레나, 서울의 밤)로 초기화하시겠습니까? (기존 데이터가 덮어씌워집니다)')) return;
   
   const sample1 = {
-    id: 'sample1',
-    title: '신라의 달밤 (퓨전 사극)',
+    id: 'sample-arena',
+    title: '디렉터즈 아레나',
     data: {
-      id: 'sample1',
-      title: '신라의 달밤 (퓨전 사극)',
-      genre: '퓨전 사극, 미스터리',
-      logline: '죽은 자가 돌아오는 신라의 밤, 사라진 공주를 찾기 위한 화랑들의 사투.',
-      synopsis: '신라 서라벌, 가뭄이 극심하던 어느 날 밤 죽은 자들이 무덤에서 일어나 살아있는 이들을 공격하기 시작한다. 이 기이한 현상의 중심에는 실종된 선화공주와 금지된 주술이 얽혀있다.',
+      id: 'sample-arena',
+      title: '디렉터즈 아레나 (Director\'s Arena)',
+      genre: '로맨틱 코미디, 오피스',
+      logline: '전직 천재 PD와 완벽주의 PPL 퀸, 상극인 두 사람이 오디션 프로그램을 만들며 벌어지는 불협화음 로맨스.',
+      synopsis: '서울 마포구 합정동, 한물간 스타 PD 재헌과 업계 최고의 전략가 서영이 숏폼 전문 스튜디오 "아레나"에서 만난다. "이야기가 전부"라는 남자와 "데이터가 전부"라는 여자는 사사건건 충돌하지만, 그 과정에서 서로의 빈자리를 채워가게 되는데...',
       characters: [
-        { name: '무명', role: '주연', desc: '출신 불명의 천재 화랑. 냉소적이지만 정의감이 강하다.' },
-        { name: '선화공주', role: '주연', desc: '궁을 탈출한 비운의 공주. 영적 능력을 숨기고 있다.' }
+        { name: '조재헌', role: '주연', desc: '감과 직관으로 승부하는 34세 PD. 낡은 청바지에 헤드폰이 심볼.' },
+        { name: '오서영', role: '주연', desc: '철저한 수치와 데이터로 분석하는 32세 전략가. 화이트 정장만큼 차가운 완벽주의자.' }
       ],
-      episodes: 16
+      scripts: [
+        { title: '제1화: 우연보다 최악인 인연', story: '재헌의 엉망진창 스튜디오에 서영이 비즈니스 파트너로 등장한다.' },
+        { title: '제2화: 숏폼의 법칙', story: '두 사람은 첫 오디션 기획을 두고 처절하게 대립한다.' }
+      ],
+      pct: 100,
+      status: 'done',
+      isVisible: true
     }
   };
   
   const sample2 = {
-    id: 'sample2',
-    title: '글로벌 해커스 (오피스 스릴러)',
+    id: 'sample-seoul',
+    title: '서울의 밤 (Seoul Night)',
     data: {
-      id: 'sample2',
-      title: '글로벌 해커스 (오피스 스릴러)',
-      genre: '오피스, 스릴러',
-      logline: '평범한 IT 보안 회사가 사실은 국제적인 해커 그룹의 아지트였다면?',
-      synopsis: '꿈의 직장으로 불리는 테크 기업 "제네시스". 신입 개발자 준우는 우연히 서버실의 비밀 통로를 발견하고, 낮에는 코딩하고 밤에는 국가 보안망을 뚫는 팀원들의 정체를 알게 된다.',
+      id: 'sample-seoul',
+      title: '서울의 밤 (Seoul Night)',
+      genre: '범죄, 스릴러, 누아르',
+      logline: '낮에는 선량한 배달원, 밤에는 베일에 싸인 정보원. 서울의 그림자 속에서 펼쳐지는 처절한 누아르.',
+      synopsis: '동대문 뒷골목의 한 배달 대행 업체. 10년째 과거를 지우고 살아온 강호는 우연히 대형 카르텔의 배달 사고에 휘말린다. 죽어야 끝나는 게임, 그는 다시 한 번 밤의 왕국으로 발을 들이게 된다.',
       characters: [
-        { name: '강준우', role: '주연', desc: '순수하지만 눈치 빠른 신입 개발자.' },
-        { name: '박대표', role: '주연', desc: '자상한 멘토이자 냉혹한 해커 리더.' }
+        { name: '이강호', role: '주연', desc: '낮에는 평범한 배달부, 밤에는 최고의 정보 처리 전문가.' },
+        { name: '김민주', role: '주연', desc: '조직의 비밀을 쫓다 강호와 얽히게 된 집념의 마약반 형사.' }
       ],
-      episodes: 12
+      scripts: [
+        { title: '제1화: 잘못 배달된 진실', story: '강호가 배달한 상자 안에서 조직의 지불 장부가 발견된다.' },
+        { title: '제2화: 붉은 추격', story: '조직원들의 추격 속에 민주와 강호가 처음으로 대면한다.' }
+      ],
+      pct: 100,
+      status: 'done',
+      isVisible: true
     }
   };
 
