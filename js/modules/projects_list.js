@@ -6,10 +6,50 @@ export async function renderProjectCards() {
   const wrap = document.getElementById('project-cards-wrap');
   if (!wrap) return;
 
-  wrap.innerHTML = '<div class="project-list-loading"><div class="pcg-spinner"></div>로딩 중...</div>';
-
   const projects = await fetchProjects();
+  const sorted = (projects || []).sort((a, b) => {
+    const da = new Date(b.created_at || b.createdAt || 0);
+    const db = new Date(a.created_at || a.createdAt || 0);
+    return da - db;
+  });
 
+  const gridExists = wrap.querySelector('.project-cards-grid');
+  const projectCountChanged = gridExists && wrap.querySelectorAll('.project-slate-card').length !== sorted.length + 1; // +1 for the "New Project" card
+
+  // If grid doesn't exist or project count changed, do a full render
+  if (!gridExists || projectCountChanged) {
+    if (!gridExists) wrap.innerHTML = '<div class="project-list-loading"><div class="pcg-spinner"></div>로딩 중...</div>';
+    _performFullRender(wrap, sorted);
+  } else {
+    // Targeted Update for generating projects
+    sorted.forEach(rawP => {
+      const p = normalizeProject(rawP);
+      if (p.status === 'generating') {
+        const card = document.getElementById(`gen-card-${p.id}`);
+        if (card) {
+          const bar = card.querySelector('.pcg-bar-fill-dynamic');
+          const labels = card.querySelectorAll('.pcg-progress-wrap span');
+          if (bar) bar.style.width = (p.pct || 0) + '%';
+          if (labels.length >= 2) labels[1].textContent = (p.pct || 0) + '%';
+        } else {
+          // Card for this generating project missing? Force full render just in case
+          _performFullRender(wrap, sorted);
+        }
+      } else {
+        // If a project status changed from generating to something else, we might need to refresh its card appearance
+        const card = document.getElementById(`gen-card-${p.id}`);
+        if (card && card.classList.contains('generating')) {
+           _performFullRender(wrap, sorted);
+        }
+      }
+    });
+  }
+
+  const sub = document.getElementById('projects-page-sub');
+  if (sub) sub.textContent = `총 ${sorted.length}개의 프로덕션 슬레이트`;
+}
+
+function _performFullRender(wrap, projects) {
   if (!projects || projects.length === 0) {
     wrap.innerHTML = `
       <div class="project-empty-state">
@@ -18,8 +58,6 @@ export async function renderProjectCards() {
         <p class="project-empty-desc">로그라인 한 줄만으로 당신의 상상이 시나리오가 됩니다.</p>
         <button class="btn btn-primary btn-wizard-start-big" onclick="showPage('wizard')">+ 새 프로젝트 만들기</button>
       </div>`;
-    const sub = document.getElementById('projects-page-sub');
-    if (sub) sub.textContent = '아직 생성한 프로젝트가 없습니다';
     return;
   }
 
@@ -42,26 +80,17 @@ export async function renderProjectCards() {
     'error': '생성 중 오류 발생'
   };
 
-  const sampleImgUrl = 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&q=80';
-
-  projects.sort((a, b) => {
-    const da = new Date(b.created_at || b.createdAt || 0);
-    const db = new Date(a.created_at || a.createdAt || 0);
-    return da - db;
-  }).forEach(rawP => {
-
+  projects.forEach(rawP => {
     const p = normalizeProject(rawP);
     const isErr = p.status === 'error';
     const isGen = p.status === 'generating';
     const pct = isErr ? 100 : (p.pct || 0);
     const stepIdx = p.stepIdx;
 
-    // Shared delete button HTML (Hidden for samples)
     const delBtnHtml = p.is_sample
       ? ''
       : `<button class="project-card-del" onclick="event.stopPropagation(); window.confirmDeleteProject('${p.id}')">&times;</button>`;
 
-    // Extract Flag metadata
     const genre = p.genre || '로맨스';
     const episodesVal = (p.episodes_count) || (p.episodes && typeof p.episodes === 'number' ? p.episodes : 8);
     const target = (p.input && p.input.target_audience) || (p.stats && p.stats.target_audience) || '';
@@ -125,17 +154,12 @@ export async function renderProjectCards() {
 
     } else {
       const dateStr = _formatRelativeDate(p.createdAt);
-      const isOtt = p.platform === 'OTT';
-      const platformIcon = isOtt ? 'N' : (p.platform === 'TV' ? 'TV' : 'W');
-
       html += `
         <div class="project-slate-card" onclick="openProject('${p.id}')">
           ${delBtnHtml}
           <div class="project-card-img-wrap">
             <div class="project-card-img-overlay"></div>
-            <div class="project-card-badge-slate">
-              ${p.platform || 'OTT'}
-            </div>
+            <div class="project-card-badge-slate">${p.platform || 'OTT'}</div>
             ${flagHtml}
             <div class="project-card-body-slate">
               <div class="project-card-title-slate">${p.title}</div>
@@ -151,9 +175,6 @@ export async function renderProjectCards() {
 
   html += `</div>`;
   wrap.innerHTML = html;
-
-  const sub = document.getElementById('projects-page-sub');
-  if (sub) sub.textContent = `총 ${projects.length}개의 프로덕션 슬레이트`;
 }
 
 function _formatRelativeDate(date) {

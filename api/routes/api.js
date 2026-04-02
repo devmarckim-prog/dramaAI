@@ -677,7 +677,7 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
         await updateProject({ ...resultData, pct: 20, stepIdx: 1 });
         break;
 
-      case 1: // Phase 2: Synopsis (40%)
+      case 2: // Phase 3: Synopsis (45%)
         const synopPrompt = `제목: ${project.title || resultData.title}. 로그라인: ${project.logline || resultData.logline}. 이 드라마의 전체 줄거리(시놉시스)를 1000자 내외로 상세히 작성해줘. JSON 형식: {"synopsis": "내용"}`;
         const synopResp = await anthropic.messages.create({
           model: getModelId(config.productionModel),
@@ -686,10 +686,22 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
           messages: [{ role: 'user', content: synopPrompt }]
         });
         resultData = JSON.parse(synopResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
-        await updateProject({ synopsis: resultData.synopsis, pct: 45, stepIdx: 2 });
+        await updateProject({ synopsis: resultData.synopsis, pct: 45, stepIdx: 3 });
         break;
 
-      case 2: // Phase 3: Characters (65%)
+      case 3: // Phase 4: Conflicts (60%)
+        const conflictPrompt = `드라마 "${project.title}"의 주요 갈등 구조를 분석해줘. 내적 갈등, 대인 갈등, 사회적/환경적 갈등을 포함해. JSON 형식: {"conflicts": [{"type": "내적/대인/사회", "character": "인물명", "desc": "갈등 내용"}]}`;
+        const conflictResp = await anthropic.messages.create({
+          model: getModelId(config.productionModel),
+          max_tokens: 1024,
+          system: config.systemPrompt,
+          messages: [{ role: 'user', content: conflictPrompt }]
+        });
+        resultData = JSON.parse(conflictResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
+        await updateProject({ conflicts: resultData.conflicts, pct: 60, stepIdx: 4 });
+        break;
+
+      case 4: // Phase 5: Characters (75%)
         const charPrompt = `드라마 "${project.title || resultData.title}"의 주요 인물 3명을 설정해줘. 이름, 성격, 나이, 역할을 포함해. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
         const charResp = await anthropic.messages.create({
           model: getModelId(config.productionModel),
@@ -698,25 +710,25 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
           messages: [{ role: 'user', content: charPrompt }]
         });
         resultData = JSON.parse(charResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
-        await updateProject({ chars: resultData.chars, pct: 70, stepIdx: 3 });
+        await updateProject({ chars: resultData.chars, pct: 75, stepIdx: 5 });
         break;
 
-      case 3: // Phase 4: Episodes (90%)
+      case 5: // Phase 6: Episodes (90%)
         const epCount = project.episodes || 8;
         const epPrompt = `드라마 "${project.title}"의 전 ${epCount}회차 구성을 JSON으로 작성해줘. 회차별 제목과 요약을 포함해. JSON 형식: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;
-        const res3 = await anthropic.messages.create({
+        const res5 = await anthropic.messages.create({
           model: getModelId(config.planningModel),
           max_tokens: 4096,
           system: config.systemPrompt,
           messages: [{ role: 'user', content: epPrompt }]
         });
-        const text3 = res3.content[0].text;
-        resultData = JSON.parse(text3.match(/\{[\s\S]*\}/)?.[0] || text3.substring(text3.indexOf('{'), text3.lastIndexOf('}') + 1));
-        await updateProject({ scripts: resultData.episodes, pct: 90, stepIdx: 4 });
+        const text5 = res5.content[0].text;
+        resultData = JSON.parse(text5.match(/\{[\s\S]*\}/)?.[0] || text5.substring(text5.indexOf('{'), text5.lastIndexOf('}') + 1));
+        await updateProject({ scripts: resultData.episodes, pct: 90, stepIdx: 6 });
         break;
 
-      case 4: // Finalize (100%)
-        await updateProject({ pct: 100, status: 'done', stepIdx: 5 });
+      case 6: // Finalize (100%)
+        await updateProject({ pct: 100, status: 'done', stepIdx: 7 });
         resultData = { success: true, status: 'done' };
         break;
 
@@ -850,9 +862,19 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
        max_tokens: 2048
      }, config, anthropic);
      const synopData = JSON.parse(synopRespText.match(/\{[\s\S]*\}/)[0]);
-     await updateProject({ synopsis: synopData.synopsis, pct: 45, stepIdx: 3 });
+     await updateProject({ synopsis: synopData.synopsis, pct: 50, stepIdx: 3 });
 
-     // Phase 4: Characters
+     // Phase 4: Conflicts
+     const conflictPrompt = `드라마 "${loglineData.title}"의 주요 갈등 구조 분석. 내적, 대인, 사회적 갈등을 포함해. JSON: {"conflicts": [{"type": "내적/대인/사회", "character": "핵심인물", "desc": "상세내용"}]}`;
+     const conflictRespText = await callUnifiedAI({
+       prompt: conflictPrompt,
+       modelAlias: config.productionModel,
+       max_tokens: 1024
+     }, config, anthropic);
+     const conflictData = JSON.parse(conflictRespText.match(/\{[\s\S]*\}/)[0]);
+     await updateProject({ conflicts: conflictData.conflicts, pct: 65, stepIdx: 4 });
+
+     // Phase 5: Characters
      const charPrompt = `주요 인물 3명 설정. JSON: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
      const charRespText = await callUnifiedAI({
        prompt: charPrompt,
@@ -860,8 +882,6 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
        max_tokens: 2048
      }, config, anthropic);
      const charData = JSON.parse(charRespText.match(/\{[\s\S]*\}/)[0]);
-     await updateProject({ chars: charData.chars, pct: 70, stepIdx: 3 });
-
      // Phase 4: Episodes
      const epCount = project.episodes || 8;
      const epPrompt = `${epCount}회차 구성. JSON: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;

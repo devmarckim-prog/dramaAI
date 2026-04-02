@@ -237,23 +237,23 @@ export function buildRelationMap() {
   const female = chars.find(c => c.role === '여주' || (c.gender && c.gender.includes('여'))) || chars[0];
   const subs = chars.filter(c => c !== male && c !== female).slice(0, 4);
 
-  const W = 800, H = 400;
-  const cx = W / 2, cy = H / 2 + 20;
-  const mPos = { x: cx - 200, y: cy };
-  const fPos = { x: cx + 200, y: cy };
+  const W = 800, H = 300; // Reduced height from 400
+  const cx = W / 2, cy = H / 2 + 30;
+  const mPos = { x: cx - 180, y: cy }; // Narrowed from 200
+  const fPos = { x: cx + 180, y: cy }; // Narrowed from 200
 
   const arcPositions = [
-    { x: cx - 320, y: cy - 120 }, { x: cx - 100, y: cy - 160 },
-    { x: cx + 100, y: cy - 160 }, { x: cx + 320, y: cy - 120 },
+    { x: cx - 280, y: cy - 90 }, { x: cx - 90, y: cy - 120 },
+    { x: cx + 90, y: cy - 120 }, { x: cx + 280, y: cy - 90 },
   ];
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto; overflow:visible" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-        <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.2"/>
+        <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.15"/>
       </filter>
       <filter id="glow-gold" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="4" result="blur" />
+        <feGaussianBlur stdDeviation="3" result="blur" />
         <feComposite in="SourceGraphic" in2="blur" operator="over" />
       </filter>
       <linearGradient id="gradGold" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -267,36 +267,36 @@ export function buildRelationMap() {
     </defs>`;
 
   // Links
-  svg += `<path d="M ${mPos.x} ${mPos.y} Q ${cx} ${cy - 80} ${fPos.x} ${fPos.y}" fill="none" stroke="url(#gradGold)" stroke-width="5" class="rel-link" opacity="0.9" filter="url(#glow-gold)"/>`;
+  svg += `<path d="M ${mPos.x} ${mPos.y} Q ${cx} ${cy - 70} ${fPos.x} ${fPos.y}" fill="none" stroke="url(#gradGold)" stroke-width="4" class="rel-link" opacity="0.8" filter="url(#glow-gold)"/>`;
   svg += `
-    <g transform="translate(${cx}, ${cy - 55})">
-      <rect x="-60" y="-12" width="120" height="24" rx="12" fill="#fff" stroke="var(--gold)" stroke-width="1"/>
-      <text font-size="12" fill="var(--gold)" text-anchor="middle" dominant-baseline="middle" font-weight="900">♥ 메인 관계</text>
+    <g transform="translate(${cx}, ${cy - 50})">
+      <rect x="-45" y="-10" width="90" height="20" rx="10" fill="#fff" stroke="var(--gold)" stroke-width="1"/>
+      <text font-size="10" fill="var(--gold)" text-anchor="middle" dominant-baseline="middle" font-weight="900">♥ 메인 관계</text>
     </g>
   `;
 
   subs.forEach((c, i) => {
     const pos = arcPositions[i];
     if (!pos) return;
-    svg += `<line x1="${pos.x}" y1="${pos.y}" x2="${cx}" y2="${cy}" stroke="#bbb" stroke-width="2" stroke-dasharray="6,4" class="rel-link" opacity="0.6"/>`;
+    svg += `<line x1="${pos.x}" y1="${pos.y}" x2="${cx}" y2="${cy}" stroke="#ddd" stroke-width="1.5" stroke-dasharray="4,3" class="rel-link" opacity="0.5"/>`;
   });
 
   // Nodes
   const nodeHtml = (p, n, grad, isMain = false) => `
     <g class="rel-node ${isMain ? 'rel-node-main' : ''}" onclick="selectCharByName('${n}')" style="cursor:pointer" filter="url(#shadow)">
-      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 42 : 32}" fill="#fff" stroke="${isMain ? 'var(--gold)' : '#ccc'}" stroke-width="2"/>
-      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 36 : 26}" fill="${grad}" opacity="1"/>
-      <text x="${p.x}" y="${p.y}" font-size="${isMain ? 20 : 16}" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="900">${n[0]}</text>
-      <g transform="translate(${p.x}, ${p.y + (isMain ? 65 : 55)})">
-        <rect x="-40" y="-12" width="80" height="24" rx="6" fill="rgba(255,255,255,0.9)" />
-        <text class="rel-text" font-size="14" fill="#111" text-anchor="middle" dominant-baseline="middle" font-weight="800">${n}</text>
+      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 32 : 24}" fill="#fff" stroke="${isMain ? 'var(--gold)' : '#eee'}" stroke-width="1.5"/>
+      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 28 : 20}" fill="${grad}" opacity="1"/>
+      <text x="${p.x}" y="${p.y}" font-size="${isMain ? 16 : 12}" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="900">${n[0]}</text>
+      <g transform="translate(${p.x}, ${p.y + (isMain ? 48 : 38)})">
+        <rect x="-35" y="-10" width="70" height="20" rx="4" fill="rgba(255,255,255,0.95)" />
+        <text class="rel-text" font-size="11" fill="#222" text-anchor="middle" dominant-baseline="middle" font-weight="800">${n}</text>
       </g>
     </g>`;
 
   svg += nodeHtml(mPos, male.name, 'url(#gradGold)', true);
   svg += nodeHtml(fPos, female.name, 'url(#gradBlue)', true);
   subs.forEach((c, i) => {
-    if (arcPositions[i]) svg += nodeHtml(arcPositions[i], c.name, '#888');
+    if (arcPositions[i]) svg += nodeHtml(arcPositions[i], c.name, '#aaa');
   });
 
   svg += `</svg>`;

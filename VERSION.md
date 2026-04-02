@@ -1,4 +1,11 @@
 # DramaScript AI Version History
+
+ ## v0.1.130 (2026-04-02)
+ ### ✨ AI Conflict Analysis & UI Flicker Reduction
+ - **Conflict Analysis Phase**: Integrated a new "Conflict Analysis" step into the AI generation pipeline (Backend Phase 3). This generates deep internal, interpersonal, and social conflicts for each project.
+ - **Flicker-Free Progress Bars**: Refactored `renderProjectCards` to use targeted DOM updates for generating projects, eliminating the full-page refresh flicker during polling.
+ - **Elegant Relationship Map**: Simplified the character connection SVG with smaller nodes and a more compact vertical layout for a cleaner dashboard experience.
+ - **AI Pipeline Step Indexing**: Fixed sequential numbering and labeling of generation phases in the backend for more accurate progress tracking.
  
  ## v0.1.122 (2026-04-02)
  ### ✅ Final AI Pipeline Verification & Stabilization
