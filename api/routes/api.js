@@ -3,12 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
-const { Anthropic: AnthropicSDK } = Anthropic || {}; 
 const { supabase, createUserClient, serviceSupabase } = require('../supabaseClient');
-// pg dependency removed as it was redundant with serviceSupabase
 
 // 2. Constants & Helpers
-const GLOBAL_GUEST_UUID = 'e098bba0-8c4e-41c6-8149-41efd79854dc'; // Points to dev.marckim@gmail.com for database referral integrity
+const AnthropicSDK = Anthropic.Anthropic || Anthropic;
+const GLOBAL_GUEST_UUID = 'e098bba0-8c4e-41c6-8149-41efd79854dc';
 
 const logFile = path.resolve(__dirname, '../../api/server.log');
 const log = (msg, level = 'info') => {
@@ -57,31 +56,35 @@ async function getSystemConfig() {
     return defaults;
   }
 
-  // 1. Try Supabase Cloud Config First
-  try {
-    const { data, error } = await serviceSupabase
-      .from('admin_config')
-      .select('*')
-      .eq('key', 'system_config')
-      .maybeSingle();
+    return defaults;
+}
 
-    if (!error && data && data.value) {
-      log('[Config] Loaded from Supabase Cloud: ' + data.value.productionModel);
-      return { ...defaults, ...data.value };
-    }
-  } catch (dbErr) {
-    log('[Config] Cloud load failed, using local fallback.', 'error');
-  }
+/**
+ * Robust AI Calling Helper (v0.1.132)
+ */
+async function callAI(prompt, modelAlias, config, anthropicInstance) {
+  const modelId = modelMap[modelAlias] || modelAlias || 'claude-sonnet-4-6';
+  const systemPrompt = config.systemPrompt || "당신은 세계적인 K-드라마 전문 작가이자 제작 전문가입니다. 모든 출력은 반드시 JSON 형식으로만 제공하세요.";
 
-  // 2. Fallback to local file if cloud fails
   try {
-    if (fs.existsSync(configPath)) {
-    }
+    const response = await anthropicInstance.messages.create({
+      model: modelId,
+      max_tokens: 8192,
+      system: systemPrompt,
+      messages: [{ role: "user", content: prompt }]
+    });
+
+    let text = response.content[0].text;
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) text = jsonMatch[0];
+    
+    // Cleanup known JSON breakages
+    text = text.replace(/,\s*([\}\]])/g, '$1');
+    return JSON.parse(text);
   } catch (err) {
-    console.error('[Config] Failed to read system.json:', err);
+    log(`[AI-Call-Error] Model: ${modelId} | ${err.message}`, 'error');
+    throw err;
   }
-
-  return defaults;
 }
 
 /**
@@ -138,15 +141,6 @@ async function syncProfile(user) {
 }
 
 const router = express.Router();
-
-// Create POOL for direct PostgreSQL access (to bypass RLS for guest/background tasks)
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-});
-
-// Test connection
-pool.query('SELECT NOW()').catch(err => log(`[DB Pool] CRITICAL: Connection failed: ${err.message}`, 'error'));
 
 // Google OAuth URL generator
 router.get('/auth/google', async (req, res) => {
@@ -791,92 +785,64 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
  async function runLocalGeneration(project, options) {
   const { id: projectId } = project;
   const config = await getSystemConfig();
-  const AnthropicClass = AnthropicSDK || Anthropic;
-  const anthropic = new AnthropicClass({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const anthropic = new AnthropicSDK({ apiKey: process.env.ANTHROPIC_API_KEY });
   const inputData = typeof project.input === 'string' ? JSON.parse(project.input) : (project.input || {});
   
-  log(`[AI-Gen] 🚀 Starting Full Pipeline for ${projectId} (v0.1.131)`);
+  log(`[AI-Gen] 🚀 Pipeline Start: ${projectId} (v0.1.132)`);
   
   const updateProject = async (payload) => {
-    const aliasMap = {
-      'characters': 'chars',
-      'episodes_list': 'scripts',
-      'episodesList': 'scripts',
-      'budget_data': 'budget',
-      'budgetData': 'budget',
-      'production_data': 'stats',
-      'productionData': 'stats'
-    };
-    
-    const normalizedPayload = { ...payload };
-    Object.keys(aliasMap).forEach(alias => {
-      if (normalizedPayload[alias] !== undefined && normalizedPayload[aliasMap[alias]] === undefined) {
-        normalizedPayload[aliasMap[alias]] = normalizedPayload[alias];
-        delete normalizedPayload[alias];
-      }
-    });
+    payload.updated_at = new Date().toISOString();
+    // Alias mappings
+    if (payload.characters) { payload.chars = payload.characters; delete payload.characters; }
+    if (payload.episodes) { payload.scripts = payload.episodes; delete payload.episodes; }
 
-    normalizedPayload.updated_at = new Date().toISOString();
-    const { error } = await serviceSupabase.from('projects').update(normalizedPayload).eq('id', projectId);
-    if (error) log(`[AI-Gen-DB] Update Error: ${error.message}`, 'error');
+    const { error } = await serviceSupabase.from('projects').update(payload).eq('id', projectId);
+    if (error) log(`[AI-Gen-DB] Error: ${error.message}`, 'error');
   };
 
   try {
-    // PHASE 1: CORE DRAFT (5%)
-    log(`[AI-Gen] Phase 1: Core Drafting...`);
+    // PHASE 1: CORE (20%)
+    log(`[AI-Gen] Phase 1...`);
     await updateProject({ status: 'generating', pct: 5, stepIdx: 1 });
-    const corePrompt = `드라마 제목, 로그라인, 전체 줄거리(1500자 이상), 주인공 4인의 프로필을 구상해. JSON 출력: { "title": "제목", "logline": "한줄요약", "synopsis": "줄거리", "characters": [{ "name": "이름", "desc": "설명" }] }. 기획안: ${JSON.stringify(inputData)}`;
-    const coreData = await callAI(corePrompt, 'claude-sonnet-4-6', config, anthropic);
-    await updateProject({ 
-        title: coreData.title, 
-        logline: coreData.logline, 
-        synopsis: coreData.synopsis, 
-        chars: coreData.characters || coreData.chars,
-        pct: 20 
-    });
+    const coreData = await callAI(`기획안: ${JSON.stringify(inputData)}. 제목, 로그라인, 줄거리, 캐릭터 4인을 JSON으로 작성해. { "title":"", "logline":"", "synopsis":"", "characters":[] }`, 'claude-sonnet-4-6', config, anthropic);
+    await updateProject({ ...coreData, pct: 20 });
 
-    // PHASE 2: OUTLINE (30%)
-    log(`[AI-Gen] Phase 2: Structural Outline...`);
+    // PHASE 2: OUTLINE (40%)
+    log(`[AI-Gen] Phase 2...`);
     await updateProject({ pct: 25, stepIdx: 2 });
-    const outPrompt = `전체 ${inputData.episodes || 16}회차의 회차별 제목과 한 줄 줄거리를 작성해. JSON 출력: { "episodes": [{ "title": "제목", "logline": "내용" }] }. 로그라인: ${coreData.logline}`;
-    const outlineData = await callAI(outPrompt, 'claude-haiku-4-5-20251001', config, anthropic);
-    await updateProject({ outline: outlineData.episodes || outlineData, pct: 40 });
+    const outData = await callAI(`회차별 제목과 한줄 줄거리 JSON: { "episodes": [] }. 정보: ${coreData.logline}`, 'claude-haiku-4-5', config, anthropic);
+    await updateProject({ outline: outData.episodes || outData, pct: 40 });
 
-    // PHASE 3: SYNOPSIS EXPANSION (50%)
-    log(`[AI-Gen] Phase 3: Detailed Synopsis...`);
+    // PHASE 3: SYNOPSIS (55%)
+    log(`[AI-Gen] Phase 3...`);
     await updateProject({ pct: 45, stepIdx: 3 });
-    const synPrompt = `기승전결 4단 구성을 포함한 심층 시놉시스(3000자 이상)를 작성해. JSON 출력: { "synopsis": "..." }. 원안: ${coreData.synopsis}`;
-    const synData = await callAI(synPrompt, 'claude-sonnet-4-6', config, anthropic);
+    const synData = await callAI(`심층 시놉시스 JSON: { "synopsis": "" }. 대상: ${coreData.synopsis}`, 'claude-sonnet-4-6', config, anthropic);
     await updateProject({ synopsis: synData.synopsis, pct: 55 });
 
-    // PHASE 4: CONFLICT ANALYSIS (New - 65%)
-    log(`[AI-Gen] Phase 4: Conflict Analysis...`);
+    // PHASE 4: CONFLICTS (75%)
+    log(`[AI-Gen] Phase 4...`);
     await updateProject({ pct: 60, stepIdx: 4 });
-    const conPrompt = `작품의 핵심 갈등 3종(내적, 인물간, 사회적)을 분석해. JSON 출력: { "conflicts": [{ "type": "...", "desc": "...", "impact": "..." }] }. 대상: ${synData.synopsis}`;
-    const conData = await callAI(conPrompt, 'claude-haiku-4-5-20251001', config, anthropic);
+    const conData = await callAI(`갈등 요소 분석 JSON: { "conflicts": [] }. 대상: ${synData.synopsis}`, 'claude-haiku-4-5', config, anthropic);
     await updateProject({ conflicts: conData.conflicts || conData, pct: 75 });
 
-    // PHASE 5: CHARACTER PERSONA (85%)
-    log(`[AI-Gen] Phase 5: Persona Profiles...`);
+    // PHASE 5: PERSONA (90%)
+    log(`[AI-Gen] Phase 5...`);
     await updateProject({ pct: 80, stepIdx: 5 });
-    const charPrompt = `주연 캐릭터들의 심층 프로필과 예상 대사를 작성해. JSON 출력: { "characters": [...] }. 갈등구조: ${JSON.stringify(conData)}`;
-    const charData = await callAI(charPrompt, 'claude-haiku-4-5-20251001', config, anthropic);
+    const charData = await callAI(`캐릭터 상세 페르소나 JSON: { "characters": [] }. 갈등구조: ${JSON.stringify(conData)}`, 'claude-haiku-4-5', config, anthropic);
     await updateProject({ chars: charData.characters || charData.chars, pct: 90 });
 
     // PHASE 6: FINAL EPISODES (100%)
-    log(`[AI-Gen] Phase 6: Final Episodes Beats...`);
+    log(`[AI-Gen] Phase 6...`);
     await updateProject({ pct: 95, stepIdx: 6 });
-    const epPrompt = `전체 회차의 제목과 상세 줄거리를 최종 확정해. JSON 출력: { "episodes": [...] }. 요약안: ${JSON.stringify(outlineData)}`;
-    const lastData = await callAI(epPrompt, 'claude-sonnet-4-6', config, anthropic);
-    
+    const epData = await callAI(`최종 회차별 줄거리 JSON: { "episodes": [] }. 정보: ${JSON.stringify(outData)}`, 'claude-sonnet-4-6', config, anthropic);
     await updateProject({ 
-        scripts: lastData.episodes || lastData,
+        scripts: epData.episodes || epData,
         status: 'done',
         pct: 100,
         stepIdx: 7
     });
     
-    log(`[AI-Gen] ✅ Pipeline Finished for ${projectId}`);
+    log(`[AI-Gen] ✅ Pipeline Success: ${projectId}`);
 
   } catch (err) {
     log(`[AI-Gen-Error] ${projectId}: ${err.message}`, 'error');
