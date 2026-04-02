@@ -11,8 +11,8 @@ export function renderNav() {
   if (!nav) return;
 
   if (state.isLoggedIn) {
-    const userEmail = localStorage.getItem('ds_user_email') || 'User';
-    const avatarChar = userEmail[0].toUpperCase();
+    const userEmail = localStorage.getItem('ds_user_email') || state.currentUser?.email || 'User';
+    const avatarChar = userEmail[0]?.toUpperCase() || 'U';
     const avatarUrl = localStorage.getItem('ds_user_avatar');
     
     // Admin Check + Developer Fallback
@@ -64,8 +64,8 @@ export async function handleLogout() {
 }
 
 export function handleStartBtn() {
-  console.log('[DEBUG] handleStartBtn triggered. LoggedIn:', state.isLoggedIn);
-  if (!state.isLoggedIn) {
+  console.log('[DEBUG] handleStartBtn triggered. LoggedIn:', state.isLoggedIn, 'GuestMode:', state.isGuestMode);
+  if (!state.isLoggedIn && !state.isGuestMode) {
     showLoginModal();
     return;
   }
@@ -170,7 +170,7 @@ export function enterGuestMode() {
 export function fetchUserProfile() {
   return new Promise(async (resolve) => {
     const token = localStorage.getItem('ds_auth_token');
-    if (!token) return resolve(null);
+    if (!token || token === 'mock_token') return resolve(null);
 
     try {
       const res = await fetch('/api/profile', {
@@ -180,18 +180,28 @@ export function fetchUserProfile() {
       if (res.ok) {
         const profile = await res.json();
         state.userProfile = profile;
-        state.isLoggedIn = true;
         
-        // Sync to localStorage for persistent initial state
-        if (profile.email) localStorage.setItem('ds_user_email', profile.email);
-        if (profile.role) localStorage.setItem('ds_user_role', profile.role);
-        if (profile.credits !== undefined) localStorage.setItem('ds_user_credits', profile.credits);
-        if (profile.plan) localStorage.setItem('ds_user_plan', profile.plan);
+        // Only mark as logged in if it's a real user role
+        const isGuest = profile.role === 'guest';
         
-        // Clear guest mode on successful server profile sync
-        localStorage.removeItem('ds_guest_mode');
-        state.isGuestMode = false;
-        state.isLoggedIn = true; // Confirm state is fully logged in
+        if (isGuest) {
+          state.isLoggedIn = false;
+          state.isGuestMode = localStorage.getItem('ds_guest_mode') === 'true';
+        } else {
+          state.isLoggedIn = true;
+          state.isGuestMode = false;
+          
+          // Sync to localStorage for persistent initial state
+          if (profile.email) {
+            localStorage.setItem('ds_user_email', profile.email);
+            state.currentUser.email = profile.email;
+          }
+          if (profile.role) localStorage.setItem('ds_user_role', profile.role);
+          if (profile.credits !== undefined) localStorage.setItem('ds_user_credits', profile.credits);
+          if (profile.plan) localStorage.setItem('ds_user_plan', profile.plan);
+          
+          localStorage.removeItem('ds_guest_mode');
+        }
 
         renderNav();
         resolve(profile);

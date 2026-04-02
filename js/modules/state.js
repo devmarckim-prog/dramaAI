@@ -3,7 +3,7 @@
  */
 
 export const state = {
-  isLoggedIn: !!localStorage.getItem('ds_auth_token'),
+  isLoggedIn: !!localStorage.getItem('ds_auth_token') && localStorage.getItem('ds_auth_token') !== 'mock_token',
   isGuestMode: localStorage.getItem('ds_guest_mode') === 'true',
   currentUser: { 
     email: localStorage.getItem('ds_user_email') || null,
