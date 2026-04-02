@@ -29,8 +29,18 @@ export async function renderProjectCards() {
         if (card) {
           const bar = card.querySelector('.pcg-bar-fill-dynamic');
           const labels = card.querySelectorAll('.pcg-progress-wrap span');
-          if (bar) bar.style.width = (p.pct || 0) + '%';
-          if (labels.length >= 2) labels[1].textContent = (p.pct || 0) + '%';
+          if (bar) {
+             const currentWidth = parseFloat(bar.style.width) || 0;
+             const newPct = p.pct || 0;
+             if (newPct >= currentWidth || newPct === 100) {
+               bar.style.width = newPct + '%';
+             }
+          }
+          if (labels.length >= 2) {
+             labels[0].textContent = (typeof p.stepIdx === 'number' && p.stepIdx >= 0 && p.stepIdx <= 5) ? 
+                ['드라마 기본 구조 설계 중...', '주요 등장인물 구체화 중...', '회차별 스토리 아웃라인 구성 중...', '상세 시나리오 대본 집필 중...', '사전 제작 예산 산출 중...', '마무리 및 PPL 브랜드 기획 중...'][p.stepIdx] : 'AI 작가 집필 중...';
+             labels[1].textContent = (p.pct || 0) + '%';
+          }
         } else {
           // Card for this generating project missing? Force full render just in case
           _performFullRender(wrap, sorted);
@@ -80,6 +90,15 @@ function _performFullRender(wrap, projects) {
     'error': '생성 중 오류 발생'
   };
 
+  const stepLabels = [
+    '드라마 기본 구조 설계 중...',
+    '주요 등장인물 구체화 중...',
+    '회차별 스토리 아웃라인 구성 중...',
+    '상세 시나리오 대본 집필 중...',
+    '사전 제작 예산 산출 중...',
+    '마무리 및 PPL 브랜드 기획 중...'
+  ];
+
   projects.forEach(rawP => {
     const p = normalizeProject(rawP);
     const isErr = p.status === 'error';
@@ -105,7 +124,10 @@ function _performFullRender(wrap, projects) {
     </div>`;
 
     if (isGen || isErr || p.status === 'sample_done' || p.status === 'done') {
-      const statusText = statusLabels[p.status] || '진행 중';
+      let statusText = statusLabels[p.status] || '진행 중';
+      if (isGen && typeof p.stepIdx === 'number' && p.stepIdx >= 0 && p.stepIdx < stepLabels.length) {
+        statusText = stepLabels[p.stepIdx];
+      }
       const isPaused = p.status === 'sample_done';
 
       html += `
@@ -121,6 +143,8 @@ function _performFullRender(wrap, projects) {
                 ${isErr ? 'AI 생성 실패' : (isPaused ? '기획안 검토 가능' : (p.status === 'done' ? '드라마 완성' : 'AI 작가 집필 중'))}
               </div>
               <div class="project-card-title-slate" style="${isErr ? 'color: #ffcccc;' : ''}">${p.title || '새 드라마'}</div>
+              
+              ${p.status !== 'done' ? `
               <div class="pcg-progress-wrap">
                   <div class="project-card-meta-row" style="color:#fff; font-size:10px; margin-bottom:4px;">
                     <span>${statusText}</span>
@@ -130,6 +154,7 @@ function _performFullRender(wrap, projects) {
                     <div class="pcg-bar-fill pcg-bar-fill-dynamic" style="width:${pct}%; background:${isErr ? '#ff4d4d' : (isPaused ? '#4CAF50' : 'var(--gold)')};"></div>
                   </div>
               </div>
+              ` : ''}
               
               ${isPaused ? `
                 <div class="project-card-action-bar" style="margin-top:12px;">

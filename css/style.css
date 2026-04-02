@@ -1731,8 +1731,7 @@ body {
   display: grid;
   grid-template-columns: 256px 1fr;
   gap: 0;
-  height: calc(100vh - 56px - 320px);
-  min-height: 600px
+  min-height: calc(100vh - 64px);
 }
 
 .result-sidebar {
@@ -7210,13 +7209,19 @@ body {
   display: flex;
   flex-direction: column;
   padding: 20px 0;
+  height: calc(100vh - 64px);
+  position: sticky;
+  top: 64px;
+  overflow-y: auto;
+  flex-shrink: 0;
 }
 
 .result-main {
   flex: 1;
   padding: 40px;
   background: var(--paper);
-  height: 100%;
+  min-height: calc(100vh - 64px);
+  overflow-y: visible;
 }
 
 .sidebar-item {

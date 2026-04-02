@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const Anthropic = require('@anthropic-ai/sdk');
+// const { GoogleGenerativeAI } = require('@google/generative-ai');
 const { supabase, createUserClient, serviceSupabase } = require('../supabaseClient');
 
 // 2. Constants & Helpers
@@ -26,13 +27,17 @@ const log = (msg, level = 'info') => {
 
 // 3. Global Configuration & Model Map
 const modelMap = {
+  // Anthropic
   'claude-haiku-4-5': 'claude-haiku-4-5-20251001',
   'claude-sonnet-4-6': 'claude-sonnet-4-6',
   'claude-opus-4-6': 'claude-opus-4-6',
   'claude-3-5-sonnet-latest': 'claude-sonnet-4-6',
   'claude-3-5-haiku-latest': 'claude-haiku-4-5-20251001',
   'claude-3-5-sonnet-20241022': 'claude-sonnet-4-6',
-  'claude-3-5-haiku-20241022': 'claude-haiku-4-5-20251001'
+  'claude-3-5-haiku-20241022': 'claude-haiku-4-5-20251001',
+  // Gemini
+  'gemini-1.5-flash': 'gemini-1.5-flash',
+  'gemini-1.5-pro': 'gemini-1.5-pro'
 };
 
 const getModelId = (alias) => modelMap[alias] || alias || 'claude-sonnet-4-6';
@@ -60,21 +65,18 @@ async function getSystemConfig() {
 }
 
 /**
- * Robust AI Calling Helper (v0.1.132)
+ * Robust AI Calling Helper (v0.2.0 - Multi-Provider)
+ * Refactored to use callUnifiedAI for automatic fallback
  */
 async function callAI(prompt, modelAlias, config, anthropicInstance) {
-  const modelId = modelMap[modelAlias] || modelAlias || 'claude-sonnet-4-6';
-  const systemPrompt = config.systemPrompt || "당신은 세계적인 K-드라마 전문 작가이자 제작 전문가입니다. 모든 출력은 반드시 JSON 형식으로만 제공하세요.";
-
   try {
-    const response = await anthropicInstance.messages.create({
-      model: modelId,
-      max_tokens: 8192,
-      system: systemPrompt,
-      messages: [{ role: "user", content: prompt }]
-    });
+    const raw = await callUnifiedAI({
+      prompt: prompt,
+      system: config.systemPrompt || "당신은 세계적인 K-드라마 전문 작가이자 제작 전문가입니다. 모든 출력은 반드시 JSON 형식으로만 제공하세요.",
+      modelAlias: modelAlias
+    }, config, anthropicInstance);
 
-    let text = response.content[0].text;
+    let text = raw;
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (jsonMatch) text = jsonMatch[0];
     
@@ -82,7 +84,7 @@ async function callAI(prompt, modelAlias, config, anthropicInstance) {
     text = text.replace(/,\s*([\}\]])/g, '$1');
     return JSON.parse(text);
   } catch (err) {
-    log(`[AI-Call-Error] Model: ${modelId} | ${err.message}`, 'error');
+    log(`[AI-Call-Final-Error] ${err.message}`, 'error');
     throw err;
   }
 }
@@ -133,6 +135,19 @@ async function syncProfile(user) {
       }
       return newProfile;
     }
+
+    // [Fix] If the user is fully logged in with an email, but the DB somehow has 'guest@dramascript.ai', upgrade it.
+    if (profile && user.email && profile.email.includes('guest@') && !user.isGuest) {
+      log(`[Profile Sync] Upgrading guest email to ${user.email} for ${profileId}`);
+      const { data: updated } = await serviceSupabase
+        .from('user_profiles')
+        .update({ email: user.email, role: isPrimaryEmail ? 'admin' : 'user' })
+        .eq('id', profileId)
+        .select()
+        .single();
+      if (updated) return updated;
+    }
+
     return profile;
   } catch (err) {
     console.error('[Profile Sync] Critical Error:', err);
@@ -607,7 +622,7 @@ router.post('/generate/start', authMiddleware, async (req, res) => {
 router.post('/generate/step', authMiddleware, async (req, res) => {
   const { projectId, step, input: clientInput } = req.body;
   const config = await getSystemConfig();
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const anthropicClient = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   
   log(`[Generate-Step] Project: ${projectId}, Step: ${step}`);
 
@@ -667,64 +682,32 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
     switch (parseInt(step)) {
       case 0: // Phase 1: Logline & Genre (15%)
         const loglinePrompt = `드라마 기획안의 핵심 컨셉을 작성해줘. 로그라인 시드: ${inputData.logline || inputData.topic || '자유 주제'}. 장르: ${inputData.genre || '드라마'}. 다음 JSON 형식으로 응답해: {"title": "제목", "genre": "장르", "logline": "한 줄 로그라인"}`;
-        const res0 = await anthropic.messages.create({
-          model: getModelId(config.productionModel),
-          max_tokens: 1024,
-          system: config.systemPrompt,
-          messages: [{ role: 'user', content: loglinePrompt }]
-        });
-        const text0 = res0.content[0].text;
-        resultData = JSON.parse(text0.match(/\{[\s\S]*\}/)?.[0] || text0.substring(text0.indexOf('{'), text0.lastIndexOf('}') + 1));
+        resultData = await callAI(loglinePrompt, config.productionModel, config, anthropicClient);
         await updateProject({ ...resultData, pct: 20, stepIdx: 1 });
         break;
 
       case 2: // Phase 3: Synopsis (45%)
         const synopPrompt = `제목: ${project.title || resultData.title}. 로그라인: ${project.logline || resultData.logline}. 이 드라마의 전체 줄거리(시놉시스)를 1000자 내외로 상세히 작성해줘. JSON 형식: {"synopsis": "내용"}`;
-        const synopResp = await anthropic.messages.create({
-          model: getModelId(config.productionModel),
-          max_tokens: 2048,
-          system: config.systemPrompt,
-          messages: [{ role: 'user', content: synopPrompt }]
-        });
-        resultData = JSON.parse(synopResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
+        resultData = await callAI(synopPrompt, config.productionModel, config, anthropicClient);
         await updateProject({ synopsis: resultData.synopsis, pct: 45, stepIdx: 3 });
         break;
 
       case 3: // Phase 4: Conflicts (60%)
         const conflictPrompt = `드라마 "${project.title}"의 주요 갈등 구조를 분석해줘. 내적 갈등, 대인 갈등, 사회적/환경적 갈등을 포함해. JSON 형식: {"conflicts": [{"type": "내적/대인/사회", "character": "인물명", "desc": "갈등 내용"}]}`;
-        const conflictResp = await anthropic.messages.create({
-          model: getModelId(config.productionModel),
-          max_tokens: 1024,
-          system: config.systemPrompt,
-          messages: [{ role: 'user', content: conflictPrompt }]
-        });
-        resultData = JSON.parse(conflictResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
+        resultData = await callAI(conflictPrompt, config.productionModel, config, anthropicClient);
         await updateProject({ conflicts: resultData.conflicts, pct: 60, stepIdx: 4 });
         break;
 
       case 4: // Phase 5: Characters (75%)
         const charPrompt = `드라마 "${project.title || resultData.title}"의 주요 인물 3명을 설정해줘. 이름, 성격, 나이, 역할을 포함해. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
-        const charResp = await anthropic.messages.create({
-          model: getModelId(config.productionModel),
-          max_tokens: 2048,
-          system: config.systemPrompt,
-          messages: [{ role: 'user', content: charPrompt }]
-        });
-        resultData = JSON.parse(charResp.content[0].text.match(/\{[\s\S]*\}/)[0]);
+        resultData = await callAI(charPrompt, config.productionModel, config, anthropicClient);
         await updateProject({ chars: resultData.chars, pct: 75, stepIdx: 5 });
         break;
 
       case 5: // Phase 6: Episodes (90%)
         const epCount = project.episodes || 8;
         const epPrompt = `드라마 "${project.title}"의 전 ${epCount}회차 구성을 JSON으로 작성해줘. 회차별 제목과 요약을 포함해. JSON 형식: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;
-        const res5 = await anthropic.messages.create({
-          model: getModelId(config.planningModel),
-          max_tokens: 4096,
-          system: config.systemPrompt,
-          messages: [{ role: 'user', content: epPrompt }]
-        });
-        const text5 = res5.content[0].text;
-        resultData = JSON.parse(text5.match(/\{[\s\S]*\}/)?.[0] || text5.substring(text5.indexOf('{'), text5.lastIndexOf('}') + 1));
+        resultData = await callAI(epPrompt, config.planningModel, config, anthropicClient);
         await updateProject({ scripts: resultData.episodes, pct: 90, stepIdx: 6 });
         break;
 
@@ -749,23 +732,26 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
  
  
  /**
-  * Unified AI Calling Helper
+  * Unified AI Calling Helper (Anthropic -> Gemini Fallback)
   */
  const callUnifiedAI = async (params, config, anthropicClient) => {
    const { prompt, system, max_tokens, modelAlias, customApiKey } = params;
-   
-   // Use custom key if provided (from user header), otherwise use the provided client or the default global one
-   const localAnthropic = customApiKey ? new Anthropic({ apiKey: customApiKey }) : anthropicClient;
- 
-   if (customApiKey || process.env.ANTHROPIC_API_KEY) {
+   const anthropicKey = customApiKey || process.env.ANTHROPIC_API_KEY;
+   const geminiKey = process.env.GEMINI_API_KEY;
+
+   const finalSystem = system || config.systemPrompt || "당신은 세계적인 K-드라마 전문 작가이자 제작 전문가입니다.";
+
+   // 1. Try Anthropic first if key available
+   if (anthropicKey) {
      try {
+       const localAnthropic = customApiKey ? new Anthropic({ apiKey: customApiKey }) : (anthropicClient || new Anthropic({ apiKey: anthropicKey }));
        const modelId = modelMap[modelAlias] || modelAlias || 'claude-sonnet-4-6';
-       log(`[AI-Call] Attempting Anthropic (${modelId})...`);
        
+       log(`[AI-Call] Attempting Anthropic (${modelId})...`);
        const resp = await localAnthropic.messages.create({
          model: modelId,
          max_tokens: max_tokens || 8192,
-         system: system || config.systemPrompt,
+         system: finalSystem,
          messages: [{ role: 'user', content: prompt }]
        });
        
@@ -773,10 +759,34 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
      } catch (err) {
        log(`[AI-Call] Anthropic failed: ${err.message}`, 'error');
        throw err;
+       /* Gemini Fallback - 현재 비활성화됨
+       log(`[AI-Call] Anthropic failed: ${err.message}. ${geminiKey ? 'Attempting Gemini fallback...' : 'No fallback key available.'}`, 'error');
+       if (!geminiKey) throw err;
+       */
      }
    }
- 
-   throw new Error('No AI Providers available (Missing or restricted keys)');
+
+   /* --- Gemini Fallback (주석 처리됨) ---
+   if (geminiKey) {
+     try {
+       log(`[AI-Call] Attempting Gemini (gemini-1.5-flash)...`);
+       const genAI = new GoogleGenerativeAI(geminiKey);
+       const model = genAI.getGenerativeModel({ 
+         model: "gemini-1.5-flash",
+         systemInstruction: finalSystem
+       });
+
+       const result = await model.generateContent(prompt);
+       const response = await result.response;
+       return response.text();
+     } catch (gemErr) {
+       log(`[AI-Call] Gemini failed: ${gemErr.message}`, 'error');
+       throw gemErr;
+     }
+   }
+   --------------------------------------- */
+
+   throw new Error('No AI Providers available (Anthropic key missing or failed)');
  };
  
  /**
