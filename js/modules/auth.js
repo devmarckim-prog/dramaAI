@@ -50,17 +50,26 @@ export function renderNav() {
 }
 
 export async function handleLogout() {
+  console.log('[Auth] Logging out...');
+  
+  // 1. Purge ALL user and guest metadata to prevent identity leakage
   localStorage.removeItem('ds_auth_token');
   localStorage.removeItem('ds_user_email');
   localStorage.removeItem('ds_user_avatar');
+  localStorage.removeItem('ds_user_role');
+  localStorage.removeItem('ds_user_credits');
+  localStorage.removeItem('ds_user_plan');
   localStorage.removeItem('ds_guest_mode');
+  localStorage.removeItem('ds_guest_fingerprint'); // Clear guest ID too
+  
   state.isLoggedIn = false;
-  state.currentUser = null;
-  state.userProfile = { role: 'user', credits: 0, plan: 'Free' };
   state.isGuestMode = false;
-  showToast('로그아웃되었습니다.', 'info');
-  showPage('home');
+  state.currentUser = { email: 'Guest', avatar: '' };
+  state.userProfile = { role: 'user', credits: 0, plan: 'Free' };
+  
   renderNav();
+  showPage('home');
+  showToast('성공적으로 로그아웃되었습니다.', 'success');
 }
 
 export function handleStartBtn() {
@@ -128,8 +137,12 @@ export async function doLogin(provider) {
   }
 
   if (provider === 'google') {
-    localStorage.removeItem('ds_guest_mode'); // Clear guest mode BEFORE trying to login
-    localStorage.removeItem('ds_auth_token'); // Clear any old token
+    // 2. Pre-emptive purge before redirecting to Google
+    localStorage.removeItem('ds_guest_mode');
+    localStorage.removeItem('ds_auth_token');
+    localStorage.removeItem('ds_user_email');
+    localStorage.removeItem('ds_user_avatar');
+    
     state.isGuestMode = false;
     state.isLoggedIn = false;
     
@@ -182,11 +195,14 @@ export function fetchUserProfile() {
         state.userProfile = profile;
         
         // Only mark as logged in if it's a real user role
-        const isGuest = profile.role === 'guest';
-        
         if (isGuest) {
           state.isLoggedIn = false;
           state.isGuestMode = localStorage.getItem('ds_guest_mode') === 'true';
+          
+          // Identity Hardening: Force clear any lingering user email if the role is guest
+          localStorage.removeItem('ds_user_email');
+          localStorage.removeItem('ds_user_avatar');
+          state.currentUser.email = 'Guest';
         } else {
           state.isLoggedIn = true;
           state.isGuestMode = false;

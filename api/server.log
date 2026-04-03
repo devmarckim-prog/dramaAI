@@ -12852,3 +12852,31 @@
 [2026-04-03T00:00:04.631Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
 [2026-04-03T00:00:04.675Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
 [2026-04-03T00:00:04.677Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:03:11.849Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.882Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.884Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.885Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.908Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.909Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.910Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.911Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.911Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.913Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.916Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.918Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.919Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.922Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.923Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:11.923Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:03:12.141Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:03:12.198Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:03:12.253Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:03:12.254Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:03:14.903Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:03:14.904Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T00:03:14.904Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:03:28.741Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:03:28.743Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:03:29.930Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:03:29.931Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T00:03:29.933Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...

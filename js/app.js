@@ -138,8 +138,14 @@ async function initApp() {
       localStorage.removeItem('ds_guest_mode'); // Force clear guest mode on OAuth return
       try {
         const payload = JSON.parse(atob(accessToken.split('.')[1]));
-        if (payload.email) localStorage.setItem('ds_user_email', payload.email);
-        if (payload.user_metadata?.avatar_url) localStorage.setItem('ds_user_avatar', payload.user_metadata.avatar_url);
+        if (payload.email) {
+          localStorage.setItem('ds_user_email', payload.email);
+          state.currentUser.email = payload.email;
+        }
+        if (payload.user_metadata?.avatar_url) {
+          localStorage.setItem('ds_user_avatar', payload.user_metadata.avatar_url);
+          state.currentUser.avatar = payload.user_metadata.avatar_url;
+        }
         Nav.addDebugLog(`사용자 로그인 성공: ${payload.email}`, "success");
       } catch (e) {
         Nav.addDebugLog("토큰 파싱 실패", "error");

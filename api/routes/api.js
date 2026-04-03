@@ -95,20 +95,22 @@ async function callAI(prompt, modelAlias, config, anthropicInstance) {
 async function syncProfile(user) {
   if (!user) return null;
 
-  // If guest, return a mock profile
-  if (user.id === GLOBAL_GUEST_UUID || user.isGuest) {
-    return { id: user.id, email: 'guest@dramascript.ai', role: 'guest', plan: 'Free', credits: 999 };
+  // Use metadata email if top-level email is missing (common in Supabase OAuth)
+  const userEmail = user.email || user.user_metadata?.email;
+  
+  // 1. Strict Guest Guard: Only return mock guest if isGuest flag is EXPLICITLY true
+  if (user.isGuest === true || user.id === GLOBAL_GUEST_UUID) {
+    return { id: user.id || GLOBAL_GUEST_UUID, email: 'guest@dramascript.ai', role: 'guest', plan: 'Free', credits: 999 };
   }
 
-  // High-priority Admin rule for new users or domain-level control
-  const isPrimaryEmail = user.email && (user.email.endsWith('@dramascript.ai') || user.email === 'dev.marckim@gmail.com');
+  // 2. High-priority Admin rule for new users or domain-level control
+  const isPrimaryEmail = userEmail && (userEmail.endsWith('@dramascript.ai') || userEmail === 'dev.marckim@gmail.com');
 
   const config = await getSystemConfig();
   const defaultCredits = config.creditsFree || 10;
 
   try {
-    // 1. Fetch current profile - Chain all methods in one expression (Supabase queries are immutable!)
-    const profileId = (user.isGuest && user.fingerprint) ? user.fingerprint : user.id;
+    const profileId = user.id;
     const { data: profile, error } = await serviceSupabase
       .from('user_profiles')
       .select('*')
@@ -116,13 +118,13 @@ async function syncProfile(user) {
       .single();
 
     if (error) {
-      console.log(`[Profile Sync] Creating/Updating profile for ${user.email || 'Guest'}`);
+      log(`[Profile Sync] Creating NEW profile for ${userEmail || 'AuthUser'}`);
       const { data: newProfile, error: insErr } = await serviceSupabase
         .from('user_profiles')
         .upsert({
           id: profileId,
-          email: user.email || `guest-${(user.fingerprint || 'anon').slice(0, 8)}@dramascript.ai`,
-          role: isPrimaryEmail ? 'admin' : (user.isGuest ? 'guest' : 'user'),
+          email: userEmail || `user-${profileId.slice(0, 8)}@dramascript.ai`,
+          role: isPrimaryEmail ? 'admin' : 'user',
           plan: 'Free',
           credits: defaultCredits,
           updated_at: new Date().toISOString()
@@ -131,17 +133,17 @@ async function syncProfile(user) {
         .single();
       if (insErr) {
         console.error('[Profile Sync] UPSERT error:', insErr.message);
-        return { id: profileId, email: user.email, role: user.isGuest ? 'guest' : 'user', plan: 'Free', credits: defaultCredits };
+        return { id: profileId, email: userEmail, role: 'user', plan: 'Free', credits: defaultCredits };
       }
       return newProfile;
     }
 
-    // [Fix] If the user is fully logged in with an email, but the DB somehow has 'guest@dramascript.ai', upgrade it.
-    if (profile && user.email && profile.email.includes('guest@') && !user.isGuest) {
-      log(`[Profile Sync] Upgrading guest email to ${user.email} for ${profileId}`);
+    // 3. Identity Recovery: If the user is fully logged in with an email, but the DB has 'guest@...', upgrade it immediately.
+    if (profile && userEmail && profile.email.includes('guest@')) {
+      log(`[Profile Sync] Upgrading guest identity to ${userEmail} for ${profileId}`);
       const { data: updated } = await serviceSupabase
         .from('user_profiles')
-        .update({ email: user.email, role: isPrimaryEmail ? 'admin' : 'user' })
+        .update({ email: userEmail, role: isPrimaryEmail ? 'admin' : 'user' })
         .eq('id', profileId)
         .select()
         .single();
