@@ -2,7 +2,7 @@
  * Global State Management
  */
 
-export const APP_VERSION = 'v0.25';
+export const APP_VERSION = 'v0.26';
 
 export const state = {
   isLoggedIn: !!localStorage.getItem('ds_auth_token') && localStorage.getItem('ds_auth_token') !== 'mock_token',

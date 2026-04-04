@@ -303,22 +303,22 @@ export function buildRelationMap() {
   const female = chars.find(c => c.role === '여주' || (c.gender && c.gender.includes('여'))) || chars[0];
   const subs = chars.filter(c => c !== male && c !== female).slice(0, 4);
 
-  const W = 800, H = 350; 
-  const cx = W / 2, cy = H / 2 + 20;
-  const mPos = { x: cx - 140, y: cy + 20 };
-  const fPos = { x: cx + 140, y: cy + 20 };
+  const W = 600, H = 220; 
+  const cx = W / 2, cy = H / 2 + 10;
+  const mPos = { x: cx - 100, y: cy + 15 };
+  const fPos = { x: cx + 100, y: cy + 15 };
 
   const arcPositions = [
-    { x: cx - 220, y: cy - 70 }, 
-    { x: cx - 70, y: cy - 100 },
-    { x: cx + 70, y: cy - 100 }, 
-    { x: cx + 220, y: cy - 70 },
+    { x: cx - 180, y: cy - 60 }, 
+    { x: cx - 60, y: cy - 80 },
+    { x: cx + 60, y: cy - 80 }, 
+    { x: cx + 180, y: cy - 60 },
   ];
 
-  let svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto; overflow:visible" xmlns="http://www.w3.org/2000/svg">
+  let svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%; max-width: 800px; height:auto; overflow:visible; margin: 0 auto; display: block;" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <filter id="nodeShadow" x="-50%" y="-50%" width="200%" height="200%">
-        <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.1"/>
+        <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/>
       </filter>
       <linearGradient id="gradGold" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:1" />
@@ -335,25 +335,25 @@ export function buildRelationMap() {
     </defs>`;
 
   // Draw Links with organic curves
-  svg += `<path d="M ${mPos.x} ${mPos.y} Q ${cx} ${cy - 40} ${fPos.x} ${fPos.y}" fill="none" stroke="url(#gradGold)" stroke-width="3" opacity="0.6" stroke-dasharray="0" />`;
+  svg += `<path d="M ${mPos.x} ${mPos.y} Q ${cx} ${cy - 30} ${fPos.x} ${fPos.y}" fill="none" stroke="url(#gradGold)" stroke-width="2.5" opacity="0.6" stroke-dasharray="0" />`;
   svg += `
-    <g transform="translate(${cx}, ${cy - 25})">
-      <rect x="-40" y="-10" width="80" height="20" rx="10" fill="#fff" stroke="#D4AF37" stroke-width="1"/>
-      <text font-size="10" fill="#D4AF37" text-anchor="middle" dominant-baseline="middle" font-weight="900">MAIN COUPLE</text>
+    <g transform="translate(${cx}, ${cy - 20})">
+      <rect x="-35" y="-8" width="70" height="16" rx="8" fill="#fff" stroke="#D4AF37" stroke-width="0.5"/>
+      <text font-size="8" fill="#D4AF37" text-anchor="middle" dominant-baseline="middle" font-weight="900">MAIN COUPLE</text>
     </g>
   `;
 
   subs.forEach((c, i) => {
     const pos = arcPositions[i];
     if (!pos) return;
-    svg += `<path d="M ${pos.x} ${pos.y} L ${cx} ${cy}" stroke="#eee" stroke-width="1" stroke-dasharray="4,2" opacity="0.8"/>`;
+    svg += `<path d="M ${pos.x} ${pos.y} L ${cx} ${cy}" stroke="#eee" stroke-width="1" stroke-dasharray="3,2" opacity="0.8"/>`;
   });
 
   const nodeHtml = (p, n, grad, isMain = false) => `
     <g class="rel-node" onclick="selectCharByName('${n}')" style="cursor:pointer" filter="url(#nodeShadow)">
-      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 28 : 22}" fill="${grad}" stroke="#fff" stroke-width="2"/>
-      <text x="${p.x}" y="${p.y}" font-size="${isMain ? 14 : 11}" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="900">${n[0]}</text>
-      <text x="${p.x}" y="${p.y + (isMain ? 45 : 35)}" font-size="12" fill="#1A1A1B" text-anchor="middle" font-weight="800">${n}</text>
+      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 22 : 18}" fill="${grad}" stroke="#fff" stroke-width="1.5"/>
+      <text x="${p.x}" y="${p.y}" font-size="${isMain ? 12 : 10}" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="900">${n[0]}</text>
+      <text x="${p.x}" y="${p.y + (isMain ? 36 : 28)}" font-size="11" fill="var(--ink)" text-anchor="middle" font-weight="800">${n}</text>
     </g>`;
 
   svg += nodeHtml(mPos, male.name, 'url(#gradGold)', true);
