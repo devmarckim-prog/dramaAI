@@ -831,6 +831,13 @@ async function renderAdminConfig(container) {
                   <label class="admin-config-label">JSON_REPAIR (JSON 구조 자동 복구)</label>
                   <textarea id="p-json-repair" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.JSON_REPAIR || ''}</textarea>
                 </div>
+                <div class="admin-config-group" style="margin-top:16px; border-top:1px solid rgba(255,255,255,0.05); padding-top:16px">
+                  <label class="admin-config-label" style="color:var(--teal)">🛡️ USER_CONTEXT_WRAPPER (유저 설정 주입 템플릿)</label>
+                  <textarea id="p-context-wrapper" class="admin-config-input admin-config-textarea" style="min-height: 120px; font-size:12px; color:var(--teal); background:rgba(29,158,117,0.05)">${config.prompts?.CONTEXT_WRAPPER || ''}</textarea>
+                  <div style="font-size:10px; color:#777; margin-top:6px">
+                    사용 가능한 변수: <code style="color:var(--gold)">{characters}</code>, <code style="color:var(--gold)">{era}</code>, <code style="color:var(--gold)">{target}</code>, <code style="color:var(--gold)">{setting}</code>, <code style="color:var(--gold)">{extra}</code>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -886,7 +893,8 @@ window.saveAdminConfig = async function(btn) {
     PPL: document.getElementById('p-ppl').value,
     SCRIPT: document.getElementById('p-script').value,
     // System
-    JSON_REPAIR: document.getElementById('p-json-repair').value
+    JSON_REPAIR: document.getElementById('p-json-repair').value,
+    CONTEXT_WRAPPER: document.getElementById('p-context-wrapper').value
   };
   
   if (btn) { btn.disabled = true; btn.textContent = '저장 중...'; }

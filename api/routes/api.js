@@ -196,19 +196,14 @@ async function syncProfile(user) {
   // Use metadata email if top-level email is missing (common in Supabase OAuth)
   const userEmail = user.email || user.user_metadata?.email;
   
-  // 1. Strict Guest Guard: Only return mock guest if isGuest flag is EXPLICITLY true
-  if (user.isGuest === true || user.id === GLOBAL_GUEST_UUID) {
-    return { id: user.id || GLOBAL_GUEST_UUID, email: 'guest@dramascript.ai', role: 'guest', plan: 'Free', credits: 999 };
-  }
-
-  // 2. High-priority Admin rule for new users or domain-level control
   const isPrimaryEmail = userEmail && (userEmail.endsWith('@dramascript.ai') || userEmail === 'dev.marckim@gmail.com');
-
+  const isGuestUser = user.isGuest === true || user.id === GLOBAL_GUEST_UUID;
+  const guestId = user.id || GLOBAL_GUEST_UUID;
   const config = await getSystemConfig();
   const defaultCredits = config.creditsFree || 10;
 
   try {
-    const profileId = user.id;
+    const profileId = isGuestUser ? guestId : user.id;
     const { data: profile, error } = await serviceSupabase
       .from('user_profiles')
       .select('*')
@@ -216,21 +211,22 @@ async function syncProfile(user) {
       .single();
 
     if (error) {
-      log(`[Profile Sync] Creating NEW profile for ${userEmail || 'AuthUser'}`);
+      log(`[Profile Sync] Creating NEW profile for ${userEmail || (isGuestUser ? 'Guest' : 'AuthUser')}`);
       const { data: newProfile, error: insErr } = await serviceSupabase
         .from('user_profiles')
         .upsert({
           id: profileId,
-          email: userEmail || `user-${profileId.slice(0, 8)}@dramascript.ai`,
-          role: isPrimaryEmail ? 'admin' : 'user',
-          plan: 'Free',
-          credits: defaultCredits,
+          email: userEmail || (isGuestUser ? `guest-${profileId.slice(0, 8)}@dramascript.ai` : `user-${profileId.slice(0, 8)}@dramascript.ai`),
+          role: isPrimaryEmail ? 'admin' : (isGuestUser ? 'guest' : 'user'),
+          plan: isGuestUser ? 'Guest' : 'Free',
+          credits: isGuestUser ? 999 : defaultCredits,
           updated_at: new Date().toISOString()
         })
         .select()
         .single();
       if (insErr) {
-        console.error('[Profile Sync] UPSERT error:', insErr.message);
+        log(`[Profile Sync] UPSERT fail (${insErr.code}): ${insErr.message} - ${insErr.details || ''}`, 'error');
+        // Fallback: return mock profile to prevent 500 if error is non-critical
         return { id: profileId, email: userEmail, role: 'user', plan: 'Free', credits: defaultCredits };
       }
       return newProfile;
@@ -498,6 +494,9 @@ router.post('/projects', authMiddleware, async (req, res) => {
     }
     const userDb = isGuest ? serviceSupabase : createUserClient(req.token);
 
+    // 1. Ensure profile exists before project insertion (Fixes FK constraint 23503 for guests)
+    await syncProfile(req.user).catch(err => log(`[Profile Sync] Critical failure: ${err.message}`, 'error'));
+
     let finalProject;
 
     if (id) {
@@ -520,7 +519,10 @@ router.post('/projects', authMiddleware, async (req, res) => {
       payload.user_id = req.user.id;
       log(`[Projects] Creating new project: ${payload.id} for user: ${payload.user_id}`);
       const { data, error } = await userDb.from('projects').insert(payload).select().single();
-      if (error) throw error;
+      if (error) {
+        log(`[Projects] Insert failed (${error.code}): ${error.message} - ${error.details || ''}`, 'error');
+        throw error;
+      }
       finalProject = data;
     }
 
@@ -604,63 +606,52 @@ router.delete('/projects/:id', authMiddleware, async (req, res) => {
  * NEW: Trigger 7-step AI Generation Flow (Local Fallback + Edge Support)
  */
 router.post('/generate/start', authMiddleware, async (req, res) => {
-  const { projectId, options = {} } = req.body;
-
-  log(`[Generate] Request to start generation for ${projectId} (Action: ${options.action || 'full'})`);
-
+  const { projectId, input } = req.body;
+  
   try {
-    if (!serviceSupabase) throw new Error('Database not initialized');
+    // 1. Fetch project to ensure input is available if not provided (Defense)
+    let finalInput = input;
+    if (!finalInput) {
+      const { data: p } = await serviceSupabase.from('projects').select('input').eq('id', projectId).single();
+      finalInput = p?.input || {};
+    }
+    const inputObj = typeof finalInput === 'string' ? JSON.parse(finalInput) : finalInput;
 
-    // 1. Fetch project to get stored input data (Bug #4 Fix)
-    const { data: project, error: fetchErr } = await serviceSupabase
+    // 2. DB 초기화 (pct: 5%에서 시작)
+    await serviceSupabase
       .from('projects')
-      .select('id, input, status')
-      .eq('id', projectId)
-      .single();
+      .update({ status: 'generating', pct: 5, updated_at: new Date().toISOString() })
+      .eq('id', projectId);
 
-    if (fetchErr || !project) throw new Error(`Project not found: ${projectId}`);
-
-    const projectInput = typeof project.input === 'string'
-      ? JSON.parse(project.input)
-      : (project.input || {});
-
-    // 2. Initialize project status
-    const updatePayload = { status: 'generating', pct: 5, updated_at: new Date().toISOString() };
-    await serviceSupabase.from('projects').update(updatePayload).eq('id', projectId);
-
-    // 3. Trigger Edge Function with proper input data
-    log(`[Generate] Project ${projectId} initialized. Triggering Supabase Edge Function.`);
-    const edgeFunctionUrl = `${process.env.SUPABASE_URL}/functions/v1/generate`;
-
-    fetch(edgeFunctionUrl, {
+    // 3. Edge Function 호출 (fire and forget - await 없음)
+    const edgeUrl = `${process.env.SUPABASE_URL}/functions/v1/generate`;
+    log(`[Edge] Triggering generation for ${projectId}...`);
+    
+    fetch(edgeUrl, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ projectId, input: projectInput, action: options.action || 'start' })
-    }).then(async (efRes) => {
-      if (!efRes.ok) {
-        const errBody = await efRes.json().catch(() => ({}));
-        log(`[Generate Edge] Non-OK response (${efRes.status}): ${errBody.error || 'Unknown error'}`, 'error');
-        // Mark project as error if Edge Function responds with failure
+      body: JSON.stringify({ projectId, input: inputObj, action: 'start' })
+    }).catch(async (err) => {
+      log(`[Edge] Trigger failed for ${projectId}: ${err.message}`, 'error');
+      try {
         await serviceSupabase.from('projects').update({
           status: 'error',
-          error_msg: `Edge Function 오류: ${errBody.error || efRes.status}`
+          error_msg: `Edge Function 요청 실패: ${err.message}`,
+          updated_at: new Date().toISOString()
         }).eq('id', projectId);
+      } catch (dbErr) {
+        log(`[Edge] DB Update Error for ${projectId}: ${dbErr.message}`, 'error');
       }
-    }).catch(err => {
-      log(`[Generate Edge Call] Failed to trigger function: ${err.message}`, 'error');
-      // Mark as error in DB so frontend sees it
-      serviceSupabase.from('projects').update({
-        status: 'error',
-        error_msg: `Edge Function 연결 실패: ${err.message}`
-      }).eq('id', projectId);
     });
 
-    res.json({ success: true, message: 'Background generation started via Edge Function.', projectId });
+    // 4. 즉시 응답 (브라우저는 폴링으로 진행상황 확인)
+    res.json({ success: true, message: 'Edge Function triggered', projectId });
+    
   } catch (err) {
-    log(`[Generate] Initialization failed: ${err.message}`, 'error');
+    log(`[Generate] Start failed: ${err.message}`, 'error');
     res.status(500).json({ error: err.message });
   }
 });
@@ -977,131 +968,8 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
  // callUnifiedAI is now defined above callAI (moved to L110 area to fix const hoisting issue)
  
  /**
-  * Local implementation of the 7-step generation flow
-  * Ported from Supabase Edge Function (supabase/functions/generate/index.ts)
-  */
- async function runLocalGeneration(project, options) {
-  const { id: projectId } = project;
-  const config = await getSystemConfig();
-  const anthropic = new AnthropicSDK({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const inputData = typeof project.input === 'string' ? JSON.parse(project.input) : (project.input || {});
-  
-  log(`[AI-Gen] 🚀 Pipeline Start: ${projectId}`);
-  
-  const updateProject = async (payload) => {
-    payload.updated_at = new Date().toISOString();
-    if (payload.characters) { payload.chars = payload.characters; delete payload.characters; }
-    const { error } = await serviceSupabase.from('projects').update(payload).eq('id', projectId);
-    if (error) throw new Error(`DB update failed: ${error.message}`);
-  };
-
-  try {
-    // PHASE 1: CORE (20%)
-    log(`[AI-Gen] Phase 1: CORE`);
-    await updateProject({ status: 'generating', pct: 5, stepIdx: 1 });
-    const corePrompt = (config.prompts?.CORE || `다음 드라마 기획안으로 제목, 로그라인, 전체 줄거리(1000자 이상), 주요 캐릭터 4인을 작성해. JSON 형식: { "title": "", "logline": "", "synopsis": "", "characters": [{ "name": "", "age": "", "role": "", "desc": "" }] }`)
-      + `\n기획 방향: ${inputData.genre || '드라마'} 장르, ${inputData.platform || 'OTT'} 플랫폼, 키워드: ${inputData.keywords || inputData.logline || '자유 주제'}`;
-    
-    const coreData = await callAI(corePrompt, config.planningModel, config, anthropic);
-    const finalTitle = (typeof coreData.title === 'object') ? (coreData.title?.main || '드라마') : (coreData.title || project.title);
-    const finalSynopsis = (typeof coreData.synopsis === 'object') ? JSON.stringify(coreData.synopsis) : (coreData.synopsis || '');
-    await updateProject({
-      title: finalTitle,
-      logline: coreData.logline || project.logline,
-      synopsis: finalSynopsis,
-      chars: Array.isArray(coreData.characters) ? coreData.characters : (Array.isArray(coreData.chars) ? coreData.chars : []),
-      pct: 20,
-      stepIdx: 1,
-      status: 'core_done'
-    });
-
-    // PHASE 2: OUTLINE (40%)
-    log(`[AI-Gen] Phase 2: OUTLINE`);
-    await updateProject({ pct: 25, stepIdx: 2 });
-    const epCount = parseInt(inputData.episodes) || 8;
-    const outlinePrompt = (config.prompts?.EP_OUTLINE || `전체 ${epCount}회차의 제목과 각 회차별 1줄 줄거리를 JSON으로 작성해. JSON 형식: { "episodes": [{ "title": "제목", "logline": "내용 요약" }] }`)
-      + `\n장르: ${inputData.genre || '드라마'}, 전체 로그라인: ${coreData.logline || ''}`;
-    
-    const outData = await callAI(outlinePrompt, config.planningModel, config, anthropic);
-    const outlineArr = Array.isArray(outData.episodes) ? outData.episodes : [];
-    await updateProject({ outline: outlineArr, pct: 40, stepIdx: 2, status: 'outline_done' });
-
-    // PHASE 3: PLAN_DETAIL (per-episode) — Bug #2 Fix: Re-fetch DB for fresh outline
-    log(`[AI-Gen] Phase 3: PLAN_DETAIL`);
-    const { data: refreshedProject } = await serviceSupabase.from('projects').select('*').eq('id', projectId).single();
-    const eps = Array.isArray(refreshedProject?.outline) ? refreshedProject.outline : outlineArr;
-    const totalEps = eps.length > 0 ? eps.length : epCount;
-    
-    log(`[AI-Gen] Phase 3: Generating ${totalEps} episodes`);
-
-    for (let i = 0; i < totalEps; i++) {
-      const epNum = i + 1;
-      const epTitle = eps[i]?.title || `${epNum}화`;
-      const epLogline = eps[i]?.logline || eps[i]?.summary || '';
-
-      // Check idempotency
-      const { data: existingEp } = await serviceSupabase.from('episodes').select('id, story').eq('project_id', projectId).eq('ep_num', epNum).single();
-      if (existingEp?.story) {
-        log(`[AI-Gen] Episode ${epNum} already exists, skipping.`);
-        continue;
-      }
-
-      await updateProject({ pct: 40 + Math.floor((i / totalEps) * 20) });
-      
-      // Bug #6 Fix: 씬 필드명 명확화
-      const detailPrompt = (config.prompts?.PLAN_DETAIL || `${epNum}화 "${epTitle}"의 상세 스토리와 씬 리스트를 JSON으로 작성해. 런타임: 약 ${inputData.runtime || 70}분 (씬 수: ${Math.ceil((inputData.runtime || 70) / 5)}개). JSON 형식: { "story": "기승전결 포함 상세 줄거리 (700자 이상)", "scenes": [{ "num": 1, "place": "INT. 장소명", "time": "낮/밤/새벽", "desc": "씬 핵심 내용 2줄" }] }`)
-        .replace(/{num}/g, epNum)
-        .replace(/{epNum}/g, epNum)
-        .replace(/{title}/g, epTitle)
-        .replace(/{runtime}/g, inputData.runtime || 70)
-        + `\n줄거리 요약: ${epLogline}`;
-
-      const detail = await callAI(detailPrompt, config.productionModel, config, anthropic);
-
-      const scenes = Array.isArray(detail.scenes) ? detail.scenes : [];
-      
-      // Bug #3 Fix: Safe insert/update (no onConflict needed)
-      if (existingEp) {
-        await serviceSupabase.from('episodes').update({
-          title: epTitle, logline: epLogline, story: detail.story || '', scenes, status: 'pending'
-        }).eq('id', existingEp.id);
-      } else {
-        const { error: insErr } = await serviceSupabase.from('episodes').insert({
-          project_id: projectId, ep_num: epNum, title: epTitle, logline: epLogline, story: detail.story || '', scenes, status: 'pending'
-        });
-        if (insErr) log(`[AI-Gen] Episode ${epNum} insert error: ${insErr.message}`, 'error');
-      }
-    }
-
-    await updateProject({ pct: 60, stepIdx: 3, status: 'plan_done' });
-
-    // PHASE 4: SCRIPT SAMPLE (1화)
-    log(`[AI-Gen] Phase 4: SCRIPT SAMPLE`);
-    const { data: ep1 } = await serviceSupabase.from('episodes').select('*').eq('project_id', projectId).eq('ep_num', 1).single();
-    if (ep1) {
-      const samplePrompt = (config.prompts?.SCRIPT_SAMPLE || `1화 "${ep1.title}"의 첫 씬 샘플 대본을 전문적인 형식(지문+대사)으로 작성해. JSON 형식: { "script": "S#1. INT. 장소 - 낮\\n\\n지문..." }`)
-        .replace(/{title}/g, ep1.title)
-        + `\n줄거리: ${ep1.story || ''}`;
-        
-      const scriptRes = await callAI(samplePrompt, config.productionModel, config, anthropic);
-      await serviceSupabase.from('episodes').update({
-        script: scriptRes.script ? [{ num: 'S#1', loc: '전체', content: scriptRes.script }] : []
-      }).eq('id', ep1.id);
-    }
-
-    // FINALIZE
-    await updateProject({ pct: 100, status: 'done', stepIdx: 7 });
-    log(`[AI-Gen] ✅ Pipeline Success: ${projectId}`);
-
-  } catch (err) {
-    log(`[AI-Gen-Error] ${projectId}: ${err.message}`, 'error');
-    await serviceSupabase.from('projects').update({
-      status: 'error',
-      error_msg: err.message.substring(0, 500),
-      updated_at: new Date().toISOString()
-    }).eq('id', projectId);
-  }
-}
+ * runLocalGeneration was removed in v0.31 as all generation is now offloaded to Supabase Edge Functions.
+ */
 
 
 /**

@@ -1,9 +1,30 @@
 # VERSION HISTORY
 
+## v0.34 (2026-04-04) - Production Stabilization (Final Release)
+- **전역 안정성 통합**: v0.33의 재시도 로직과 모델 동기화를 기반으로 한 최종 안정화 버전 배포.
+- **웹 푸시**: Netlify 및 GitHub 배포 동시 진행.
+- **네비게이션 최적화**: 로딩 및 전환 속도 향상.
+
+## v0.33 (2026-04-04) - AI Generation Reliability & Race Condition Fix (P0 Fixed)
+
+## v0.32 (2026-04-04) - UI/UX Brand Refinement
+- **브랜드 텍스트 제거**: 네비게이션 바 로고 옆의 'DramaScript AI' 텍스트를 제거하여 '디렉터즈 아레나' 브랜드 중심의 깔끔한 디자인으로 개선.
+- **버전 배지 유지**: 사용자의 요청에 따라 `v0.32` 버전 정보는 시각적으로 유지.
+- **메타 데이터 동기화**: `state.js` 및 `index.html` 타이틀을 '디렉터즈 아레나'로 통일하여 브랜드 일관성 확보.
+
+## v0.31 (2026-04-05) - AI Generation Pipeline Migration to Supabase Edge Functions (P0 Fixed)
+- **504 Gateway Timeout 완전 해결**: Vercel의 30초 제한 문제를 해결하기 위해 AI 생성 로직을 Supabase Edge Function(`generate`)으로 전면 이관.
+- **백엔드 경량화**: `api.js` 내의 무거운 `runLocalGeneration` 로직을 제거하고 비동기(Fire-and-forget) 호출 구조로 전환하여 응답성 향상.
+- **프롬프트 동기화**: `CONTEXT_WRAPPER`를 포함한 v0.30의 모든 최신 AI 로직을 Edge Function에 완벽 이식.
+- **버전 업데이트**: 전 시스템 버전을 `v0.31`로 업데이트하여 안정성 확보.
+
+## v0.30 (2026-04-05) - AI Pipeline Stabilization & Prompt Wrapper Sync (P0 Fixed)
+- **504 Timeout 해결 (Phase 3/4)**: 상세 회차 구성(`PLAN_DETAIL`) 및 대본 샘플(`SCRIPT_SAMPLE`) 단계를 `claude-haiku-4-5`로 전환하여 30초 내 생성 완료 보장 및 에러 원천 차단.
+- **유저 컨텍스트 주입 동기화**: `api.js`에 하드코딩되었던 유저 설정 주입 로직을 `CONTEXT_WRAPPER` 설정으로 이관하여 어드민 대시보드(System Category)에서 직접 관리 가능하도록 연동.
+- **프롬프트 품질 고도화**: 모든 생성 단계에서 인물, 시대, 타겟, 추가 요청 사항이 일관되게 주입되도록 `buildUserContext` 엔진 도입.
+- **버전 동기화 완료**: `index.html`, `state.js`, `VERSION.md` 버전을 `v0.30`으로 최종 통합.
+
 ## v0.29 (2026-04-05) - Universal AI Prompt Migration Finalization
-- **프롬프트 전면 시스템화 완료**: API 서버(`api.js`) 및 어드민 대시보드(`admin.js`)에 산재해 있던 18개 생성 단계의 모든 하드코딩된 프롬프트를 DB(`system_settings`) 우선 참조 구조로 최종 이관 완료.
-- **초호화 어드민 설정 UI 구축**: 5대 카테고리(일괄, 단계별, 실시간, 제작, 시스템)별 통합 프롬프트 에디터를 통해 AI 로직을 실시간으로 튜닝할 수 있는 운영 체제 확보.
-- **버전 동기화 완료**: `index.html`, `state.js`, `VERSION.md` 버전을 `v0.29`로 최종 상향 및 통일.
 
 ## v0.28 (2026-04-05) - Universal Prompt Management & Admin Expansion (P1 Priority)
 - **전용 프롬프트 전면 시스템화**: 18개 생성 단계(BATCH, WIZARD, INTERACTIVE, PRODUCTION, SYSTEM)의 모든 프롬프트를 DB(`system_settings`) 우선 관리 구조로 전환.

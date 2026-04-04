@@ -2,8 +2,8 @@
  * Global State Management
  */
 
-export const APP_VERSION = 'v0.29';
-export const APP_NAME = 'DramaScript AI';
+export const APP_VERSION = 'v0.34';
+export const APP_NAME = "Director's Arena";
 
 export const state = {
   isLoggedIn: !!localStorage.getItem('ds_auth_token') && localStorage.getItem('ds_auth_token') !== 'mock_token',
