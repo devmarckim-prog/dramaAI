@@ -348,6 +348,7 @@ router.get('/config', async (req, res) => {
         planningModel: data.planning_model,
         productionModel: data.production_model,
         systemPrompt: data.system_prompt,
+        prompts: data.prompts || {},
         pricingPro: data.pricing_pro || 29900,
         creditsFree: data.credits_free || 10,
         source: 'supabase'
@@ -371,6 +372,7 @@ router.get('/config', async (req, res) => {
         planningModel: 'claude-haiku-4-5-20251001',
         productionModel: 'claude-sonnet-4-6',
         systemPrompt: '',
+        prompts: {},
         pricingPro: 29900,
         creditsFree: 10,
         source: 'defaults'
@@ -383,7 +385,7 @@ router.get('/config', async (req, res) => {
 
 router.post('/config', async (req, res) => {
   try {
-    const { planningModel, productionModel, systemPrompt, pricingPro, creditsFree } = req.body;
+    const { planningModel, productionModel, systemPrompt, prompts, pricingPro, creditsFree } = req.body;
     
     // 1. Update Supabase
     const { data, error } = await supabase
@@ -393,6 +395,7 @@ router.post('/config', async (req, res) => {
         planning_model: planningModel,
         production_model: productionModel,
         system_prompt: systemPrompt,
+        prompts: prompts || {},
         pricing_pro: parseInt(pricingPro) || 29900,
         credits_free: parseInt(creditsFree) || 10,
         updated_at: new Date().toISOString()
@@ -417,6 +420,7 @@ router.post('/config', async (req, res) => {
           planningModel, 
           productionModel, 
           systemPrompt, 
+          prompts: prompts || {},
           pricingPro: parseInt(pricingPro) || 29900, 
           creditsFree: parseInt(creditsFree) || 10 
         };

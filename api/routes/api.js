@@ -88,6 +88,7 @@ async function getSystemConfig() {
         planningModel: data.planning_model || defaults.planningModel,
         productionModel: data.production_model || defaults.productionModel,
         systemPrompt: data.system_prompt || defaults.systemPrompt,
+        prompts: data.prompts || {},
         pricingPro: data.pricing_pro || defaults.pricingPro,
         creditsFree: data.credits_free || defaults.creditsFree
       };
@@ -169,15 +170,13 @@ async function callAI(prompt, modelAlias, config, anthropicInstance, history = [
       if (retryCount < maxRetries) {
         retryCount++;
         log(`[AI-Call-Retry] Parsing failed. Retrying... Error: ${err.message}`, 'warn');
-        currentPrompt = `아래 텍스트를 유효한 JSON으로 변환해줘.
+        const repairDefault = `아래 텍스트를 유효한 JSON으로 변환해줘.
 규칙:
 - 문자열 내부의 큰따옴표(")는 모두 삭제
 - 줄바꿈은 \\n으로 변환
 - JSON 외 텍스트는 모두 제거
-- 반드시 완전한 JSON으로 마무리
-
-원본:
-${raw}`;
+- 반드시 완전한 JSON으로 마무리`;
+        currentPrompt = (config.prompts?.JSON_REPAIR || repairDefault) + `\n\n원본:\n${raw}`;
         return await attempt();
       }
       log(`[AI-Call-Final-Error] ${err.message}`, 'error');
@@ -683,23 +682,10 @@ router.post('/generate/scene/init', authMiddleware, async (req, res) => {
     const model = getModelId(config.productionModel);
 
     // 2. Build INITIAL Context Prompt (Turn 1)
-    const initPrompt = `당신은 드라마 [${project.title}]의 전문 작가입니다. 
-지금부터 ${ep.ep_num}화 대본을 씬별로 작성합니다.
-
-[드라마 정보]
-장르: ${project.genre}
-로그라인: ${project.logline}
-줄거리 요약: ${project.synopsis?.substring(0, 500)}...
-
-[인물 정보]
-${JSON.stringify(project.chars?.slice(0, 5))}
-
-[${ep.ep_num}화 정보]
-제목: ${ep.title}
-줄거리: ${ep.story}
-씬 목록 전체: ${JSON.stringify(ep.scenes)}
-
-준비되면 '시작'이라고만 답하세요. JSON 형식이 아니어도 좋으나 반드시 '시작'이라는 단어가 포함되어야 합니다.`;
+    const initPrompt = (config.prompts?.SCENE_INIT || `당신은 드라마 [{title}]의 전문 작가입니다. 지금부터 {epNum}화 대본을 씬별로 작성합니다. 준비되면 '시작'이라고만 답하세요.`)
+      .replace(/{title}/g, project.title)
+      .replace(/{epNum}/g, ep.ep_num)
+      + `\n\n[드라마 정보]\n장르: ${project.genre}\n로그라인: ${project.logline}\n줄거리 요약: ${project.synopsis?.substring(0, 500)}...\n\n[인물 정보]\n${JSON.stringify(project.chars?.slice(0, 5))}\n\n[${ep.ep_num}화 정보]\n제목: ${ep.title}\n줄거리: ${ep.story}\n씬 목록 전체: ${JSON.stringify(ep.scenes)}`;
 
     const anthropic = new AnthropicSDK({ apiKey: process.env.ANTHROPIC_API_KEY });
     const response = await anthropic.messages.create({
@@ -749,18 +735,11 @@ router.post('/generate/scene/next', authMiddleware, async (req, res) => {
     if (!targetScene) throw new Error(`Scene ${sceneIdx} not found in episode map.`);
 
     const model = getModelId(config.productionModel);
-    const scenePrompt = `S#${targetScene.num || sceneIdx + 1} (${targetScene.place} / ${targetScene.time}) 을 작성해주세요.
-내용 요약: ${targetScene.desc || targetScene.content}
-
-[출력 규칙]
-- 전문적인 대본 형식 준수
-- 인물 말투 고정 (chars 정보 기반)
-- 반드시 아래 JSON 형식으로만 출력:
-{
-  "num": "S#${targetScene.num || sceneIdx + 1}",
-  "loc": "${targetScene.place} / ${targetScene.time}",
-  "content": "대본 내용..."
-}`;
+    const scenePrompt = (config.prompts?.SCENE_NEXT || `S#{sceneNum} ({place} / {time}) 을 작성해주세요.\n내용 요약: {desc}\n\n[출력 규칙]\n- 전문적인 대본 형식 준수\n- 인물 말투 고정 (chars 정보 기반)\n- 반드시 아래 JSON 형식으로만 출력:\n{ "num": "S#{sceneNum}", "loc": "{place} / {time}", "content": "대본 내용..." }`)
+      .replace(/{sceneNum}/g, targetScene.num || sceneIdx + 1)
+      .replace(/{place}/g, targetScene.place)
+      .replace(/{time}/g, targetScene.time)
+      .replace(/{desc}/g, targetScene.desc || targetScene.content);
 
     const anthropic = new AnthropicSDK({ apiKey: process.env.ANTHROPIC_API_KEY });
     
@@ -822,7 +801,9 @@ router.post('/generate/ep-summary', authMiddleware, async (req, res) => {
     const { data: ep } = await userDb.from('episodes').select('*').eq('id', episodeId).single();
     
     const fullScript = ep.script?.map(s => s.content).join('\n\n') || "";
-    const prompt = `드라마 ${ep.ep_num}화의 전체 대본입니다. 다음 화 집필을 위해 핵심 사건 3줄로 요약해줘.\n\n${fullScript}`;
+    const prompt = (config.prompts?.EP_SUMMARY || `드라마 {epNum}화의 전체 대본입니다. 다음 화 집필을 위해 핵심 사건 3줄로 요약해줘.`)
+      .replace(/{epNum}/g, ep.ep_num)
+      + `\n\n${fullScript}`;
 
     const anthropic = new AnthropicSDK({ apiKey: process.env.ANTHROPIC_API_KEY });
     const response = await anthropic.messages.create({
@@ -908,16 +889,20 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
 
     switch (parseInt(step)) {
       case 0: { // Phase 1: Logline & Genre (20%)
-        const loglinePrompt = `드라마 기획안의 핵심 컨셉을 작성해줘. 로그라인 시드: ${inputData.logline || inputData.topic || '자유 주제'}. 장르: ${inputData.genre || '드라마'}. 다음 JSON 형식으로 응답해: {"title": "제목", "genre": "장르", "logline": "한 줄 로그라인"}`;
+        const loglinePrompt = (config.prompts?.LOGLINE_GEN || `드라마 기획안의 핵심 컨셉을 작성해줘. 로그라인 시드: {seed}. 장르: {genre}. 다음 JSON 형식으로 응답해: {"title": "제목", "genre": "장르", "logline": "한 줄 로그라인"}`)
+          .replace(/{seed}/g, inputData.logline || inputData.topic || '자유 주제')
+          .replace(/{genre}/g, inputData.genre || '드라마');
         resultData = await callAI(loglinePrompt, config.productionModel, config, anthropicClient);
         await updateProject({ ...resultData, pct: 20, stepIdx: 1 });
         break;
       }
 
-      case 1: { // Phase 2: Characters setup (35%) — was missing!
+      case 1: { // Phase 2: Characters setup (35%)
         const title1 = project.title || inputData.title || '드라마';
         const logline1 = project.logline || inputData.logline || '';
-        const charPrompt1 = `드라마 "${title1}" (로그라인: ${logline1})의 주요 인물 3명의 기초 설정을 작성해줘. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
+        const charPrompt1 = (config.prompts?.CHAR_BASIC || `드라마 "{title}" (로그라인: {logline})의 주요 인물 3명의 기초 설정을 작성해줘. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`)
+          .replace(/{title}/g, title1)
+          .replace(/{logline}/g, logline1);
         resultData = await callAI(charPrompt1, config.planningModel, config, anthropicClient);
         await updateProject({ chars: Array.isArray(resultData.chars) ? resultData.chars : [], pct: 35, stepIdx: 2 });
         break;
@@ -926,7 +911,9 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
       case 2: { // Phase 3: Synopsis (45%)
         const title2 = project.title || inputData.title || '드라마';
         const logline2 = project.logline || inputData.logline || '';
-        const synopPrompt = `제목: ${title2}. 로그라인: ${logline2}. 이 드라마의 전체 줄거리(시놉시스)를 1000자 내외로 상세히 작성해줘. JSON 형식: {"synopsis": "내용"}`;
+        const synopPrompt = (config.prompts?.SYNOPSIS_GEN || `제목: {title}. 로그라인: {logline}. 이 드라마의 전체 줄거리(시놉시스)를 1000자 내외로 상세히 작성해줘. JSON 형식: {"synopsis": "내용"}`)
+          .replace(/{title}/g, title2)
+          .replace(/{logline}/g, logline2);
         resultData = await callAI(synopPrompt, config.productionModel, config, anthropicClient);
         await updateProject({ synopsis: resultData.synopsis || '', pct: 45, stepIdx: 3 });
         break;
@@ -934,7 +921,8 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
 
       case 3: { // Phase 4: Conflicts (60%)
         const title3 = project.title || inputData.title || '드라마';
-        const conflictPrompt = `드라마 "${title3}"의 주요 갈등 구조를 분석해줘. 내적 갈등, 대인 갈등, 사회적/환경적 갈등을 포함해. JSON 형식: {"conflicts": [{"type": "내적/대인/사회", "character": "인물명", "desc": "갈등 내용"}]}`;
+        const conflictPrompt = (config.prompts?.CONFLICT_GEN || `드라마 "{title}"의 주요 갈등 구조를 분석해줘. 내적 갈등, 대인 갈등, 사회적/환경적 갈등을 포함해. JSON 형식: {"conflicts": [{"type": "내적/대인/사회", "character": "인물명", "desc": "갈등 내용"}]}`)
+          .replace(/{title}/g, title3);
         resultData = await callAI(conflictPrompt, config.productionModel, config, anthropicClient);
         await updateProject({ conflicts: Array.isArray(resultData.conflicts) ? resultData.conflicts : [], pct: 60, stepIdx: 4 });
         break;
@@ -945,7 +933,9 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
         const existingChars = Array.isArray(project.chars) && project.chars.length > 0
           ? JSON.stringify(project.chars)
           : '(아직 미설정)';
-        const charPrompt = `드라마 "${title4}"의 주요 인물 3명을 상세 설정해줘. 기존 설정: ${existingChars}. 이름, 성격, 나이, 역할, 외모를 포함해. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "...", "looks": "..."}]}`;
+        const charPrompt = (config.prompts?.CHAR_DEEP || `드라마 "{title}"의 주요 인물 3명을 상세 설정해줘. 기존 설정: {existingChars}. 이름, 성격, 나이, 역할, 외모를 포함해. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "...", "looks": "..."}]}`)
+          .replace(/{title}/g, title4)
+          .replace(/{existingChars}/g, existingChars);
         resultData = await callAI(charPrompt, config.productionModel, config, anthropicClient);
         await updateProject({ chars: Array.isArray(resultData.chars) ? resultData.chars : (project.chars || []), pct: 75, stepIdx: 5 });
         break;
@@ -954,7 +944,9 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
       case 5: { // Phase 6: Episodes (90%)
         const title5 = project.title || inputData.title || '드라마';
         const epCount = (typeof project.episodes === 'number') ? project.episodes : (parseInt(inputData.episodes) || 8);
-        const epPrompt = `드라마 "${title5}"의 전 ${epCount}회차 구성을 JSON으로 작성해줘. 회차별 제목과 요약을 포함해. JSON 형식: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;
+        const epPrompt = (config.prompts?.EP_PLAN || `드라마 "{title}"의 전 {epCount}회차 구성을 JSON으로 작성해줘. 회차별 제목과 요약을 포함해. JSON 형식: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`)
+          .replace(/{title}/g, title5)
+          .replace(/{epCount}/g, epCount);
         resultData = await callAI(epPrompt, config.planningModel, config, anthropicClient);
         const epArray = Array.isArray(resultData.episodes) ? resultData.episodes : [];
         await updateProject({ scripts: epArray, pct: 90, stepIdx: 6 });
@@ -1007,11 +999,10 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
     // PHASE 1: CORE (20%)
     log(`[AI-Gen] Phase 1: CORE`);
     await updateProject({ status: 'generating', pct: 5, stepIdx: 1 });
-    const coreData = await callAI(
-      `다음 드라마 기획안으로 제목, 로그라인, 전체 줄거리(1000자 이상), 주요 캐릭터 4인을 작성해. JSON 형식: { "title": "", "logline": "", "synopsis": "", "characters": [{ "name": "", "age": "", "role": "", "desc": "" }] }
-기획 방향: ${inputData.genre || '드라마'} 장르, ${inputData.platform || 'OTT'} 플랫폼, 키워드: ${inputData.keywords || inputData.logline || '자유 주제'}`,
-      'claude-sonnet-4-6', config, anthropic
-    );
+    const corePrompt = (config.prompts?.CORE || `다음 드라마 기획안으로 제목, 로그라인, 전체 줄거리(1000자 이상), 주요 캐릭터 4인을 작성해. JSON 형식: { "title": "", "logline": "", "synopsis": "", "characters": [{ "name": "", "age": "", "role": "", "desc": "" }] }`)
+      + `\n기획 방향: ${inputData.genre || '드라마'} 장르, ${inputData.platform || 'OTT'} 플랫폼, 키워드: ${inputData.keywords || inputData.logline || '자유 주제'}`;
+    
+    const coreData = await callAI(corePrompt, config.planningModel, config, anthropic);
     const finalTitle = (typeof coreData.title === 'object') ? (coreData.title?.main || '드라마') : (coreData.title || project.title);
     const finalSynopsis = (typeof coreData.synopsis === 'object') ? JSON.stringify(coreData.synopsis) : (coreData.synopsis || '');
     await updateProject({
@@ -1028,11 +1019,10 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
     log(`[AI-Gen] Phase 2: OUTLINE`);
     await updateProject({ pct: 25, stepIdx: 2 });
     const epCount = parseInt(inputData.episodes) || 8;
-    const outData = await callAI(
-      `전체 ${epCount}회차의 제목과 각 회차별 1줄 줄거리를 JSON으로 작성해. JSON 형식: { "episodes": [{ "title": "제목", "logline": "내용 요약" }] }
-장르: ${inputData.genre || '드라마'}, 전체 로그라인: ${coreData.logline || ''}`,
-      'claude-haiku-4-5', config, anthropic
-    );
+    const outlinePrompt = (config.prompts?.EP_OUTLINE || `전체 ${epCount}회차의 제목과 각 회차별 1줄 줄거리를 JSON으로 작성해. JSON 형식: { "episodes": [{ "title": "제목", "logline": "내용 요약" }] }`)
+      + `\n장르: ${inputData.genre || '드라마'}, 전체 로그라인: ${coreData.logline || ''}`;
+    
+    const outData = await callAI(outlinePrompt, config.planningModel, config, anthropic);
     const outlineArr = Array.isArray(outData.episodes) ? outData.episodes : [];
     await updateProject({ outline: outlineArr, pct: 40, stepIdx: 2, status: 'outline_done' });
 
@@ -1059,12 +1049,14 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
       await updateProject({ pct: 40 + Math.floor((i / totalEps) * 20) });
       
       // Bug #6 Fix: 씬 필드명 명확화
-      const detail = await callAI(
-        `${epNum}화 "${epTitle}"의 상세 스토리와 씬 리스트를 JSON으로 작성해. 런타임: 약 ${inputData.runtime || 70}분 (씬 수: ${Math.ceil((inputData.runtime || 70) / 5)}개).
-JSON 형식: { "story": "기승전결 포함 상세 줄거리 (700자 이상)", "scenes": [{ "num": 1, "place": "INT. 장소명", "time": "낮/밤/새벽", "desc": "씬 핵심 내용 2줄" }] }
-줄거리 요약: ${epLogline}`,
-        'claude-sonnet-4-6', config, anthropic
-      );
+      const detailPrompt = (config.prompts?.PLAN_DETAIL || `${epNum}화 "${epTitle}"의 상세 스토리와 씬 리스트를 JSON으로 작성해. 런타임: 약 ${inputData.runtime || 70}분 (씬 수: ${Math.ceil((inputData.runtime || 70) / 5)}개). JSON 형식: { "story": "기승전결 포함 상세 줄거리 (700자 이상)", "scenes": [{ "num": 1, "place": "INT. 장소명", "time": "낮/밤/새벽", "desc": "씬 핵심 내용 2줄" }] }`)
+        .replace(/{num}/g, epNum)
+        .replace(/{epNum}/g, epNum)
+        .replace(/{title}/g, epTitle)
+        .replace(/{runtime}/g, inputData.runtime || 70)
+        + `\n줄거리 요약: ${epLogline}`;
+
+      const detail = await callAI(detailPrompt, config.productionModel, config, anthropic);
 
       const scenes = Array.isArray(detail.scenes) ? detail.scenes : [];
       
@@ -1087,11 +1079,11 @@ JSON 형식: { "story": "기승전결 포함 상세 줄거리 (700자 이상)", 
     log(`[AI-Gen] Phase 4: SCRIPT SAMPLE`);
     const { data: ep1 } = await serviceSupabase.from('episodes').select('*').eq('project_id', projectId).eq('ep_num', 1).single();
     if (ep1) {
-      const scriptRes = await callAI(
-        `1화 "${ep1.title}"의 첫 씬 샘플 대본을 전문적인 형식(지문+대사)으로 작성해. JSON 형식: { "script": "S#1. INT. 장소 - 낮\\n\\n지문..." }
-줄거리: ${ep1.story || ''}`,
-        'claude-sonnet-4-6', config, anthropic
-      );
+      const samplePrompt = (config.prompts?.SCRIPT_SAMPLE || `1화 "${ep1.title}"의 첫 씬 샘플 대본을 전문적인 형식(지문+대사)으로 작성해. JSON 형식: { "script": "S#1. INT. 장소 - 낮\\n\\n지문..." }`)
+        .replace(/{title}/g, ep1.title)
+        + `\n줄거리: ${ep1.story || ''}`;
+        
+      const scriptRes = await callAI(samplePrompt, config.productionModel, config, anthropic);
       await serviceSupabase.from('episodes').update({
         script: scriptRes.script ? [{ num: 'S#1', loc: '전체', content: scriptRes.script }] : []
       }).eq('id', ep1.id);

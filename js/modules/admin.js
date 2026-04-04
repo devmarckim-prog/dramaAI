@@ -707,10 +707,132 @@ async function renderAdminConfig(container) {
         <div class="admin-config-group">
           <label class="admin-config-label">AI 페르소나 및 전역 규칙</label>
           <textarea id="config-system-prompt" class="admin-config-input admin-config-textarea" 
-            style="min-height: 250px; font-family: 'Inter', sans-serif; line-height: 1.6;"
+            style="min-height: 150px; font-family: 'Inter', sans-serif; line-height: 1.6; background: rgba(255,215,0,0.05); border: 1px solid rgba(212,175,55,0.3);"
             placeholder="AI에게 부여할 정체성 또는 전역 규칙을 입력하세요...">${config.systemPrompt || ''}</textarea>
           <div style="font-size:12px; color:#666; margin-top:8px">
-            이 프롬프트는 모든 AI 요청에 공통으로 삽입됩니다. (예: "당신은 세계적인 K-드라마 전문가입니다...")
+            이 프롬프트는 모든 AI 요청에 공통으로 삽입됩니다.
+          </div>
+        </div>
+
+        <div class="admin-section-title" style="margin-top:40px">🎭 단계별 세부 프롬프트 (Advanced)</div>
+        <div style="background: rgba(255,255,255,0.03); border-radius: 16px; padding: 24px; border: 1px solid rgba(255,255,255,0.1);">
+          <p style="font-size: 13px; color: #aaa; margin-bottom: 20px; line-height: 1.6;">
+            각 생성 단계별로 특화된 프롬프트를 설정할 수 있습니다. <code style="color:var(--gold)">{num}</code>, <code style="color:var(--gold)">{title}</code> 등의 변수는 자동으로 치환됩니다.
+          </p>
+
+          <div class="admin-prompt-grid" style="display:grid; grid-template-columns: 1fr; gap: 32px;">
+            <!-- Category 1: 일괄 생성 (Batch) -->
+            <div style="border-left: 3px solid var(--gold); padding: 16px; background: rgba(255,255,255,0.02); border-radius: 4px 12px 12px 4px;">
+              <h4 style="margin: 0 0 16px 0; font-size: 14px; color: var(--gold); display: flex; align-items: center; gap: 8px;">
+                <span>📦</span> 일괄 생성 모드 (Project Generation)
+              </h4>
+              <div style="display: grid; gap: 16px;">
+                <div class="admin-config-group">
+                  <label class="admin-config-label">1-A. CORE (기획안 & 인물)</label>
+                  <textarea id="p-core" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.CORE || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">1-B. EP_OUTLINE (전체 회차 구성)</label>
+                  <textarea id="p-outline" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.EP_OUTLINE || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">1-C. PLAN_DETAIL (상세 씬 맵핑)</label>
+                  <textarea id="p-detail" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.PLAN_DETAIL || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">1-D. SCRIPT_SAMPLE (초기 대본 샘플)</label>
+                  <textarea id="p-script-sample" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.SCRIPT_SAMPLE || ''}</textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 2: 단계별 생성 (Wizard) -->
+            <div style="border-left: 3px solid #4CAF50; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 4px 12px 12px 4px;">
+              <h4 style="margin: 0 0 16px 0; font-size: 14px; color: #4CAF50; display: flex; align-items: center; gap: 8px;">
+                <span>🪄</span> 단계별 위저드 모드 (Stepwise Flow)
+              </h4>
+              <div style="display: grid; gap: 16px;">
+                <div class="admin-config-group">
+                  <label class="admin-config-label">2-1. LOGLINE_GEN (로그라인 생성)</label>
+                  <textarea id="p-logline-gen" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.LOGLINE_GEN || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">2-2. CHAR_BASIC (기초 인물 설정)</label>
+                  <textarea id="p-char-basic" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.CHAR_BASIC || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">2-3. SYNOPSIS_GEN (전체 줄거리)</label>
+                  <textarea id="p-synopsis-gen" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.SYNOPSIS_GEN || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">2-4. CONFLICT_GEN (갈등 구조 분석)</label>
+                  <textarea id="p-conflict-gen" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.CONFLICT_GEN || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">2-5. CHAR_DEEP (인물 심층 분석)</label>
+                  <textarea id="p-char-deep" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.CHAR_DEEP || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">2-6. EP_PLAN (회차 기획)</label>
+                  <textarea id="p-ep-plan" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.EP_PLAN || ''}</textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 3: 실시간 대본 (Interactive) -->
+            <div style="border-left: 3px solid #2196F3; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 4px 12px 12px 4px;">
+              <h4 style="margin: 0 0 16px 0; font-size: 14px; color: #2196F3; display: flex; align-items: center; gap: 8px;">
+                <span>💬</span> 실시간 대본 채팅 (Interactive Chat)
+              </h4>
+              <div style="display: grid; gap: 16px;">
+                <div class="admin-config-group">
+                  <label class="admin-config-label">3-A. SCENE_INIT (채팅 시작/컨텍스트)</label>
+                  <textarea id="p-scene-init" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.SCENE_INIT || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">3-B. SCENE_NEXT (다음 씬 집필)</label>
+                  <textarea id="p-scene-next" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.SCENE_NEXT || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">3-C. EP_SUMMARY (회차 요약)</label>
+                  <textarea id="p-ep-summary" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.EP_SUMMARY || ''}</textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 4: 제작/비즈니스 (Production) -->
+            <div style="border-left: 3px solid #E91E63; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 4px 12px 12px 4px;">
+              <h4 style="margin: 0 0 16px 0; font-size: 14px; color: #E91E63; display: flex; align-items: center; gap: 8px;">
+                <span>💰</span> 제작 및 비즈니스 (Production & Biz)
+              </h4>
+              <div style="display: grid; gap: 16px;">
+                <div class="admin-config-group">
+                  <label class="admin-config-label">4-A. PRODUCTION (캐스팅 & 예산)</label>
+                  <textarea id="p-prod" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.PRODUCTION || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">4-B. PPL (브랜드 협찬 제안)</label>
+                  <textarea id="p-ppl" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.PPL || ''}</textarea>
+                </div>
+                <div class="admin-config-group">
+                  <label class="admin-config-label">4-C. SCRIPT (최종 대본 전문)</label>
+                  <textarea id="p-script" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.SCRIPT || ''}</textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 5: 시스템 (Internal) -->
+            <div style="border-left: 3px solid #9C27B0; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 4px 12px 12px 4px;">
+              <h4 style="margin: 0 0 16px 0; font-size: 14px; color: #9C27B0; display: flex; align-items: center; gap: 8px;">
+                <span>🛠️</span> 시스템 엔진 (Internal Recovery)
+              </h4>
+              <div style="display: grid; gap: 16px;">
+                <div class="admin-config-group">
+                  <label class="admin-config-label">JSON_REPAIR (JSON 구조 자동 복구)</label>
+                  <textarea id="p-json-repair" class="admin-config-input admin-config-textarea" style="min-height: 100px; font-size:13px">${config.prompts?.JSON_REPAIR || ''}</textarea>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -742,11 +864,36 @@ window.saveAdminConfig = async function(btn) {
   const productionModel = document.getElementById('config-production-model').value;
   const systemPrompt = document.getElementById('config-system-prompt').value;
   
+  const prompts = {
+    // Batch
+    CORE: document.getElementById('p-core').value,
+    EP_OUTLINE: document.getElementById('p-outline').value,
+    PLAN_DETAIL: document.getElementById('p-detail').value,
+    SCRIPT_SAMPLE: document.getElementById('p-script-sample').value,
+    // Wizard
+    LOGLINE_GEN: document.getElementById('p-logline-gen').value,
+    CHAR_BASIC: document.getElementById('p-char-basic').value,
+    SYNOPSIS_GEN: document.getElementById('p-synopsis-gen').value,
+    CONFLICT_GEN: document.getElementById('p-conflict-gen').value,
+    CHAR_DEEP: document.getElementById('p-char-deep').value,
+    EP_PLAN: document.getElementById('p-ep-plan').value,
+    // Interactive
+    SCENE_INIT: document.getElementById('p-scene-init').value,
+    SCENE_NEXT: document.getElementById('p-scene-next').value,
+    EP_SUMMARY: document.getElementById('p-ep-summary').value,
+    // Production
+    PRODUCTION: document.getElementById('p-prod').value,
+    PPL: document.getElementById('p-ppl').value,
+    SCRIPT: document.getElementById('p-script').value,
+    // System
+    JSON_REPAIR: document.getElementById('p-json-repair').value
+  };
+  
   if (btn) { btn.disabled = true; btn.textContent = '저장 중...'; }
   try {
     const res = await adminFetch('/api/admin/config', { 
       method: 'POST', 
-      body: JSON.stringify({ planningModel, productionModel, systemPrompt }) 
+      body: JSON.stringify({ planningModel, productionModel, systemPrompt, prompts }) 
     });
     if (!res.ok) throw new Error(`서버 오류: ${res.status}`);
     

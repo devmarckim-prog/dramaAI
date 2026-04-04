@@ -1,5 +1,22 @@
 # VERSION HISTORY
 
+## v0.29 (2026-04-05) - Universal AI Prompt Migration Finalization
+- **프롬프트 전면 시스템화 완료**: API 서버(`api.js`) 및 어드민 대시보드(`admin.js`)에 산재해 있던 18개 생성 단계의 모든 하드코딩된 프롬프트를 DB(`system_settings`) 우선 참조 구조로 최종 이관 완료.
+- **초호화 어드민 설정 UI 구축**: 5대 카테고리(일괄, 단계별, 실시간, 제작, 시스템)별 통합 프롬프트 에디터를 통해 AI 로직을 실시간으로 튜닝할 수 있는 운영 체제 확보.
+- **버전 동기화 완료**: `index.html`, `state.js`, `VERSION.md` 버전을 `v0.29`로 최종 상향 및 통일.
+
+## v0.28 (2026-04-05) - Universal Prompt Management & Admin Expansion (P1 Priority)
+- **전용 프롬프트 전면 시스템화**: 18개 생성 단계(BATCH, WIZARD, INTERACTIVE, PRODUCTION, SYSTEM)의 모든 프롬프트를 DB(`system_settings`) 우선 관리 구조로 전환.
+- **초호화 어드민 설정 UI**: 모든 프롬프트를 5대 카테고리로 분류하여 실시간으로 수정, 테스트, 저장할 수 있는 통합 에디터 구축.
+- **백엔드 하드코딩 완전 제거**: `api.js` 내부의 모든 AI 모델명 및 프롬프트 문자열을 동적 설정값 참조로 대체하여 유연성 극대화.
+- **JSON 복구 엔진 강화**: `JSON_REPAIR` 프롬프트의 어드민 노출로 AI 응답 오류 시 즉각적인 로직 대응 체계 마련.
+- **버전 동기화 완료**: `index.html`, `state.js`, `VERSION.md` 버전을 `v0.28`로 최종 통일.
+
+## v0.27 (2026-04-05) - Director's Arena sample data enrichment and sync
+- **디렉터즈 아레나(Director's Arena)** 샘플 데이터 고도화: 8화 전체 시놉시스, 캐릭터 아크, 테마, 마케팅 포인트 보강.
+- **샘플 데이터 서버 동적 동기화 완료**: `seed_samples.js`를 통해 DB(Supabase) 최신화하여 실시간 데이터 반영 구조 확보.
+- **버전 동기화**: `state.js`, `index.html`, `VERSION.md` 버전을 `v0.27`로 통일.
+
 ## v0.26 (2026-04-05) - Character relationship map size reduction and UI refinement
 - **Conflict Mapping Fix**: `openProject` 함수에서 `conflicts` 데이터가 누락되던 렌더링 엔진 오류 수정.
 - **장군님의 횟집 데이터 보강**: 시놉시스에 맞는 5대 주요 갈등 구조 및 캐릭터 상세 정보 강제 업데이트 완료.

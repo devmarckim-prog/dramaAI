@@ -61,3 +61,8 @@
 - [x] 전역 버전 `v0.24` 동기화 (`state.js`, `index.html`, `VERSION.md`)
 - [x] 대시보드 갈등 구조 렌더링 로직 강화 (Deep Search 적용)
 - [x] 서버 가동 및 최종 렌더링 상태 검증
+
+## 🍱 디렉터즈 아레나 샘플 고도화 (완료) [v0.30]
+- [x] `js/modules/samples.js` 최신 8화 데이터 반영 (프론트엔드)
+- [x] Supabase `samples` 테이블 데이터 동기화 (백엔드)
+- [x] 최종 가동 및 렌더링 검증

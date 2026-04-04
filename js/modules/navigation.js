@@ -43,7 +43,7 @@ import { state, APP_VERSION } from './state.js';
  * Sync APP_VERSION to all .version-tag elements
  */
 export function syncVersionUI() {
-  document.querySelectorAll('.version-tag').forEach(el => {
+  document.querySelectorAll('.nav-version').forEach(el => {
     el.textContent = APP_VERSION;
   });
 }
