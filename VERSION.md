@@ -1,5 +1,12 @@
 # VERSION HISTORY
 
+## v0.35 (2026-04-04) - Guest Mode Stabilization & Model Parameter Sync (P0 Fixed)
+- **Guest 500 에러 근본 해결**: 게스트 프로젝트 생성 시 발생하는 외래 키 제약 조건 위배(FK 23503)를 해결하기 위해 `syncProfile` 로직을 강화하고 강제 동기화 보장.
+- **프로젝트별 AI 모델 추적**: `projects` 테이블에 `planning_model`, `production_model`, `system_prompt` 컬럼을 추가하여 각 프로젝트가 생성될 당시의 AI 엔진 설정을 영구 기록.
+- **백엔드 인프라 개선**: `/api/config` 공용 엔드포인트를 추가하여 프론트엔드와 AI 모델 설정 및 프롬프트를 실시간 동기화.
+- **어드민 분석 강화**: 어드민 상세 보기 모달에서 해당 프로젝트를 생성한 AI 모델 정보를 기술적으로 확인할 수 있도록 UI 업데이트.
+- **데이터 무결성 확보**: 실패한 게스트 프로필 생성 시 목(Mock) 데이터 반환 대신 에러를 발생시켜 잘못된 데이터가 DB에 삽입되는 현상 차단.
+
 ## v0.34 (2026-04-04) - Production Stabilization (Final Release)
 - **전역 안정성 통합**: v0.33의 재시도 로직과 모델 동기화를 기반으로 한 최종 안정화 버전 배포.
 - **웹 푸시**: Netlify 및 GitHub 배포 동시 진행.

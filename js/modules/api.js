@@ -122,6 +122,25 @@ export async function startGenerationFlow(input) {
   addDebugLog('드라마 프로젝트 생성을 시작합니다...', 'success');
 
   try {
+    addDebugLog('데이터베이스에 프로젝트를 등록 중...');
+    
+    // FETCH GLOBAL CONFIG FOR INITIAL MODELS (v0.35)
+    let planning_model = 'claude-haiku-4-5';
+    let production_model = 'claude-sonnet-4-6';
+    let system_prompt = '';
+    
+    try {
+      const gRes = await fetch('/api/config');
+      if (gRes.ok) {
+        const config = await gRes.json();
+        planning_model = config.planningModel;
+        production_model = config.productionModel;
+        system_prompt = config.systemPrompt;
+      }
+    } catch (e) {
+      console.warn('[API] Could not fetch global config for model pinning, using defaults:', e);
+    }
+
     const initialProject = {
       title: (input.genre || '드라마') + ' 프로젝트',
       genre: input.genre,
@@ -130,6 +149,9 @@ export async function startGenerationFlow(input) {
       input: input,
       status: 'generating',
       pct: 5,
+      planning_model,
+      production_model,
+      system_prompt,
       createdAt: new Date().toISOString()
     };
 
@@ -768,6 +790,11 @@ export function normalizeProject(p) {
        if (Array.isArray(p.outline)) return p.outline.length;
        return parseInt(rawInputEps) || 8;
     })(),
+
+    // AICore Model Tracking (v0.35)
+    planning_model: p.planning_model || 'claude-haiku-4-5',
+    production_model: p.production_model || 'claude-sonnet-4-6',
+    system_prompt: p.system_prompt || '',
 
     episodes: _safeArray(p.episodes || p.scripts || p.outline || p.episodes_list).map((ep, idx) => ({
       ...ep,

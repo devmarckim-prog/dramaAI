@@ -15700,3 +15700,629 @@
 [2026-04-04T09:00:07.978Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
 [2026-04-04T09:00:07.980Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: generating)
 [2026-04-04T09:00:08.025Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:03:13.021Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:03:13.022Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:03:13.023Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:03:13.024Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:03:13.030Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:03:13.031Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:03:13.031Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:03:13.046Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T11:03:13.048Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T11:03:13.664Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:03:13.665Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:03:13.667Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:03:13.667Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:03:13.868Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:03:13.871Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:03:14.072Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:03:14.073Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:03:14.074Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:03:14.075Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:03:14.077Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:03:14.078Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:03:14.079Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:03:14.080Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:03:14.239Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:03:14.269Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:03:14.384Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:03:14.385Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:03:14.387Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:03:14.388Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:03:14.398Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:03:14.399Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:03:14.401Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:03:14.401Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:03:14.475Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:03:14.494Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:03:14.565Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:03:14.566Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:03:14.568Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:03:14.569Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:03:14.605Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:03:14.606Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:03:14.607Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:03:14.608Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:03:14.667Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:03:14.727Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:04:39.825Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T11:04:39.857Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T11:04:39.858Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T11:04:39.859Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:39.902Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.240Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.241Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.242Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.247Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.249Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.250Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.251Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.252Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.255Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.258Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.259Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.354Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.564Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:04:40.565Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:04:40.566Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:04:40.587Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.619Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T11:04:40.620Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T11:04:41.245Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:04:41.246Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:04:41.247Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:04:41.248Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:04:41.257Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:04:41.258Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:04:41.259Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:04:41.422Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:04:41.423Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:04:41.424Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:04:41.424Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:04:41.428Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:04:41.575Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:04:41.576Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:04:41.577Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:04:41.577Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:04:41.598Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:04:41.689Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:04:41.715Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:04:41.716Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:04:41.717Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:04:41.718Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:04:41.828Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:04:41.829Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:04:41.829Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:04:41.830Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:04:41.899Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:04:41.986Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:04:42.038Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:04:42.038Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:04:42.039Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:04:42.040Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:04:42.114Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:04:42.115Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:04:42.116Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:04:42.116Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:04:42.140Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:04:42.225Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:04:42.226Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:04:42.226Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:04:42.227Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:04:42.248Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:04:42.293Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:14.226Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:14.226Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:14.227Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:14.227Z] [Projects] Creating new project: g-e0b5c-1775300714227 for user: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:14.690Z] [REQUEST] POST /api/generate/start | Auth: YES | Guest: YES
+[2026-04-04T11:05:14.691Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:14.692Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:14.693Z] [Generate] Request to start generation for g-b5c060-1775300714680 (Action: full)
+[2026-04-04T11:05:14.696Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:14.697Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:14.698Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:14.780Z] [ERROR] [Generate] Initialization failed: Project not found: g-b5c060-1775300714680
+[2026-04-04T11:05:14.799Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:14.800Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:14.802Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:14.803Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 0%, Status: error)
+[2026-04-04T11:05:14.868Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:14.870Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:14.871Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:14.875Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:14.877Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:14.878Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:14.878Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:05:14.900Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:14.968Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:14.969Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:14.970Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:14.973Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:14.974Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:14.975Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:14.976Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:05:14.990Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.052Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.053Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.054Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.055Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:05:15.061Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.062Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.063Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.064Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:05:15.097Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.141Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.171Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.208Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.209Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.211Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.212Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:05:15.215Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.216Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.218Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.218Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:05:15.246Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.247Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.248Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.249Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:05:15.282Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.289Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.292Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.362Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.363Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.365Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.366Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:05:15.369Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.369Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.371Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.372Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:05:15.373Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.374Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.375Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.375Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:05:15.431Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.434Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.470Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.504Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.505Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.506Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.507Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:05:15.509Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.510Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.511Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.512Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:05:15.566Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.573Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.574Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.575Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.575Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: generating)
+[2026-04-04T11:05:15.584Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.662Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.675Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.675Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.677Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.678Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:05:15.680Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:15.682Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:15.683Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:15.684Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: generating)
+[2026-04-04T11:05:15.743Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:15.746Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:20.598Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.642Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.644Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.645Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.669Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.670Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.671Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.675Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.676Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.677Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.679Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.680Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.682Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.684Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.686Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.705Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.889Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.919Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:20.920Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:20.920Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:20.927Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.934Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T11:05:20.935Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T11:05:21.118Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:21.119Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:21.120Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:21.121Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:05:21.127Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:21.128Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:21.129Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:21.175Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:21.230Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:21.231Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:21.232Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:21.234Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:05:21.249Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:21.250Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:21.251Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:21.252Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:05:21.280Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:21.305Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:21.356Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:21.357Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:21.357Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:21.358Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:05:21.369Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:21.370Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:21.371Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:21.372Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:05:21.451Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:21.478Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:21.512Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:21.513Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:21.514Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:21.515Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:05:21.541Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:21.542Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:21.543Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:21.544Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:05:21.599Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:21.608Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:21.656Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:21.657Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:21.658Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:21.658Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:05:21.682Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:21.682Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:21.684Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:21.684Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:05:21.750Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:21.752Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:05:21.828Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:05:21.828Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:05:21.829Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:05:21.830Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:05:21.919Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:19.116Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.139Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.140Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.141Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.167Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.167Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.168Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.170Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.173Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.174Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.175Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.177Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.178Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.179Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.181Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.182Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.203Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.218Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:19.219Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:19.220Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:19.223Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.228Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T11:06:19.230Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T11:06:21.784Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:21.785Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:21.787Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:21.788Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:06:21.809Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:21.810Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:21.811Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:23.114Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:23.118Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:23.119Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:23.121Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:23.122Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:06:23.292Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:23.297Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:23.298Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:23.299Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:23.300Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:06:23.414Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:23.423Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:23.424Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:23.425Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:23.426Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:06:23.475Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:23.483Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:23.484Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:23.485Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:23.486Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:06:23.529Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:23.530Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:23.532Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:23.533Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:06:23.640Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:23.643Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:23.712Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:23.713Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:23.715Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:23.715Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:06:23.727Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:23.728Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:23.729Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:23.730Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:06:23.844Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:23.848Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:23.960Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:23.961Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:23.962Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:23.963Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:06:23.968Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:23.969Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:23.970Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:23.971Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:06:24.017Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:24.020Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:24.472Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.519Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.529Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.531Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.585Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.587Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.589Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.591Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.592Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.596Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.599Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.600Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.602Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.606Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.608Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.611Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.666Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.699Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:24.700Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:24.701Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:24.707Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.733Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T11:06:24.734Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T11:06:24.806Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:24.808Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:24.809Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:24.811Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:06:24.832Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:24.833Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:24.834Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:24.854Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:24.900Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:24.901Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:24.903Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:24.904Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:06:24.939Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:24.940Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:24.942Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:24.943Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:06:25.477Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:25.480Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:25.580Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:25.582Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:25.584Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:25.585Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:06:25.588Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:25.589Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:25.591Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:25.592Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:06:25.676Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:25.680Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:25.766Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:25.768Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:25.769Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:25.770Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:06:25.773Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:25.774Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:25.776Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:25.777Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:06:25.823Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:25.855Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:25.897Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:25.898Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:25.899Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:25.900Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:06:25.954Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:25.955Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:25.957Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:25.958Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:06:25.985Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:26.026Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:26.102Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:26.104Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:26.105Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:26.106Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:06:26.175Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:29.775Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.815Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.821Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.823Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.867Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.926Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.931Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.933Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.935Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.936Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.938Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.940Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.945Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.949Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.951Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.952Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.959Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.971Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:29.972Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:29.973Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:29.980Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.988Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T11:06:29.990Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T11:06:30.066Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:30.067Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:30.068Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:30.082Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:30.083Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:30.085Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:30.086Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:06:30.120Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:30.121Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:30.122Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:30.123Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:06:30.152Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:30.232Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:30.246Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:30.247Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:30.249Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:30.250Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:06:30.331Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:30.334Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:30.335Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:30.337Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:30.338Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:06:30.399Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:30.419Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:30.420Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:30.422Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:30.423Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:06:30.467Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:30.468Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:30.470Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:30.471Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:06:30.484Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:30.538Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:30.595Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:30.596Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:30.598Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:30.599Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:06:30.601Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:30.603Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:30.604Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:30.605Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:06:30.672Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:30.704Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:30.747Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:30.748Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:30.750Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:30.751Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:06:30.802Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:06:30.814Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:06:30.815Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:06:30.817Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:06:30.817Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:06:30.897Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:49.054Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:49.055Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:49.056Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:49.057Z] [Projects] Creating new project: g-e0b5c-1775300869057 for user: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:49.833Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:49.834Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:49.834Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:49.836Z] [REQUEST] POST /api/generate/start | Auth: YES | Guest: YES
+[2026-04-04T11:07:49.837Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:49.838Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:49.838Z] [Generate] Request to start generation for g-b5c060-1775300869821 (Action: full)
+[2026-04-04T11:07:49.975Z] [ERROR] [Generate] Initialization failed: Project not found: g-b5c060-1775300869821
+[2026-04-04T11:07:49.990Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:49.991Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:49.992Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:49.993Z] [Projects] Upserting project g-b5c060-1775300869821 (pct: 0%, Status: error)
+[2026-04-04T11:07:50.011Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.012Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.013Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.018Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.019Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.020Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.021Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.078Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.097Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.098Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.099Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.100Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.166Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.242Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.259Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.260Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.261Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.270Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.271Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.272Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.273Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.349Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.350Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.351Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.353Z] [Projects] Upserting project g-b5c060-1775290896982 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.357Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.358Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.359Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.360Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.391Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.427Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.444Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.492Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.493Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.495Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.496Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.498Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.499Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.500Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.501Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.525Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.526Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.527Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.528Z] [Projects] Upserting project g-b5c060-1775291348987 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.566Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.573Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.602Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.631Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.632Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.633Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.634Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.648Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.648Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.650Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.651Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.667Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.668Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.669Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.670Z] [Projects] Upserting project g-b5c060-1775292847126 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.697Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.700Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.727Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.747Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.748Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.749Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.750Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.756Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.757Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.759Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.760Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.783Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.784Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.785Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.787Z] [Projects] Upserting project g-b5c060-1775293206676 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.795Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.799Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.844Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.844Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.846Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.846Z] [Projects] Upserting project g-b5c060-1775300869821 (pct: 5%, Status: generating)
+[2026-04-04T11:07:50.848Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.857Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.858Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.860Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.861Z] [Projects] Upserting project g-b5c060-1775300869821 (pct: 5%, Status: generating)
+[2026-04-04T11:07:50.891Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.892Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.894Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.894Z] [Projects] Upserting project g-b5c060-1775300714680 (pct: 5%, Status: error)
+[2026-04-04T11:07:50.899Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.906Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.934Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE
+[2026-04-04T11:07:50.982Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-04T11:07:50.983Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T11:07:50.985Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T11:07:50.986Z] [Projects] Upserting project g-b5c060-1775300869821 (pct: 5%, Status: error)
+[2026-04-04T11:07:51.036Z] [ERROR] [Projects] Upsert failed (23503): insert or update on table "projects" violates foreign key constraint "projects_user_id_fkey" — retrying with UPDATE

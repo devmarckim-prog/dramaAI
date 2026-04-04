@@ -514,9 +514,15 @@ window.viewAdminProjectDetail = async (id) => {
         <div class="admin-viewer-paper">
           <center>
             <h1 style="font-family:var(--serif); font-size:32px; margin-bottom:10px">${project.title}</h1>
-            <div style="display:flex; justify-content:center; gap:12px; align-items:baseline; margin-bottom:40px">
+            <div style="display:flex; justify-content:center; gap:12px; align-items:baseline; margin-bottom:10px">
                <span class="admin-badge admin-badge-done">${platform}</span>
                <span style="color:#666; font-size:14px">${genre} | ${epCount}부작 | 🏷️ ${status}</span>
+            </div>
+            <!-- Model Metadata (v0.35) -->
+            <div style="display:flex; justify-content:center; gap:15px; font-size:10px; color:#999; font-family:monospace; margin-bottom:30px; background:rgba(0,0,0,0.02); padding:8px; border-radius:8px; width:fit-content; margin-inline:auto">
+               <span>🏗️ Plan: ${project.planning_model || 'N/A'}</span>
+               <span>✍️ Prod: ${project.production_model || 'N/A'}</span>
+               <span title="${project.system_prompt || 'N/A'}">📜 Prompt: ${project.system_prompt ? 'Custom' : 'Default'}</span>
             </div>
           </center>
 

@@ -226,8 +226,8 @@ async function syncProfile(user) {
         .single();
       if (insErr) {
         log(`[Profile Sync] UPSERT fail (${insErr.code}): ${insErr.message} - ${insErr.details || ''}`, 'error');
-        // Fallback: return mock profile to prevent 500 if error is non-critical
-        return { id: profileId, email: userEmail, role: 'user', plan: 'Free', credits: defaultCredits };
+        // Throwing error instead of mock fallback to prevent Foreign Key violations downstream
+        throw new Error(`Profile sync failed: ${insErr.message}`);
       }
       return newProfile;
     }
@@ -247,7 +247,23 @@ async function syncProfile(user) {
     return profile;
   } catch (err) {
     console.error('[Profile Sync] Critical Error:', err);
-    return { id: user.id, email: user.email, role: isPrimaryEmail ? 'admin' : 'user', plan: 'Free', credits: 10 };
+    throw err; // Ensure the caller knows sync failed
+  }
+}
+
+/**
+ * Public System Configuration (Read-only for model reference)
+ */
+async function getPublicConfig(req, res) {
+  try {
+    const config = await getSystemConfig();
+    res.json({
+      planningModel: config.planningModel || 'claude-haiku-4-5',
+      productionModel: config.productionModel || 'claude-sonnet-4-6',
+      systemPrompt: (config.systemPrompt || '').substring(0, 500) // Truncated for safety
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Config fetch failed' });
   }
 }
 
@@ -349,6 +365,8 @@ router.get('/user', authMiddleware, (req, res) => {
   res.json(req.user);
 });
 
+router.get('/config', getPublicConfig);
+
 router.get('/profile', authMiddleware, async (req, res) => {
   try {
     const profile = await syncProfile(req.user);
@@ -416,7 +434,7 @@ router.get('/projects/:id', authMiddleware, async (req, res) => {
 
 router.post('/projects', authMiddleware, async (req, res) => {
   try {
-    const { id, title, genre, logline, synopsis, platform, episodes, status, pct, stepIdx, error_msg, stats } = req.body;
+    const { id, title, genre, logline, synopsis, platform, episodes, status, pct, stepIdx, error_msg, stats, planning_model, production_model, system_prompt } = req.body;
     
     // Alias handling for robustness (v0.23)
     const charsData = req.body.chars || req.body.characters || req.body.chars_list || [];
@@ -487,6 +505,10 @@ router.post('/projects', authMiddleware, async (req, res) => {
       payload.error_msg = String(error_msg || '').substring(0, 1000);
     }
 
+    if (planning_model !== undefined) payload.planning_model = planning_model;
+    if (production_model !== undefined) payload.production_model = production_model;
+    if (system_prompt !== undefined) payload.system_prompt = system_prompt;
+
     // Choose Supabase client: Guests use Service Role (bypasses RLS), Users use their token
     const isGuest = !!req.user.isGuest || (typeof id === 'string' && id.startsWith('g-'));
     if (!serviceSupabase) {
@@ -495,7 +517,12 @@ router.post('/projects', authMiddleware, async (req, res) => {
     const userDb = isGuest ? serviceSupabase : createUserClient(req.token);
 
     // 1. Ensure profile exists before project insertion (Fixes FK constraint 23503 for guests)
-    await syncProfile(req.user).catch(err => log(`[Profile Sync] Critical failure: ${err.message}`, 'error'));
+    try {
+      await syncProfile(req.user);
+    } catch (syncErr) {
+      log(`[Projects] Aborting project creation: Profile sync failed: ${syncErr.message}`, 'error');
+      return res.status(500).json({ error: `User profile synchronization failed. Please try again. (${syncErr.message})` });
+    }
 
     let finalProject;
 
