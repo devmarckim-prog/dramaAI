@@ -59,7 +59,7 @@ export function renderSceneRow() {
     return;
   }
 
-  row.innerHTML = script.map((scene, i) => {
+  const scenesHtml = script.map((scene, i) => {
     const preview = (scene.lines?.[0]?.text || scene.lines?.[0]?.line || '').slice(0, 40);
     return `
       <div class="scene-card ${i === state.currentSceneIdx ? 'active' : ''}" id="scene-card-${i}" onclick="selectSceneCard(${i})">
@@ -68,9 +68,29 @@ export function renderSceneRow() {
         <div class="scene-card-preview">${preview}...</div>
       </div>`;
   }).join('');
+
+  // Add "Generate Next Scene" button at the end of the row
+  const nextBtnHtml = `
+    <div class="scene-card next-gen-card" onclick="triggerNextSceneGen(${epIdx})" style="border-style:dashed; opacity:0.7; justify-content:center; align-items:center; display:flex">
+      <div style="text-align:center">
+        <div style="font-size:18px; margin-bottom:4px">✨</div>
+        <div style="font-size:11px; font-weight:600">다음 씬<br>집필하기</div>
+      </div>
+    </div>`;
+
+  row.innerHTML = scenesHtml + nextBtnHtml;
     
   renderSceneDetail(state.currentSceneIdx);
 }
+
+export function triggerNextSceneGen(epIdx) {
+  if (window.generateNextScene) {
+    window.generateNextScene(epIdx);
+  } else if (typeof generateNextScene === 'function') {
+    generateNextScene(epIdx);
+  }
+}
+window.triggerNextSceneGen = triggerNextSceneGen;
 
 export function selectSceneCard(i) {
   state.currentSceneIdx = i;

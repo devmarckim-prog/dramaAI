@@ -3,10 +3,11 @@ import { SYSTEM_PROMPTS } from './constants.js';
 import { updateApiStatus, showToast, showPage, addDebugLog, showDebugLog } from './navigation.js';
 import { collectWizardInput } from './wizard.js';
 import { renderProjectCards } from './projects_list.js';
-import { DIRECTORS_ARENA_SAMPLE, SEOUL_NIGHT_SAMPLE } from './samples.js';
+import { DIRECTORS_ARENA_SAMPLE, SEOUL_NIGHT_SAMPLE, SAMPLES_CACHE, syncSamplesFromServer } from './samples.js';
 
 let isGenerating = false;
 let pollingInterval = null;
+let _displayedPct = {}; // projectId -> 현재 화면에 표시된 최대 pct (절대 감소 안 함)
 
 // Generate a proper UUID v4 for stable guest identification (DB requires valid UUID format)
 function _generateUUID() {
@@ -42,6 +43,19 @@ export async function fetchProjectById(id) {
     console.error('[API] fetchProjectById error:', error);
     throw error;
   }
+}
+
+// 화면에 표시된 pct를 업데이트하는 헬퍼 — 절대 감소하지 않음
+function _updateBarUI(projectId, newPct) {
+  const prev = _displayedPct[projectId] || 0;
+  const safePct = Math.max(prev, newPct); // 무조건 이전 값 이상만 허용
+  _displayedPct[projectId] = safePct;
+
+  const bar = document.querySelector(`#gen-card-${projectId} .pcg-bar-fill-dynamic`);
+  const labels = document.querySelectorAll(`#gen-card-${projectId} .pcg-progress-wrap span`);
+  if (bar) bar.style.width = safePct + '%';
+  if (labels.length >= 2) labels[1].textContent = Math.floor(safePct) + '%';
+  return safePct;
 }
 
 export async function openProject(id) {
@@ -187,24 +201,39 @@ export function startPolling(projectId) {
   
   pollingInterval = setInterval(async () => {
     try {
-      const projects = await fetchProjects(); // This fetches from server
+      const projects = await fetchProjects();
       const current = projects.find(p => p.id.toString() === projectId.toString());
       
       if (!current) return;
 
-      // Update UI cards
-      if (window.renderProjectCards) window.renderProjectCards();
+      // ✅ 서버 pct를 받아도 절대 감소하지 않도록 _updateBarUI 사용
+      const serverPct = parseInt(current.pct) || 0;
+      _updateBarUI(projectId, serverPct);
+
+      // 상태 텍스트 업데이트
+      const labels = document.querySelectorAll(`#gen-card-${projectId} .pcg-progress-wrap span`);
+      if (labels.length >= 2) {
+        const stepLabels = ['드라마 기본 구조 설계 중...', '주요 등장인물 구체화 중...', '회차별 스토리 아웃라인 구성 중...', '상세 시나리오 대본 집필 중...', '사전 제작 예산 산출 중...', '마무리 및 PPL 브랜드 기획 중...'];
+        const stepIdx = current.stepIdx;
+        if (typeof stepIdx === 'number' && stepIdx >= 0 && stepIdx < stepLabels.length) {
+          labels[0].textContent = stepLabels[stepIdx];
+        }
+      }
+
+      // renderProjectCards는 카드 수 변화 시에만 호출 (pct 덮어쓰기 방지)
+      // if (window.renderProjectCards) window.renderProjectCards(); // ← 제거
 
       if (current.status === 'done' || current.status === 'sample_done') {
         console.log(`[Polling] Generation reached ${current.status}. Stopping poll.`);
         
-        // Force ALL UI elements related to this project to 100%
-        const cardBar = document.querySelector(`[id^="gen-card-${projectId}"] .pcg-bar-fill-dynamic`);
-        const cardLabel = document.querySelector(`[id^="gen-card-${projectId}"] .pcg-progress-wrap span:last-child`);
+        // Force 100%
+        _updateBarUI(projectId, 100);
+        const cardBar = document.querySelector(`#gen-card-${projectId} .pcg-bar-fill-dynamic`);
+        const cardLabel = document.querySelector(`#gen-card-${projectId} .pcg-progress-wrap span:last-child`);
         if (cardBar) cardBar.style.width = '100%';
         if (cardLabel) cardLabel.textContent = '100%';
 
-        // Backup for admin view as well
+        // Admin view backup
         const adminRows = document.querySelectorAll(`tr[data-project-id="${projectId}"]`);
         adminRows.forEach(row => {
           const bar = row.querySelector('.admin-progress-bar-inner');
@@ -215,6 +244,10 @@ export function startPolling(projectId) {
 
         stopPolling();
         stopProgressSmoother();
+        delete _displayedPct[projectId]; // 정리
+        
+        // 완료 후 카드 전체 재렌더 (상태 변경 반영)
+        if (window.renderProjectCards) window.renderProjectCards();
         
         if (current.status === 'done') {
            showToast('드라마 마스터피스가 완성되었습니다!', 'success');
@@ -225,12 +258,14 @@ export function startPolling(projectId) {
         console.error('[Polling] Error detected in project status');
         stopPolling();
         stopProgressSmoother();
+        delete _displayedPct[projectId];
+        if (window.renderProjectCards) window.renderProjectCards();
         showToast('생성 중 오류가 발생했습니다: ' + (current.error_msg || 'Unknown'), 'error');
       }
     } catch (e) {
       console.warn('[Polling] Fetch error during polling:', e);
     }
-  }, 3000); // 3 second interval
+  }, 3000);
 }
 
 export async function resumeProject(projectId) {
@@ -289,25 +324,19 @@ function startProgressSmoother(projectId) {
   if (progressInterval) clearInterval(progressInterval);
 
   progressInterval = setInterval(() => {
-    // 로컬 스토리지나 메모리상의 프로젝트 pct를 조금씩 올림
-    const cards = document.querySelectorAll(`[id^="gen-card-${projectId}"] .pcg-bar-fill-dynamic`);
-    const labels = document.querySelectorAll(`[id^="gen-card-${projectId}"] .pcg-progress-wrap span:last-child`);
+    const bar = document.querySelector(`#gen-card-${projectId} .pcg-bar-fill-dynamic`);
+    const labels = document.querySelectorAll(`#gen-card-${projectId} .pcg-progress-wrap span`);
 
-    if (cards.length > 0) {
-      cards.forEach(card => {
-        let currentPct = parseFloat(card.style.width) || 0;
-        if (currentPct < 99) {
-          // 자연스러운 속도로 증가 (초당 약 0.3~0.5%)
-          let increment = 0.05 + (Math.random() * 0.15);
-          let newPct = Math.min(currentPct + increment, 99);
-          card.style.width = newPct + '%';
-          labels.forEach(l => {
-            if (l.textContent.includes('%')) l.textContent = Math.floor(newPct) + '%';
-          });
-        }
-      });
-    } else {
-      // 카드가 아직 안 그려졌을 경우 재시도 유도 (무시)
+    if (bar) {
+      // ✅ DOM 현재값을 기준으로 올림 (덮어씌워도 이전보다 낮으면 스킵)
+      let currentPct = parseFloat(bar.style.width) || (_displayedPct[projectId] || 5);
+      if (currentPct < 99) {
+        // 자연스러운 속도 (300ms마다 0.05~0.2%, 초당 0.5~1%)
+        const increment = 0.05 + (Math.random() * 0.15);
+        const newPct = Math.min(currentPct + increment, 99);
+        // ✅ _updateBarUI 로 감소 방지 보장
+        _updateBarUI(projectId, newPct);
+      }
     }
   }, 300);
 }
@@ -336,44 +365,34 @@ async function finishGenerate(isError, input, errMsg) {
     pct: 100,
     stepIdx: 7,
     input: input,
-    episodes_count: input.episodes || 8,
+    // DB field standardization
+    chars: realChars && realChars.length > 0 ? realChars : [],
     conflicts: state.planData?.conflicts || [],
     stats: state.planData?.stats || state.planData?.budget || {},
-    budget: state.planData?.budget || {}
+    budget: state.planData?.budget || (state.planData?.stats && state.planData.stats.budget) || {},
+    ppl: state.planData?.ppl || []
   };
 
-  // Only include chars/episodes/ppl/budget if we have real AI data
-  // (prevents overwriting already-saved real data with dummy fallbacks)
-  if (realChars && realChars.length > 0) {
-    finalPayload.chars = realChars;
-  }
-
-  // Preserve conflicts and stats from state.planData
-  if (state.planData?.conflicts) finalPayload.conflicts = state.planData.conflicts;
-  if (state.planData?.stats) finalPayload.stats = state.planData.stats;
-  if (state.planData?.budget) finalPayload.budget = state.planData.budget;
-  if (state.planData?.ppl) finalPayload.ppl = state.planData.ppl;
-
   // Handle episodes carefully:
-  // If we have an array of detailed episodes, Suprabase route allows storing it.
-  // We want the 'count' meta to reflect the user's intent (e.g. 8) even if AI hasn't finished all lines yet.
+  // If we have an array of detailed episodes, save as is. 
+  // Otherwise, ensure the episodes field has at least the count (number).
   const requestedEps = parseInt(input.episodes) || 8;
   if (Array.isArray(realEpisodes) && realEpisodes.length > 0) {
     finalPayload.episodes = realEpisodes;
+  } else {
+    finalPayload.episodes = requestedEps;
   }
-  finalPayload.episodes_count = Number(requestedEps);
 
   await saveProject(finalPayload);
 
   addDebugLog('마지막 단계 저장 완료 (100%)');
   stopProgressSmoother();
-  renderProjectCards();
+  if (window.renderProjectCards) window.renderProjectCards();
 
   setTimeout(() => {
     const banner = document.getElementById('api-status-banner');
     if (banner) banner.style.display = 'none';
-    // showPage('result'); // 사용자가 프로젝트 목록을 보고 있을 수 있으므로 자동 이동은 주석 처리 또는 선택적 처리
-    renderProjectCards();
+    if (window.renderProjectCards) window.renderProjectCards();
     addDebugLog('전체 로직 완료됨. 이제 프로젝트를 클릭하여 열 수 있습니다.', 'success');
   }, 1000);
 }
@@ -520,7 +539,12 @@ export async function saveProject(projectData) {
       return await _saveLocal(projectData);
     }
     const data = await res.json();
-    return { success: true, id: data.project?.id || data.id, project: data.project };
+    // Safely extract project ID: server returns { success, project: { id, ... } }
+    const projectId = data.project?.id || data.id || null;
+    if (!projectId) {
+      console.warn('[API] saveProject: server returned no project ID. Response:', JSON.stringify(data).substring(0, 200));
+    }
+    return { success: true, id: projectId, project: data.project };
   } catch (err) {
     clearTimeout(timeoutId);
     if (projectData.fallback) return { success: false };
@@ -556,28 +580,19 @@ async function _saveLocal(projectData) {
 
 
 
+
+
 export async function fetchProjects() {
   const token = localStorage.getItem('ds_auth_token');
 
-  // 1. Fetch public samples from server (respects Admin visibility settings)
-  let activeSamples = [];
-  try {
-    const sRes = await fetch('/api/samples');
-    if (sRes.ok) {
-      const sData = await sRes.json();
-      activeSamples = sData.map(s => ({
-        ...(s.data || {}),
-        id: s.id,
-        title: s.title || (s.data && s.data.title),
-        is_sample: true
-      }));
-    }
-  } catch (err) {
-    console.warn('[API] Public samples fetch failed, using fallbacks.', err);
-    // Use hardcoded defaults only if server is unreachable
-    activeSamples = [DIRECTORS_ARENA_SAMPLE, SEOUL_NIGHT_SAMPLE]
-      .filter(s => s && s.id);
+  // 1. Ensure Samples are synced
+  if (!SAMPLES_CACHE || SAMPLES_CACHE.length === 0) {
+    await syncSamplesFromServer().catch(() => {});
   }
+  
+  // Only show visible samples (or all if admin, but usually handled by server-side filter on /api/samples)
+  // For safety, server already filters isVisible on /api/samples for non-admins
+  const activeSamples = SAMPLES_CACHE;
 
   // 로컬 저장소 데이터 (Guest 용 또는 백업)
   let localData = [];
@@ -632,16 +647,24 @@ export async function fetchProjects() {
       // PASSIVE MIGRATION: If we have local guest projects, sync them to cloud
       if (localData.length > 0) {
         console.log(`[API] Found ${localData.length} local projects. Initiating passive migration...`);
+        let allSynced = true;
         for (const p of localData) {
-          // If not already on server (by ID)
           if (!serverProjects.some(sp => sp.id.toString() === p.id.toString())) {
-            await saveProject({ ...p, fallback: true }); // attempt cloud save
+            const syncResult = await saveProject({ ...p, fallback: true });
+            if (!syncResult || !syncResult.success) {
+              allSynced = false;
+              console.warn(`[API] Failed to sync local project ${p.id} to cloud. Keeping local copy.`);
+            }
           }
         }
-        // Partial cleanup: only remove what we tried to sync
-        localStorage.removeItem('ds_guest_projects');
-        localStorage.removeItem('ds_projects_local');
-        console.log('[API] Migration check complete.');
+        // Only remove local cache if ALL projects synced successfully
+        if (allSynced) {
+          localStorage.removeItem('ds_guest_projects');
+          localStorage.removeItem('ds_projects_local');
+          console.log('[API] Migration complete. Local cache cleared.');
+        } else {
+          console.warn('[API] Migration partially failed. Local cache preserved.');
+        }
       }
     }
 
@@ -706,18 +729,55 @@ export function normalizeProject(p) {
     stepIdx: parseInt(p.stepIdx || p.step_idx) || 0,
     createdAt: p.createdAt || p.created_at || new Date().toISOString(),
     
-    // 복합 데이터 타입 처리
+    // 복합 데이터 타입 처리 (Deep Search 강화 v0.23)
     input: _safeJSON(p.input),
-    stats: _safeJSON(p.stats),
-    budget: _safeJSON(p.budget),
+    stats: _safeJSON(p.stats || p.budget), 
+    
+    // Budget & PPL: Deep paths for robustness
+    budget: (() => {
+      const b = p.budget || (p.stats && p.stats.budget) || (p.data && p.data.budget) || (p.input && p.input.budget) || (p.data && p.data.input && p.data.input.budget) || {};
+      return typeof b === 'object' ? b : {};
+    })(),
+    
+    ppl: (() => {
+      const pplList = p.ppl || (p.data && p.data.ppl) || (p.input && p.input.ppl) || (p.data && p.data.input && p.data.input.ppl) || [];
+      return Array.isArray(pplList) ? pplList : [];
+    })(),
+
+    conflicts: (() => {
+      const c = p.conflicts || (p.data && p.data.conflicts) || (p.input && p.input.conflicts) || 
+                (p.stats && p.stats.conflicts) || (p.input && p.input.logline_analysis && p.input.logline_analysis.conflicts) || 
+                (p.data && p.data.input && p.data.input.conflicts) || [];
+      return Array.isArray(c) ? c : [];
+    })(),
     
     // 배열 데이터 타입 처리 (Aliasing characters/chars)
-    characters: _safeArray(p.characters || p.chars),
-    chars: _safeArray(p.chars || p.characters),
-    ppl: _safeArray(p.ppl),
+    chars: _safeArray(p.chars || p.characters || (p.input && p.input.characters)),
+    characters: _safeArray(p.characters || p.chars || (p.input && p.input.characters)),
     
-    // 대본 데이터 처리 (Aliasing episodes_list/scripts)
-    scripts: _safeJSON(p.scripts || p.episodes_list, {}),
+    // 대본 데이터 처리 (Aliasing episodes_list/scripts/outline)
+    scripts: _safeJSON(p.scripts || p.episodes_list || p.episodes, {}),
+    outline: _safeArray(p.outline),
+    
+    // 회차수 계산 (episodes_count)
+    episodes_count: (() => {
+       const rawInputEps = p.input && (typeof p.input === 'string' ? JSON.parse(p.input).episodes : p.input.episodes);
+       const epVal = p.episodes;
+       if (typeof epVal === 'number') return epVal;
+       if (Array.isArray(epVal)) return epVal.length; 
+       if (Array.isArray(p.outline)) return p.outline.length;
+       return parseInt(rawInputEps) || 8;
+    })(),
+
+    episodes: _safeArray(p.episodes || p.scripts || p.outline || p.episodes_list).map((ep, idx) => ({
+      ...ep,
+      num: ep.num || idx + 1,
+      status: ep.status || 'pending',
+      current_scene_idx: parseInt(ep.current_scene_idx) || 0,
+      total_scenes_count: parseInt(ep.total_scenes_count) || (Array.isArray(ep.scenes) ? ep.scenes.length : 0),
+      ep_summary: ep.ep_summary || '',
+      script: _safeArray(ep.script)
+    })),
     
     is_sample: p.is_sample === true || (p.id && (p.id.toString().startsWith('sample-') || p.id === 'sample1' || p.id === 'sample2' || p.id === 'arena-sample'))
   };
@@ -895,5 +955,38 @@ export async function generateEpResources(epIdx) {
   }
 }
 
-// Global window assignments removed (handled in app.js)
+/**
+ * v0.16 Multi-turn Scene Generation API calls
+ */
+export async function initSceneGeneration(episodeId) {
+  const token = localStorage.getItem('ds_auth_token');
+  const res = await fetch('/api/generate/scene/init', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+    body: JSON.stringify({ episodeId })
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return await res.json();
+}
 
+export async function generateNextScene(episodeId, sceneIdx) {
+  const token = localStorage.getItem('ds_auth_token');
+  const res = await fetch('/api/generate/scene/next', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+    body: JSON.stringify({ episodeId, sceneIdx })
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return await res.json();
+}
+
+export async function summarizeEpisode(episodeId) {
+  const token = localStorage.getItem('ds_auth_token');
+  const res = await fetch('/api/generate/ep-summary', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+    body: JSON.stringify({ episodeId })
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return await res.json();
+}

@@ -4,6 +4,7 @@
 
 import { showToast, addDebugLog } from './navigation.js';
 import { normalizeProject } from './api.js';
+import { DIRECTORS_ARENA_SAMPLE, SEOUL_NIGHT_SAMPLE } from './samples.js';
 
 export async function initAdmin() {
   try {
@@ -80,11 +81,17 @@ export async function switchAdminTab(tabId) {
   const contentEl = document.getElementById('admin-tab-content');
   if (!contentEl) return;
 
-  contentEl.innerHTML = `
-    <div class="admin-loading-wrap">
-      <div class="mp-spinner"></div>
-      <div class="admin-loading-text">데이터를 불러오는 중...</div>
-    </div>`;
+  contentEl.innerHTML = ``;
+  const loader = document.createElement('div');
+  loader.id = 'admin-loader';
+  loader.className = 'admin-loading-wrap';
+  loader.innerHTML = `<div class="mp-spinner"></div><div class="admin-loading-text">데이터를 불러오는 중...</div>`;
+  contentEl.appendChild(loader);
+
+  const removeLoader = () => {
+    const l = document.getElementById('admin-loader');
+    if (l) l.remove();
+  };
 
   try {
     switch (tabId) {
@@ -119,6 +126,7 @@ export async function switchAdminTab(tabId) {
       default:
         contentEl.innerHTML = '<div style="padding:40px">Tab not found</div>';
     }
+    removeLoader(); // ✅ 로딩 완료 후 스피너 항상 제거
   } catch (error) {
     console.error(`[Admin Tab Failure] ${tabId}:`, error);
     const errMsg = (error && error.message) || '알 수 없는 오류가 발생했습니다.';
@@ -871,6 +879,7 @@ async function renderAdminSamples(container) {
         <button class="btn btn-gold" onclick="addAdminSample()" style="padding:12px 32px; font-weight:700; letter-spacing:0.5px">+ 신규 샘플 프로젝트 등록</button>
       </div>
     `;
+    container.innerHTML = ''; // Clear loading spinner
     container.appendChild(header);
 
     if (!Array.isArray(samples) || samples.length === 0) {
@@ -913,32 +922,26 @@ async function renderAdminSamples(container) {
         <div class="admin-samples-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap:20px">
           ${samples.map(s => {
             const isVisible = s.data && s.data.isVisible !== false;
-            const progress = s.data && s.data.pct !== undefined ? s.data.pct : 100;
             const dateStr = s.updated_at ? new Date(s.updated_at).toLocaleDateString('ko-KR', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' }) : '날짜 없음';
             
             return `
             <div class="admin-config-card" style="margin:0; position:relative; overflow:hidden">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px">
                 <div>
                   <h4 style="margin:0; color:var(--gold)">${s.title}</h4>
-                  <div style="font-size:11px; color:#888; margin-top:4px">ID: ${s.id} | 생성/수정: ${dateStr}</div>
+                  <div style="font-size:11px; color:#888; margin-top:4px">ID: ${s.id} | 수정: ${dateStr}</div>
                 </div>
-                <div style="display:flex; flex-direction:column; align-items:flex-end">
+                <div style="display:flex; align-items:center; gap:12px">
                   <label class="switch-container" style="display:flex; align-items:center; gap:8px; cursor:pointer">
                     <span style="font-size:11px; color:${isVisible ? 'var(--gold)' : '#666'}">${isVisible ? '노출 중' : '비노출'}</span>
                     <input type="checkbox" id="sample-visible-${s.id}" ${isVisible ? 'checked' : ''} style="cursor:pointer">
                   </label>
-                </div>
-              </div>
-
-              <!-- 생성 진행률 바 (어드민 가독성용) -->
-              <div class="admin-config-group" style="margin-bottom:15px">
-                <label class="admin-config-label" style="display:flex; justify-content:space-between">
-                  생성 진행률 
-                  <span style="color:var(--gold); font-weight:bold">${progress}%</span>
-                </label>
-                <div style="width:100%; height:6px; background:rgba(255,255,255,0.05); border-radius:3px; margin-top:6px; overflow:hidden">
-                  <div style="width:${progress}%; height:100%; background:linear-gradient(90deg, var(--gold), #fff); box-shadow:0 0 10px var(--gold)"></div>
+                  <button class="btn" style="padding:4px 12px; font-size:11px; color:var(--red); border:1px solid rgba(255,0,0,0.2); border-radius:8px; background:rgba(255,0,0,0.05); cursor:pointer" onclick="window.deleteAdminSample('${s.id}')">
+                    🗑️ 삭제
+                  </button>
+                  <button class="btn btn-gold" style="padding:4px 12px; font-size:11px; font-weight:600; border-radius:8px" onclick="window.viewAdminSampleDetail('${s.id}')">
+                    👁️ 샘플보기
+                  </button>
                 </div>
               </div>
 
@@ -1004,6 +1007,14 @@ window.saveAllAdminSamples = async function(btn) {
     
     if (res.ok) {
       showToast('모든 샘플 노출 설정과 데이터가 저장되었습니다.', 'success');
+      
+      // ✅ 저장 직후 메모리 내 샘플 데이터도 즉시 반영
+      batchData.forEach(item => {
+        window.dispatchEvent(new CustomEvent('sample-updated', {
+          detail: { id: item.id, title: item.title, data: { ...item.data, isVisible: item.isVisible } }
+        }));
+      });
+      
       // Re-render to update timestamps and state
       const container = document.getElementById('admin-tab-content');
       if (container) await renderAdminSamples(container);
@@ -1026,48 +1037,14 @@ window.seedDefaultSamples = async function() {
   
   const sample1 = {
     id: 'sample-arena',
-    title: '디렉터즈 아레나',
-    data: {
-      id: 'sample-arena',
-      title: '디렉터즈 아레나 (Director\'s Arena)',
-      genre: '로맨틱 코미디, 오피스',
-      logline: '전직 천재 PD와 완벽주의 PPL 퀸, 상극인 두 사람이 오디션 프로그램을 만들며 벌어지는 불협화음 로맨스.',
-      synopsis: '서울 마포구 합정동, 한물간 스타 PD 재헌과 업계 최고의 전략가 서영이 숏폼 전문 스튜디오 "아레나"에서 만난다. "이야기가 전부"라는 남자와 "데이터가 전부"라는 여자는 사사건건 충돌하지만, 그 과정에서 서로의 빈자리를 채워가게 되는데...',
-      characters: [
-        { name: '조재헌', role: '주연', desc: '감과 직관으로 승부하는 34세 PD. 낡은 청바지에 헤드폰이 심볼.' },
-        { name: '오서영', role: '주연', desc: '철저한 수치와 데이터로 분석하는 32세 전략가. 화이트 정장만큼 차가운 완벽주의자.' }
-      ],
-      scripts: [
-        { title: '제1화: 우연보다 최악인 인연', story: '재헌의 엉망진창 스튜디오에 서영이 비즈니스 파트너로 등장한다.' },
-        { title: '제2화: 숏폼의 법칙', story: '두 사람은 첫 오디션 기획을 두고 처절하게 대립한다.' }
-      ],
-      pct: 100,
-      status: 'done',
-      isVisible: true
-    }
+    title: DIRECTORS_ARENA_SAMPLE.title,
+    data: DIRECTORS_ARENA_SAMPLE
   };
   
   const sample2 = {
     id: 'sample-seoul',
-    title: '서울의 밤 (Seoul Night)',
-    data: {
-      id: 'sample-seoul',
-      title: '서울의 밤 (Seoul Night)',
-      genre: '범죄, 스릴러, 누아르',
-      logline: '낮에는 선량한 배달원, 밤에는 베일에 싸인 정보원. 서울의 그림자 속에서 펼쳐지는 처절한 누아르.',
-      synopsis: '동대문 뒷골목의 한 배달 대행 업체. 10년째 과거를 지우고 살아온 강호는 우연히 대형 카르텔의 배달 사고에 휘말린다. 죽어야 끝나는 게임, 그는 다시 한 번 밤의 왕국으로 발을 들이게 된다.',
-      characters: [
-        { name: '이강호', role: '주연', desc: '낮에는 평범한 배달부, 밤에는 최고의 정보 처리 전문가.' },
-        { name: '김민주', role: '주연', desc: '조직의 비밀을 쫓다 강호와 얽히게 된 집념의 마약반 형사.' }
-      ],
-      scripts: [
-        { title: '제1화: 잘못 배달된 진실', story: '강호가 배달한 상자 안에서 조직의 지불 장부가 발견된다.' },
-        { title: '제2화: 붉은 추격', story: '조직원들의 추격 속에 민주와 강호가 처음으로 대면한다.' }
-      ],
-      pct: 100,
-      status: 'done',
-      isVisible: true
-    }
+    title: SEOUL_NIGHT_SAMPLE.title,
+    data: SEOUL_NIGHT_SAMPLE
   };
 
   try {
@@ -1102,6 +1079,58 @@ window.saveBillingPolicy = async function() {
     }
   } catch (err) {
     showToast('정책 저장 실패: ' + err.message, 'error');
+  }
+};
+
+window.viewAdminSampleDetail = async function(id) {
+  try {
+    // 1. Get sample data from memory or server
+    const res = await fetch(`/api/samples/${id}`);
+    if (!res.ok) throw new Error('샘플 데이터를 가져올 수 없습니다.');
+    const sample = await res.json();
+    
+    // 2. Open project using the main project_list logic but with sample data
+    // We need to ensure the main system treats this as the current project
+    if (window.openProject) {
+      // Normalize it manually if needed, or let openProject handle it
+      const normalized = {
+        ...(sample.data || {}),
+        id: sample.id,
+        title: sample.title,
+        is_sample: true
+      };
+      
+      // Navigate to dashboard
+      window.navigateTo('result');
+      
+      // Delay slightly to ensure DOM is ready then open
+      setTimeout(() => {
+        window.openProject(normalized);
+        showToast(`'${sample.title}' 샘플 미리보기 모드`, 'info');
+      }, 100);
+    } else {
+      showToast('메인 대시보드 로직을 찾을 수 없습니다.', 'error');
+    }
+  } catch (err) {
+    showToast('미리보기 로드 실패: ' + err.message, 'error');
+  }
+};
+
+window.deleteAdminSample = async function(id) {
+  if (!confirm(`ID: ${id} 샘플을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) return;
+  
+  try {
+    const res = await adminFetch(`/api/admin/samples/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      showToast('샘플이 성공적으로 삭제되었습니다.', 'success');
+      const container = document.getElementById('admin-tab-content');
+      if (container) renderAdminSamples(container);
+    } else {
+      const err = await res.json();
+      showToast('삭제 실패: ' + err.error, 'error');
+    }
+  } catch (err) {
+    showToast('서버 연결 중 오류가 발생했습니다: ' + err.message, 'error');
   }
 };
 

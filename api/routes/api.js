@@ -25,10 +25,26 @@ const log = (msg, level = 'info') => {
   else console.log(msg);
 };
 
+// JSON 문자열 내부의 깨진 따옴표 처리
+function sanitizeJsonString(raw) {
+  if (!raw) return "";
+  // 마크다운 코드블록 제거
+  let clean = raw.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+  // JSON 블록 추출
+  const match = clean.match(/\{[\s\S]*\}/);
+  if (match) clean = match[0];
+  // 제어문자 제거
+  clean = clean.replace(/[\x00-\x1F\x7F]/g, ' ');
+  // 후행 콤마 제거 로직 추가 (보너스)
+  clean = clean.replace(/,\s*([\}\]])/g, '$1');
+  return clean;
+}
+
 // 3. Global Configuration & Model Map
 const modelMap = {
   // Anthropic
   'claude-haiku-4-5': 'claude-haiku-4-5-20251001',
+  'claude-haiku-4-5-20251001': 'claude-haiku-4-5-20251001',
   'claude-sonnet-4-6': 'claude-sonnet-4-6',
   'claude-opus-4-6': 'claude-opus-4-6',
   'claude-3-5-sonnet-latest': 'claude-sonnet-4-6',
@@ -47,7 +63,6 @@ const getModelId = (alias) => modelMap[alias] || alias || 'claude-sonnet-4-6';
  * Prioritizes Supabase Cloud DB, falls back to local JSON
  */
 async function getSystemConfig() {
-  const configPath = path.join(__dirname, '../config/system.json');
   const defaults = {
     planningModel: 'claude-haiku-4-5',
     productionModel: 'claude-sonnet-4-6',
@@ -57,36 +72,120 @@ async function getSystemConfig() {
   };
 
   if (!serviceSupabase) {
-    console.error('[Config] Supabase Service Client is NOT initialized. Check environment variables.');
+    console.error('[Config] Supabase Service Client is NOT initialized. Using defaults.');
     return defaults;
   }
 
-    return defaults;
+  try {
+    const { data, error } = await serviceSupabase
+      .from('system_settings')
+      .select('*')
+      .eq('id', 'global')
+      .single();
+
+    if (!error && data) {
+      return {
+        planningModel: data.planning_model || defaults.planningModel,
+        productionModel: data.production_model || defaults.productionModel,
+        systemPrompt: data.system_prompt || defaults.systemPrompt,
+        pricingPro: data.pricing_pro || defaults.pricingPro,
+        creditsFree: data.credits_free || defaults.creditsFree
+      };
+    }
+  } catch (err) {
+    log(`[Config] Failed to load from Supabase: ${err.message}. Using defaults.`, 'error');
+  }
+
+  // Fallback: try local config file
+  try {
+    const configPath = path.join(__dirname, '../config/system.json');
+    if (require('fs').existsSync(configPath)) {
+      const local = JSON.parse(require('fs').readFileSync(configPath, 'utf8'));
+      return { ...defaults, ...local };
+    }
+  } catch (e) { /* ignore */ }
+
+  return defaults;
 }
 
 /**
- * Robust AI Calling Helper (v0.2.0 - Multi-Provider)
- * Refactored to use callUnifiedAI for automatic fallback
+ * Unified AI Calling Helper (Anthropic)
+ * Declared here to avoid 'not defined' errors when callAI references it
  */
-async function callAI(prompt, modelAlias, config, anthropicInstance) {
-  try {
-    const raw = await callUnifiedAI({
-      prompt: prompt,
-      system: config.systemPrompt || "당신은 세계적인 K-드라마 전문 작가이자 제작 전문가입니다. 모든 출력은 반드시 JSON 형식으로만 제공하세요.",
-      modelAlias: modelAlias
-    }, config, anthropicInstance);
+async function callUnifiedAI(params, config, anthropicClient) {
+  const { prompt, system, max_tokens, modelAlias, customApiKey } = params;
+  const anthropicKey = customApiKey || process.env.ANTHROPIC_API_KEY;
 
-    let text = raw;
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (jsonMatch) text = jsonMatch[0];
-    
-    // Cleanup known JSON breakages
-    text = text.replace(/,\s*([\}\]])/g, '$1');
-    return JSON.parse(text);
-  } catch (err) {
-    log(`[AI-Call-Final-Error] ${err.message}`, 'error');
-    throw err;
+  const finalSystem = system || (config && config.systemPrompt) || "당신은 세계적인 K-드라마 전문 작가이자 제작 전문가입니다.";
+
+  if (!anthropicKey) {
+    throw new Error('ANTHROPIC_API_KEY가 설정되지 않았습니다. 환경 변수를 확인해주세요.');
   }
+
+  const localAnthropic = customApiKey
+    ? new (Anthropic.Anthropic || Anthropic)({ apiKey: customApiKey })
+    : (anthropicClient || new (Anthropic.Anthropic || Anthropic)({ apiKey: anthropicKey }));
+
+  const modelId = modelMap[modelAlias] || modelAlias || 'claude-sonnet-4-6';
+  log(`[AI-Call] Anthropic model: ${modelId}`);
+
+  const resp = await localAnthropic.messages.create({
+    model: modelId,
+    max_tokens: max_tokens || 8192,
+    system: finalSystem,
+    messages: [{ role: 'user', content: prompt }]
+  });
+
+  return resp.content[0].text;
+}
+
+/**
+ * Robust AI Calling Helper (v0.2.0)
+ */
+async function callAI(prompt, modelAlias, config, anthropicInstance, history = []) {
+  let retryCount = 0;
+  const maxRetries = 1;
+  let currentPrompt = prompt;
+
+  async function attempt() {
+    try {
+      // For multi-turn, we skip the system prompt if history is provided or combine?
+      // Anthropic SDK handles system separately.
+      const messages = [...history];
+      if (currentPrompt) {
+        messages.push({ role: "user", content: currentPrompt });
+      }
+
+      const raw = await callUnifiedAI({
+        prompt: currentPrompt,
+        system: config.systemPrompt || "당신은 세계적인 K-드라마 전문 작가이자 제작 전문가입니다. 모든 출력은 반드시 JSON 형식으로만 제공하세요.",
+        modelAlias: modelAlias,
+        history: history // Forward history to unified caller
+      }, config, anthropicInstance);
+
+      const text = sanitizeJsonString(raw);
+      return JSON.parse(text);
+    } catch (err) {
+      if (retryCount < maxRetries) {
+        retryCount++;
+        log(`[AI-Call-Retry] Parsing failed. Retrying... Error: ${err.message}`, 'warn');
+        currentPrompt = `아래 텍스트를 유효한 JSON으로 변환해줘.
+규칙:
+- 문자열 내부의 큰따옴표(")는 모두 삭제
+- 줄바꿈은 \\n으로 변환
+- JSON 외 텍스트는 모두 제거
+- 반드시 완전한 JSON으로 마무리
+
+원본:
+${raw}`;
+        return await attempt();
+      }
+      log(`[AI-Call-Final-Error] ${err.message}`, 'error');
+      throw err;
+    }
+  }
+
+  return await attempt();
 }
 
 /**
@@ -267,27 +366,17 @@ router.get('/profile', authMiddleware, async (req, res) => {
 /* --- PROJECTS API --- */
 router.get('/projects', authMiddleware, async (req, res) => {
   const isGuest = req.user.isGuest;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
-  if (isGuest && (!serviceKey || serviceKey.startsWith('sb_publishable'))) {
-    try {
-      log(`[Projects] GET /projects -> PG Fallback for Guest: ${req.user.id}`);
-      const { rows } = await pool.query('SELECT * FROM projects WHERE user_id = $1 ORDER BY created_at DESC', [req.user.id]);
-      return res.json(rows);
-    } catch (pgErr) {
-      log(`[Projects] GET /projects -> PG Fallback Failed: ${pgErr.message}`, 'error');
-      // Continue to standard fallback if needed or return empty
-      return res.json([]);
-    }
-  }
+  if (!serviceSupabase) return res.status(500).json({ error: 'DB not initialized' });
 
+  // Guests use serviceSupabase (bypasses RLS), auth users use their own token
   const userDb = isGuest ? serviceSupabase : createUserClient(req.token);
   let query = userDb.from('projects').select('*').eq('user_id', req.user.id);
   query = query.order('created_at', { ascending: false });
 
   const { data: projects, error } = await query;
   if (error) return res.status(500).json({ error: error.message });
-  res.json(projects);
+  res.json(projects || []);
 });
 
 /**
@@ -295,48 +384,35 @@ router.get('/projects', authMiddleware, async (req, res) => {
  */
 router.get('/projects/:id', authMiddleware, async (req, res) => {
   try {
-    const userDb = req.user.isGuest ? serviceSupabase : createUserClient(req.token);
+    if (!serviceSupabase) return res.status(500).json({ error: 'DB not initialized' });
+    const isGuest = req.user.isGuest;
+    const userDb = isGuest ? serviceSupabase : createUserClient(req.token);
     const projectId = req.params.id;
 
     // 1. Fetch Project
-    let project;
-    const isGuest = req.user.isGuest;
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
-
-    if (isGuest && (!serviceKey || serviceKey.startsWith('sb_publishable'))) {
-      log(`[Projects] GET /projects/${projectId} -> PG Fallback for Guest`);
-      const { rows } = await pool.query('SELECT * FROM projects WHERE id = $1', [projectId]);
-      project = rows[0];
-    } else {
-      const { data, error: pErr } = await userDb
-        .from('projects')
-        .select('*')
-        .eq('id', projectId)
-        .single();
-      if (pErr) throw pErr;
-      project = data;
-    }
-
+    const { data: project, error: pErr } = await userDb
+      .from('projects')
+      .select('*')
+      .eq('id', projectId)
+      .single();
+    if (pErr) throw pErr;
     if (!project) return res.status(404).json({ error: 'Project not found' });
 
-    // 2. Fetch Episodes
+    // 2. Fetch Episodes (optional table — safe fallback)
     let episodes = [];
-    if (isGuest && (!serviceKey || serviceKey.startsWith('sb_publishable'))) {
-      const { rows: epRows } = await pool.query('SELECT * FROM episodes WHERE project_id = $1 ORDER BY ep_num ASC', [projectId]);
-      episodes = epRows;
-    } else {
+    try {
       const { data: epData, error: eErr } = await userDb
         .from('episodes')
         .select('*')
         .eq('project_id', projectId)
         .order('ep_num', { ascending: true });
-      if (eErr) log(`[Projects] Error fetching episodes: ${eErr.message}`, 'error');
+      if (eErr) log(`[Projects] Episodes table error (may not exist): ${eErr.message}`);
       episodes = epData || [];
+    } catch (epEx) {
+      log(`[Projects] Episodes fetch skipped: ${epEx.message}`);
     }
 
-    // Merge episodes into project object for the frontend
     project.episodes_list = episodes;
-    
     res.json(project);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -345,9 +421,16 @@ router.get('/projects/:id', authMiddleware, async (req, res) => {
 
 router.post('/projects', authMiddleware, async (req, res) => {
   try {
-    const { id, title, genre, logline, synopsis, chars, ppl, budget, input, platform, episodes, episodes_count, status, pct, stepIdx, error_msg, scripts, conflicts, stats } = req.body;
+    const { id, title, genre, logline, synopsis, platform, episodes, status, pct, stepIdx, error_msg, stats } = req.body;
+    
+    // Alias handling for robustness (v0.23)
+    const charsData = req.body.chars || req.body.characters || req.body.chars_list || [];
+    const pplData = req.body.ppl || req.body.ppl_items || req.body.ppl_list || [];
+    const budgetData = req.body.budget || req.body.total_budget || (stats && stats.budget) || {};
+    const scriptsData = req.body.scripts || req.body.episodes_list || req.body.scripts_list || {};
+    const conflictsData = req.body.conflicts || req.body.conflict_points || req.body.conflict_list || [];
 
-    const baseInput = typeof input === 'string' ? JSON.parse(input) : (input || {});
+    const baseInput = typeof req.body.input === 'string' ? JSON.parse(req.body.input) : (req.body.input || {});
     // Inject fingerprint into input if guest
     if (req.user.isGuest) {
       baseInput.fingerprint = req.user.fingerprint;
@@ -389,125 +472,57 @@ router.post('/projects', authMiddleware, async (req, res) => {
     if (platform !== undefined) payload.platform = platform;
     if (logline !== undefined) payload.logline = logline;
     if (synopsis !== undefined) payload.synopsis = synopsis;
-    if (chars !== undefined) payload.chars = Array.isArray(chars) ? chars : [];
+    
+    // Robust assignments using Aliased data
+    payload.chars = Array.isArray(charsData) ? charsData : [];
+    payload.ppl = Array.isArray(pplData) ? pplData : [];
+    payload.conflicts = Array.isArray(conflictsData) ? conflictsData : [];
+    payload.budget = typeof budgetData === 'object' ? budgetData : {};
+    payload.scripts = (typeof scriptsData === 'object' && scriptsData !== null) ? scriptsData : {};
+    
     if (episodes !== undefined) payload.episodes = epOutput;
-    if (ppl !== undefined) payload.ppl = Array.isArray(ppl) ? ppl : [];
-    if (budget !== undefined) payload.budget = typeof budget === 'object' ? budget : {};
     if (status !== undefined) payload.status = status;
     if (pct !== undefined) payload.pct = pct;
     if (stepIdx !== undefined) payload.stepIdx = stepIdx;
-    if (input !== undefined) payload.input = mergedInput;
-    if (conflicts !== undefined) payload.conflicts = Array.isArray(conflicts) ? conflicts : [];
-    if (stats !== undefined) payload.stats = typeof stats === 'object' ? stats : {};
+    if (req.body.input !== undefined) payload.input = mergedInput;
     if (stats !== undefined) payload.stats = typeof stats === 'object' ? stats : {};
 
-    // Save scripts if provided (episode scripts storage)
-    if (scripts !== undefined) {
-      payload.scripts = (typeof scripts === 'object' && scripts !== null) ? scripts : {};
-    }
-    // Save error message for failed generations
+    // Save error message for failed generations (v0.23)
     if (error_msg !== undefined) {
       payload.error_msg = String(error_msg || '').substring(0, 1000);
     }
 
-    // Choose Supabase client: Guests use Service Role (to handle specific IDs), Users use their token (RLS)
+    // Choose Supabase client: Guests use Service Role (bypasses RLS), Users use their token
     const isGuest = !!req.user.isGuest || (typeof id === 'string' && id.startsWith('g-'));
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
-    
+    if (!serviceSupabase) {
+      return res.status(500).json({ error: 'Database not initialized. Check SUPABASE_URL/SERVICE_ROLE_KEY.' });
+    }
+    const userDb = isGuest ? serviceSupabase : createUserClient(req.token);
+
     let finalProject;
 
-    // IF GUEST AND SERVICE KEY MISSING -> USE DIRECT PG FALLBACK
-    if (isGuest && (!serviceKey || serviceKey.startsWith('sb_publishable'))) {
-      log(`[Projects] Using PG Fallback for Guest Project: ${id || 'NEW'}`);
-      
-      const cols = {
-        user_id: (req.user && req.user.id) || GLOBAL_GUEST_UUID,
-        title: title || '드라마 프로젝트',
-        genre: genre || '드라마', 
-        platform: platform || 'OTT', 
-        logline: logline || '', 
-        synopsis: synopsis || '',
-        chars: (Array.isArray(chars) ? chars : []),
-        episodes: (epOutput),
-        ppl: (Array.isArray(ppl) ? ppl : []),
-        budget: (typeof budget === 'object' ? budget : {}),
-        status: status || 'generating',
-        pct: pct || 0,
-        stepIdx: stepIdx || 0,
-        input: (mergedInput),
-        conflicts: (Array.isArray(conflicts) ? conflicts : []),
-        stats: (typeof stats === 'object' ? stats : {}),
-        scripts: (typeof scripts === 'object' ? scripts : {}),
-        error_msg: String(error_msg || ''),
-        updated_at: new Date().toISOString()
-      };
+    if (id) {
+      payload.id = String(id);
+      if (!payload.user_id) payload.user_id = req.user.id;
+      log(`[Projects] Upserting project ${payload.id} (pct: ${payload.pct || 0}%, Status: ${payload.status || 'unknown'})`);
 
-      if (!id) {
-        const prefix = req.user.id.substring(0, 5).replace(/[^a-z0-9]/gi, '');
-        cols.id = 'g-' + prefix + '-' + Date.now();
+      const { data, error } = await userDb.from('projects').upsert(payload, { onConflict: 'id' }).select().single();
+      if (error) {
+        log(`[Projects] Upsert failed (${error.code}): ${error.message} — retrying with UPDATE`, 'error');
+        const { data: upData, error: upError } = await userDb.from('projects').update(payload).eq('id', payload.id).select().single();
+        if (upError) throw upError;
+        finalProject = upData;
       } else {
-        cols.id = id;
-      }
-
-      const keys = Object.keys(cols);
-      const dbKeys = keys.map(k => {
-        if (k === 'stepIdx') return '"stepIdx"';
-        return k.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-      });
-      
-      const quotedKeys = dbKeys.map(k => k.includes('"') ? k : `"${k}"`).join(', ');
-      const markers = keys.map((_, i) => `$${i + 1}`).join(', ');
-      const updates = dbKeys.map((k, i) => {
-        const col = k.includes('"') ? k : `"${k}"`;
-        return `${col} = EXCLUDED.${col}`;
-      }).join(', ');
-      
-      const vals = keys.map(k => (typeof cols[k] === 'object' && cols[k] !== null) ? JSON.stringify(cols[k]) : cols[k]);
-
-      const query = `
-        INSERT INTO projects (${quotedKeys})
-        VALUES (${markers})
-        ON CONFLICT (id) DO UPDATE SET ${updates}
-        RETURNING *;
-      `;
-
-      try {
-        const resPg = await pool.query(query, vals);
-        finalProject = resPg.rows[0];
-        log(`[Projects] PG Fallback Success: ${finalProject.id}`);
-      } catch (pgErr) {
-        log(`[Projects] PG Fallback Failed: ${pgErr.message}`, 'error');
-        throw pgErr;
-      }
-    } else {
-      // STANDARD SUPABASE FLOW (for Users or when Service Key exists)
-      const userDb = isGuest ? serviceSupabase : createUserClient(req.token);
-      
-      if (id) {
-        payload.id = String(id);
-        log(`[Projects] Saving project ${payload.id} (pct: ${payload.pct || 0}%, Status: ${payload.status || 'unknown'})`);
-        
-        // Ensure user_id is set correctly for the upsert
-        if (!payload.user_id) payload.user_id = req.user.id;
-
-        const { data, error } = await userDb.from('projects').upsert(payload, { onConflict: 'id' }).select().single();
-        if (error) {
-          log(`[Projects] Upsert failed for ${payload.id}: ${error.message} (Code: ${error.code})`, 'error');
-          const { data: upData, error: upError } = await userDb.from('projects').update(payload).eq('id', payload.id).select().single();
-          if (upError) throw upError;
-          finalProject = upData;
-        } else {
-          finalProject = data;
-        }
-      } else {
-        const prefix = req.user.id.substring(0, 5).replace(/[^a-z0-9]/gi, '');
-        payload.id = 'p-' + prefix + '-' + Date.now();
-        payload.user_id = req.user.id;
-        log(`[Projects] Creating new project: ${payload.id} for user: ${payload.user_id}`);
-        const { data, error } = await userDb.from('projects').insert(payload).select().single();
-        if (error) throw error;
         finalProject = data;
       }
+    } else {
+      const prefix = req.user.id.substring(0, 5).replace(/[^a-z0-9]/gi, '');
+      payload.id = (isGuest ? 'g-' : 'p-') + prefix + '-' + Date.now();
+      payload.user_id = req.user.id;
+      log(`[Projects] Creating new project: ${payload.id} for user: ${payload.user_id}`);
+      const { data, error } = await userDb.from('projects').insert(payload).select().single();
+      if (error) throw error;
+      finalProject = data;
     }
 
     // Background sync profile
@@ -591,25 +606,60 @@ router.delete('/projects/:id', authMiddleware, async (req, res) => {
  */
 router.post('/generate/start', authMiddleware, async (req, res) => {
   const { projectId, options = {} } = req.body;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
 
   log(`[Generate] Request to start generation for ${projectId} (Action: ${options.action || 'full'})`);
 
-  // 1. Initialize project status and pct
   try {
-    const isGuest = String(projectId).startsWith('g-') || !isNaN(projectId);
+    if (!serviceSupabase) throw new Error('Database not initialized');
+
+    // 1. Fetch project to get stored input data (Bug #4 Fix)
+    const { data: project, error: fetchErr } = await serviceSupabase
+      .from('projects')
+      .select('id, input, status')
+      .eq('id', projectId)
+      .single();
+
+    if (fetchErr || !project) throw new Error(`Project not found: ${projectId}`);
+
+    const projectInput = typeof project.input === 'string'
+      ? JSON.parse(project.input)
+      : (project.input || {});
+
+    // 2. Initialize project status
     const updatePayload = { status: 'generating', pct: 5, updated_at: new Date().toISOString() };
-    
-    // Always use serviceSupabase for internal status updates to bypass RLS safely
     await serviceSupabase.from('projects').update(updatePayload).eq('id', projectId);
 
-    // 2. Trigger asynchronous background generation
-    log(`[Generate] Project ${projectId} initialized for stepped generation. Triggering background task.`);
-    runLocalGeneration({ id: projectId, input: req.body.input || {} }, options).catch(err => {
-      log(`[Generate Async] Failed for ${projectId}: ${err.message}`, 'error');
+    // 3. Trigger Edge Function with proper input data
+    log(`[Generate] Project ${projectId} initialized. Triggering Supabase Edge Function.`);
+    const edgeFunctionUrl = `${process.env.SUPABASE_URL}/functions/v1/generate`;
+
+    fetch(edgeFunctionUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ projectId, input: projectInput, action: options.action || 'start' })
+    }).then(async (efRes) => {
+      if (!efRes.ok) {
+        const errBody = await efRes.json().catch(() => ({}));
+        log(`[Generate Edge] Non-OK response (${efRes.status}): ${errBody.error || 'Unknown error'}`, 'error');
+        // Mark project as error if Edge Function responds with failure
+        await serviceSupabase.from('projects').update({
+          status: 'error',
+          error_msg: `Edge Function 오류: ${errBody.error || efRes.status}`
+        }).eq('id', projectId);
+      }
+    }).catch(err => {
+      log(`[Generate Edge Call] Failed to trigger function: ${err.message}`, 'error');
+      // Mark as error in DB so frontend sees it
+      serviceSupabase.from('projects').update({
+        status: 'error',
+        error_msg: `Edge Function 연결 실패: ${err.message}`
+      }).eq('id', projectId);
     });
 
-    res.json({ success: true, message: 'Background generation started.', projectId });
+    res.json({ success: true, message: 'Background generation started via Edge Function.', projectId });
   } catch (err) {
     log(`[Generate] Initialization failed: ${err.message}`, 'error');
     res.status(500).json({ error: err.message });
@@ -617,8 +667,180 @@ router.post('/generate/start', authMiddleware, async (req, res) => {
 });
 
 /**
- * STEP-BY-STEP GENERATION ROUTE
- * Called by frontend to perform ONE specific AI generation phase.
+ * v0.16 Multi-turn Scene Generation: STEP 1 - Initialize
+ */
+router.post('/generate/scene/init', authMiddleware, async (req, res) => {
+  const { episodeId } = req.body;
+  try {
+    const userDb = req.user.isGuest ? serviceSupabase : createUserClient(req.token);
+    const config = await getSystemConfig();
+
+    // 1. Fetch Episode & Project Context
+    const { data: ep, error: eErr } = await userDb.from('episodes').select('*, projects(*)').eq('id', episodeId).single();
+    if (eErr || !ep) throw new Error("Episode not found");
+
+    const project = ep.projects;
+    const model = getModelId(config.productionModel);
+
+    // 2. Build INITIAL Context Prompt (Turn 1)
+    const initPrompt = `당신은 드라마 [${project.title}]의 전문 작가입니다. 
+지금부터 ${ep.ep_num}화 대본을 씬별로 작성합니다.
+
+[드라마 정보]
+장르: ${project.genre}
+로그라인: ${project.logline}
+줄거리 요약: ${project.synopsis?.substring(0, 500)}...
+
+[인물 정보]
+${JSON.stringify(project.chars?.slice(0, 5))}
+
+[${ep.ep_num}화 정보]
+제목: ${ep.title}
+줄거리: ${ep.story}
+씬 목록 전체: ${JSON.stringify(ep.scenes)}
+
+준비되면 '시작'이라고만 답하세요. JSON 형식이 아니어도 좋으나 반드시 '시작'이라는 단어가 포함되어야 합니다.`;
+
+    const anthropic = new AnthropicSDK({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const response = await anthropic.messages.create({
+      model: model,
+      max_tokens: 1024,
+      system: config.systemPrompt,
+      messages: [{ role: "user", content: initPrompt }]
+    });
+
+    const aiMsg = response.content[0].text;
+    const history = [
+      { role: "user", content: initPrompt },
+      { role: "assistant", content: aiMsg }
+    ];
+
+    // 3. Update Episode status
+    await serviceSupabase.from('episodes').update({
+      script_history: history,
+      status: 'writing',
+      total_scenes_count: Array.isArray(ep.scenes) ? ep.scenes.length : 0,
+      current_scene_idx: 0
+    }).eq('id', episodeId);
+
+    res.json({ success: true, history });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * v0.16 Multi-turn Scene Generation: STEP 2 - Generate Next Scene
+ */
+router.post('/generate/scene/next', authMiddleware, async (req, res) => {
+  const { episodeId, sceneIdx } = req.body;
+  try {
+    const userDb = req.user.isGuest ? serviceSupabase : createUserClient(req.token);
+    const config = await getSystemConfig();
+
+    // 1. Fetch Episode History
+    const { data: ep, error: eErr } = await userDb.from('episodes').select('*').eq('id', episodeId).single();
+    if (eErr || !ep) throw new Error("Episode not found");
+
+    const history = ep.script_history || [];
+    const scenes = ep.scenes || [];
+    const targetScene = scenes[sceneIdx];
+
+    if (!targetScene) throw new Error(`Scene ${sceneIdx} not found in episode map.`);
+
+    const model = getModelId(config.productionModel);
+    const scenePrompt = `S#${targetScene.num || sceneIdx + 1} (${targetScene.place} / ${targetScene.time}) 을 작성해주세요.
+내용 요약: ${targetScene.desc || targetScene.content}
+
+[출력 규칙]
+- 전문적인 대본 형식 준수
+- 인물 말투 고정 (chars 정보 기반)
+- 반드시 아래 JSON 형식으로만 출력:
+{
+  "num": "S#${targetScene.num || sceneIdx + 1}",
+  "loc": "${targetScene.place} / ${targetScene.time}",
+  "content": "대본 내용..."
+}`;
+
+    const anthropic = new AnthropicSDK({ apiKey: process.env.ANTHROPIC_API_KEY });
+    
+    // Call AI with History
+    const response = await anthropic.messages.create({
+      model: model,
+      max_tokens: 4096,
+      system: config.systemPrompt + "\n[중요] 반드시 JSON 형식으로만 응답하세요.",
+      messages: [...history, { role: "user", content: scenePrompt }]
+    });
+
+    const rawMsg = response.content[0].text;
+    const cleanJson = sanitizeJsonString(rawMsg);
+    const sceneData = JSON.parse(cleanJson);
+
+    // 2. Update History & Script
+    const updatedHistory = [...history, { role: "user", content: scenePrompt }, { role: "assistant", content: rawMsg }];
+    
+    // Manage token budget: If history > 10,000 chars (approx 20k tokens in some cases), compress
+    if (JSON.stringify(updatedHistory).length > 20000) {
+       // Simple compression: remove middle turns, keep init + last 2
+       log(`[Generate-History] Compressing history for episode ${episodeId}`);
+       const compressed = [updatedHistory[0], updatedHistory[1], updatedHistory[updatedHistory.length-2], updatedHistory[updatedHistory.length-1]];
+       updatedHistory.splice(0, updatedHistory.length, ...compressed);
+    }
+
+    const currentScript = Array.isArray(ep.script) ? ep.script : [];
+    currentScript.push(sceneData);
+
+    const isFinal = (sceneIdx + 1) >= scenes.length;
+
+    await serviceSupabase.from('episodes').update({
+      script_history: updatedHistory,
+      script: currentScript,
+      current_scene_idx: sceneIdx + 1,
+      status: isFinal ? 'completed' : 'writing'
+    }).eq('id', episodeId);
+
+    // 3. If Final, Clear History to save DB space
+    if (isFinal) {
+       log(`[Generate-History] Final scene reached. Clearing history for ${episodeId}`);
+       await serviceSupabase.from('episodes').update({ script_history: [] }).eq('id', episodeId);
+    }
+
+    res.json({ success: true, scene: sceneData, isFinal });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * v0.16 Multi-turn Scene Generation: STEP 3 - Summarize Episode
+ */
+router.post('/generate/ep-summary', authMiddleware, async (req, res) => {
+  const { episodeId } = req.body;
+  try {
+    const userDb = req.user.isGuest ? serviceSupabase : createUserClient(req.token);
+    const config = await getSystemConfig();
+    const { data: ep } = await userDb.from('episodes').select('*').eq('id', episodeId).single();
+    
+    const fullScript = ep.script?.map(s => s.content).join('\n\n') || "";
+    const prompt = `드라마 ${ep.ep_num}화의 전체 대본입니다. 다음 화 집필을 위해 핵심 사건 3줄로 요약해줘.\n\n${fullScript}`;
+
+    const anthropic = new AnthropicSDK({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const response = await anthropic.messages.create({
+      model: getModelId(config.planningModel),
+      max_tokens: 512,
+      messages: [{ role: "user", content: prompt }]
+    });
+
+    const summary = response.content[0].text;
+    await serviceSupabase.from('episodes').update({ ep_summary: summary }).eq('id', episodeId);
+    
+    res.json({ success: true, summary });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
  * Prevents Netlify function timeouts by keeping each request short.
  */
 router.post('/generate/step', authMiddleware, async (req, res) => {
@@ -681,45 +903,72 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
 
     let resultData = {};
 
+    // Guard: serviceSupabase must be available for all DB updates
+    if (!serviceSupabase) throw new Error('Database not initialized. Cannot proceed with generation.');
+
     switch (parseInt(step)) {
-      case 0: // Phase 1: Logline & Genre (15%)
+      case 0: { // Phase 1: Logline & Genre (20%)
         const loglinePrompt = `드라마 기획안의 핵심 컨셉을 작성해줘. 로그라인 시드: ${inputData.logline || inputData.topic || '자유 주제'}. 장르: ${inputData.genre || '드라마'}. 다음 JSON 형식으로 응답해: {"title": "제목", "genre": "장르", "logline": "한 줄 로그라인"}`;
         resultData = await callAI(loglinePrompt, config.productionModel, config, anthropicClient);
         await updateProject({ ...resultData, pct: 20, stepIdx: 1 });
         break;
+      }
 
-      case 2: // Phase 3: Synopsis (45%)
-        const synopPrompt = `제목: ${project.title || resultData.title}. 로그라인: ${project.logline || resultData.logline}. 이 드라마의 전체 줄거리(시놉시스)를 1000자 내외로 상세히 작성해줘. JSON 형식: {"synopsis": "내용"}`;
+      case 1: { // Phase 2: Characters setup (35%) — was missing!
+        const title1 = project.title || inputData.title || '드라마';
+        const logline1 = project.logline || inputData.logline || '';
+        const charPrompt1 = `드라마 "${title1}" (로그라인: ${logline1})의 주요 인물 3명의 기초 설정을 작성해줘. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
+        resultData = await callAI(charPrompt1, config.planningModel, config, anthropicClient);
+        await updateProject({ chars: Array.isArray(resultData.chars) ? resultData.chars : [], pct: 35, stepIdx: 2 });
+        break;
+      }
+
+      case 2: { // Phase 3: Synopsis (45%)
+        const title2 = project.title || inputData.title || '드라마';
+        const logline2 = project.logline || inputData.logline || '';
+        const synopPrompt = `제목: ${title2}. 로그라인: ${logline2}. 이 드라마의 전체 줄거리(시놉시스)를 1000자 내외로 상세히 작성해줘. JSON 형식: {"synopsis": "내용"}`;
         resultData = await callAI(synopPrompt, config.productionModel, config, anthropicClient);
-        await updateProject({ synopsis: resultData.synopsis, pct: 45, stepIdx: 3 });
+        await updateProject({ synopsis: resultData.synopsis || '', pct: 45, stepIdx: 3 });
         break;
+      }
 
-      case 3: // Phase 4: Conflicts (60%)
-        const conflictPrompt = `드라마 "${project.title}"의 주요 갈등 구조를 분석해줘. 내적 갈등, 대인 갈등, 사회적/환경적 갈등을 포함해. JSON 형식: {"conflicts": [{"type": "내적/대인/사회", "character": "인물명", "desc": "갈등 내용"}]}`;
+      case 3: { // Phase 4: Conflicts (60%)
+        const title3 = project.title || inputData.title || '드라마';
+        const conflictPrompt = `드라마 "${title3}"의 주요 갈등 구조를 분석해줘. 내적 갈등, 대인 갈등, 사회적/환경적 갈등을 포함해. JSON 형식: {"conflicts": [{"type": "내적/대인/사회", "character": "인물명", "desc": "갈등 내용"}]}`;
         resultData = await callAI(conflictPrompt, config.productionModel, config, anthropicClient);
-        await updateProject({ conflicts: resultData.conflicts, pct: 60, stepIdx: 4 });
+        await updateProject({ conflicts: Array.isArray(resultData.conflicts) ? resultData.conflicts : [], pct: 60, stepIdx: 4 });
         break;
+      }
 
-      case 4: // Phase 5: Characters (75%)
-        const charPrompt = `드라마 "${project.title || resultData.title}"의 주요 인물 3명을 설정해줘. 이름, 성격, 나이, 역할을 포함해. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "..."}]}`;
+      case 4: { // Phase 5: Characters Deep (75%)
+        const title4 = project.title || inputData.title || '드라마';
+        const existingChars = Array.isArray(project.chars) && project.chars.length > 0
+          ? JSON.stringify(project.chars)
+          : '(아직 미설정)';
+        const charPrompt = `드라마 "${title4}"의 주요 인물 3명을 상세 설정해줘. 기존 설정: ${existingChars}. 이름, 성격, 나이, 역할, 외모를 포함해. JSON 형식: {"chars": [{"name": "...", "personality": "...", "age": "...", "role": "...", "looks": "..."}]}`;
         resultData = await callAI(charPrompt, config.productionModel, config, anthropicClient);
-        await updateProject({ chars: resultData.chars, pct: 75, stepIdx: 5 });
+        await updateProject({ chars: Array.isArray(resultData.chars) ? resultData.chars : (project.chars || []), pct: 75, stepIdx: 5 });
         break;
+      }
 
-      case 5: // Phase 6: Episodes (90%)
-        const epCount = project.episodes || 8;
-        const epPrompt = `드라마 "${project.title}"의 전 ${epCount}회차 구성을 JSON으로 작성해줘. 회차별 제목과 요약을 포함해. JSON 형식: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;
+      case 5: { // Phase 6: Episodes (90%)
+        const title5 = project.title || inputData.title || '드라마';
+        const epCount = (typeof project.episodes === 'number') ? project.episodes : (parseInt(inputData.episodes) || 8);
+        const epPrompt = `드라마 "${title5}"의 전 ${epCount}회차 구성을 JSON으로 작성해줘. 회차별 제목과 요약을 포함해. JSON 형식: {"episodes": [{"ep": 1, "title": "...", "summary": "..."}]}`;
         resultData = await callAI(epPrompt, config.planningModel, config, anthropicClient);
-        await updateProject({ scripts: resultData.episodes, pct: 90, stepIdx: 6 });
+        const epArray = Array.isArray(resultData.episodes) ? resultData.episodes : [];
+        await updateProject({ scripts: epArray, pct: 90, stepIdx: 6 });
         break;
+      }
 
-      case 6: // Finalize (100%)
+      case 6: { // Finalize (100%)
         await updateProject({ pct: 100, status: 'done', stepIdx: 7 });
         resultData = { success: true, status: 'done' };
         break;
+      }
 
       default:
-        throw new Error('Invalid generation step');
+        throw new Error(`Invalid generation step: ${step}`);
     }
 
     res.json({ success: true, step, data: resultData });
@@ -733,63 +982,7 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
  });
  
  
- /**
-  * Unified AI Calling Helper (Anthropic -> Gemini Fallback)
-  */
- const callUnifiedAI = async (params, config, anthropicClient) => {
-   const { prompt, system, max_tokens, modelAlias, customApiKey } = params;
-   const anthropicKey = customApiKey || process.env.ANTHROPIC_API_KEY;
-   const geminiKey = process.env.GEMINI_API_KEY;
-
-   const finalSystem = system || config.systemPrompt || "당신은 세계적인 K-드라마 전문 작가이자 제작 전문가입니다.";
-
-   // 1. Try Anthropic first if key available
-   if (anthropicKey) {
-     try {
-       const localAnthropic = customApiKey ? new Anthropic({ apiKey: customApiKey }) : (anthropicClient || new Anthropic({ apiKey: anthropicKey }));
-       const modelId = modelMap[modelAlias] || modelAlias || 'claude-sonnet-4-6';
-       
-       log(`[AI-Call] Attempting Anthropic (${modelId})...`);
-       const resp = await localAnthropic.messages.create({
-         model: modelId,
-         max_tokens: max_tokens || 8192,
-         system: finalSystem,
-         messages: [{ role: 'user', content: prompt }]
-       });
-       
-       return resp.content[0].text;
-     } catch (err) {
-       log(`[AI-Call] Anthropic failed: ${err.message}`, 'error');
-       throw err;
-       /* Gemini Fallback - 현재 비활성화됨
-       log(`[AI-Call] Anthropic failed: ${err.message}. ${geminiKey ? 'Attempting Gemini fallback...' : 'No fallback key available.'}`, 'error');
-       if (!geminiKey) throw err;
-       */
-     }
-   }
-
-   /* --- Gemini Fallback (주석 처리됨) ---
-   if (geminiKey) {
-     try {
-       log(`[AI-Call] Attempting Gemini (gemini-1.5-flash)...`);
-       const genAI = new GoogleGenerativeAI(geminiKey);
-       const model = genAI.getGenerativeModel({ 
-         model: "gemini-1.5-flash",
-         systemInstruction: finalSystem
-       });
-
-       const result = await model.generateContent(prompt);
-       const response = await result.response;
-       return response.text();
-     } catch (gemErr) {
-       log(`[AI-Call] Gemini failed: ${gemErr.message}`, 'error');
-       throw gemErr;
-     }
-   }
-   --------------------------------------- */
-
-   throw new Error('No AI Providers available (Anthropic key missing or failed)');
- };
+ // callUnifiedAI is now defined above callAI (moved to L110 area to fix const hoisting issue)
  
  /**
   * Local implementation of the 7-step generation flow
@@ -801,67 +994,123 @@ router.post('/generate/step', authMiddleware, async (req, res) => {
   const anthropic = new AnthropicSDK({ apiKey: process.env.ANTHROPIC_API_KEY });
   const inputData = typeof project.input === 'string' ? JSON.parse(project.input) : (project.input || {});
   
-  log(`[AI-Gen] 🚀 Pipeline Start: ${projectId} (v0.1.132)`);
+  log(`[AI-Gen] 🚀 Pipeline Start: ${projectId}`);
   
   const updateProject = async (payload) => {
     payload.updated_at = new Date().toISOString();
-    // Alias mappings
     if (payload.characters) { payload.chars = payload.characters; delete payload.characters; }
-    if (payload.episodes) { payload.scripts = payload.episodes; delete payload.episodes; }
-
     const { error } = await serviceSupabase.from('projects').update(payload).eq('id', projectId);
-    if (error) log(`[AI-Gen-DB] Error: ${error.message}`, 'error');
+    if (error) throw new Error(`DB update failed: ${error.message}`);
   };
 
   try {
     // PHASE 1: CORE (20%)
-    log(`[AI-Gen] Phase 1...`);
+    log(`[AI-Gen] Phase 1: CORE`);
     await updateProject({ status: 'generating', pct: 5, stepIdx: 1 });
-    const coreData = await callAI(`기획안: ${JSON.stringify(inputData)}. 제목, 로그라인, 줄거리, 캐릭터 4인을 JSON으로 작성해. { "title":"", "logline":"", "synopsis":"", "characters":[] }`, 'claude-sonnet-4-6', config, anthropic);
-    await updateProject({ ...coreData, pct: 20 });
+    const coreData = await callAI(
+      `다음 드라마 기획안으로 제목, 로그라인, 전체 줄거리(1000자 이상), 주요 캐릭터 4인을 작성해. JSON 형식: { "title": "", "logline": "", "synopsis": "", "characters": [{ "name": "", "age": "", "role": "", "desc": "" }] }
+기획 방향: ${inputData.genre || '드라마'} 장르, ${inputData.platform || 'OTT'} 플랫폼, 키워드: ${inputData.keywords || inputData.logline || '자유 주제'}`,
+      'claude-sonnet-4-6', config, anthropic
+    );
+    const finalTitle = (typeof coreData.title === 'object') ? (coreData.title?.main || '드라마') : (coreData.title || project.title);
+    const finalSynopsis = (typeof coreData.synopsis === 'object') ? JSON.stringify(coreData.synopsis) : (coreData.synopsis || '');
+    await updateProject({
+      title: finalTitle,
+      logline: coreData.logline || project.logline,
+      synopsis: finalSynopsis,
+      chars: Array.isArray(coreData.characters) ? coreData.characters : (Array.isArray(coreData.chars) ? coreData.chars : []),
+      pct: 20,
+      stepIdx: 1,
+      status: 'core_done'
+    });
 
     // PHASE 2: OUTLINE (40%)
-    log(`[AI-Gen] Phase 2...`);
+    log(`[AI-Gen] Phase 2: OUTLINE`);
     await updateProject({ pct: 25, stepIdx: 2 });
-    const outData = await callAI(`회차별 제목과 한줄 줄거리 JSON: { "episodes": [] }. 정보: ${coreData.logline}`, 'claude-haiku-4-5', config, anthropic);
-    await updateProject({ outline: outData.episodes || outData, pct: 40 });
+    const epCount = parseInt(inputData.episodes) || 8;
+    const outData = await callAI(
+      `전체 ${epCount}회차의 제목과 각 회차별 1줄 줄거리를 JSON으로 작성해. JSON 형식: { "episodes": [{ "title": "제목", "logline": "내용 요약" }] }
+장르: ${inputData.genre || '드라마'}, 전체 로그라인: ${coreData.logline || ''}`,
+      'claude-haiku-4-5', config, anthropic
+    );
+    const outlineArr = Array.isArray(outData.episodes) ? outData.episodes : [];
+    await updateProject({ outline: outlineArr, pct: 40, stepIdx: 2, status: 'outline_done' });
 
-    // PHASE 3: SYNOPSIS (55%)
-    log(`[AI-Gen] Phase 3...`);
-    await updateProject({ pct: 45, stepIdx: 3 });
-    const synData = await callAI(`심층 시놉시스 JSON: { "synopsis": "" }. 대상: ${coreData.synopsis}`, 'claude-sonnet-4-6', config, anthropic);
-    await updateProject({ synopsis: synData.synopsis, pct: 55 });
-
-    // PHASE 4: CONFLICTS (75%)
-    log(`[AI-Gen] Phase 4...`);
-    await updateProject({ pct: 60, stepIdx: 4 });
-    const conData = await callAI(`갈등 요소 분석 JSON: { "conflicts": [] }. 대상: ${synData.synopsis}`, 'claude-haiku-4-5', config, anthropic);
-    await updateProject({ conflicts: conData.conflicts || conData, pct: 75 });
-
-    // PHASE 5: PERSONA (90%)
-    log(`[AI-Gen] Phase 5...`);
-    await updateProject({ pct: 80, stepIdx: 5 });
-    const charData = await callAI(`캐릭터 상세 페르소나 JSON: { "characters": [] }. 갈등구조: ${JSON.stringify(conData)}`, 'claude-haiku-4-5', config, anthropic);
-    await updateProject({ chars: charData.characters || charData.chars, pct: 90 });
-
-    // PHASE 6: FINAL EPISODES (100%)
-    log(`[AI-Gen] Phase 6...`);
-    await updateProject({ pct: 95, stepIdx: 6 });
-    const epData = await callAI(`최종 회차별 줄거리 JSON: { "episodes": [] }. 정보: ${JSON.stringify(outData)}`, 'claude-sonnet-4-6', config, anthropic);
-    await updateProject({ 
-        scripts: epData.episodes || epData,
-        status: 'done',
-        pct: 100,
-        stepIdx: 7
-    });
+    // PHASE 3: PLAN_DETAIL (per-episode) — Bug #2 Fix: Re-fetch DB for fresh outline
+    log(`[AI-Gen] Phase 3: PLAN_DETAIL`);
+    const { data: refreshedProject } = await serviceSupabase.from('projects').select('*').eq('id', projectId).single();
+    const eps = Array.isArray(refreshedProject?.outline) ? refreshedProject.outline : outlineArr;
+    const totalEps = eps.length > 0 ? eps.length : epCount;
     
+    log(`[AI-Gen] Phase 3: Generating ${totalEps} episodes`);
+
+    for (let i = 0; i < totalEps; i++) {
+      const epNum = i + 1;
+      const epTitle = eps[i]?.title || `${epNum}화`;
+      const epLogline = eps[i]?.logline || eps[i]?.summary || '';
+
+      // Check idempotency
+      const { data: existingEp } = await serviceSupabase.from('episodes').select('id, story').eq('project_id', projectId).eq('ep_num', epNum).single();
+      if (existingEp?.story) {
+        log(`[AI-Gen] Episode ${epNum} already exists, skipping.`);
+        continue;
+      }
+
+      await updateProject({ pct: 40 + Math.floor((i / totalEps) * 20) });
+      
+      // Bug #6 Fix: 씬 필드명 명확화
+      const detail = await callAI(
+        `${epNum}화 "${epTitle}"의 상세 스토리와 씬 리스트를 JSON으로 작성해. 런타임: 약 ${inputData.runtime || 70}분 (씬 수: ${Math.ceil((inputData.runtime || 70) / 5)}개).
+JSON 형식: { "story": "기승전결 포함 상세 줄거리 (700자 이상)", "scenes": [{ "num": 1, "place": "INT. 장소명", "time": "낮/밤/새벽", "desc": "씬 핵심 내용 2줄" }] }
+줄거리 요약: ${epLogline}`,
+        'claude-sonnet-4-6', config, anthropic
+      );
+
+      const scenes = Array.isArray(detail.scenes) ? detail.scenes : [];
+      
+      // Bug #3 Fix: Safe insert/update (no onConflict needed)
+      if (existingEp) {
+        await serviceSupabase.from('episodes').update({
+          title: epTitle, logline: epLogline, story: detail.story || '', scenes, status: 'pending'
+        }).eq('id', existingEp.id);
+      } else {
+        const { error: insErr } = await serviceSupabase.from('episodes').insert({
+          project_id: projectId, ep_num: epNum, title: epTitle, logline: epLogline, story: detail.story || '', scenes, status: 'pending'
+        });
+        if (insErr) log(`[AI-Gen] Episode ${epNum} insert error: ${insErr.message}`, 'error');
+      }
+    }
+
+    await updateProject({ pct: 60, stepIdx: 3, status: 'plan_done' });
+
+    // PHASE 4: SCRIPT SAMPLE (1화)
+    log(`[AI-Gen] Phase 4: SCRIPT SAMPLE`);
+    const { data: ep1 } = await serviceSupabase.from('episodes').select('*').eq('project_id', projectId).eq('ep_num', 1).single();
+    if (ep1) {
+      const scriptRes = await callAI(
+        `1화 "${ep1.title}"의 첫 씬 샘플 대본을 전문적인 형식(지문+대사)으로 작성해. JSON 형식: { "script": "S#1. INT. 장소 - 낮\\n\\n지문..." }
+줄거리: ${ep1.story || ''}`,
+        'claude-sonnet-4-6', config, anthropic
+      );
+      await serviceSupabase.from('episodes').update({
+        script: scriptRes.script ? [{ num: 'S#1', loc: '전체', content: scriptRes.script }] : []
+      }).eq('id', ep1.id);
+    }
+
+    // FINALIZE
+    await updateProject({ pct: 100, status: 'done', stepIdx: 7 });
     log(`[AI-Gen] ✅ Pipeline Success: ${projectId}`);
 
   } catch (err) {
     log(`[AI-Gen-Error] ${projectId}: ${err.message}`, 'error');
-    await updateProject({ status: 'error', error_msg: err.message });
+    await serviceSupabase.from('projects').update({
+      status: 'error',
+      error_msg: err.message.substring(0, 500),
+      updated_at: new Date().toISOString()
+    }).eq('id', projectId);
   }
 }
+
 
 /**
  * AI Proxy for single-step tasks (legacy/compatibility)

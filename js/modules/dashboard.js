@@ -8,9 +8,51 @@ import { state } from './state.js';
 import { MAPPINGS } from './constants.js';
 import { CAST_DATA_BASE } from './samples.js';
 import { renderScript, renderEpTabs, renderSceneRow, renderSceneDetail } from './script.js';
-import { generateEpResources } from './api.js';
+import { generateEpResources, initSceneGeneration, generateNextScene, summarizeEpisode } from './api.js';
 
 const colors = ['#C9933A', '#5EAED4', '#888'];
+
+/**
+ * Deep search helper to find data in nested project objects (v0.23)
+ * @param {Object} obj The project object
+ * @param {String} targetKey The key to find (e.g., 'conflicts', 'budget')
+ * @returns {Any|null} The found value or null
+ */
+function _findDeepValue(obj, targetKey, maxDepth = 3) {
+  if (!obj || typeof obj !== 'object') return null;
+  
+  // 1. Direct hit or common nesting
+  if (obj[targetKey] !== undefined) return obj[targetKey];
+  if (obj.data && obj.data[targetKey] !== undefined) return obj.data[targetKey];
+  if (obj.input && obj.input[targetKey] !== undefined) return obj.input[targetKey];
+  if (obj.stats && obj.stats[targetKey] !== undefined) return obj.stats[targetKey];
+
+  // 2. Recursive search
+  const search = (target, depth = 0) => {
+    if (depth > maxDepth || !target || typeof target !== 'object') return null;
+    
+    // Avoid searching large known unrelated objects
+    if (target.scripts || target.episodes_list) return null;
+
+    for (const key in target) {
+      if (key === targetKey && target[key] !== undefined) {
+         // Special check for arrays/objects to ensure they aren't empty
+         if (Array.isArray(target[key]) && target[key].length === 0) continue;
+         if (typeof target[key] === 'object' && Object.keys(target[key]).length === 0) continue;
+         return target[key];
+      }
+      const found = search(target[key], depth + 1);
+      if (found !== null) return found;
+    }
+    return null;
+  };
+  
+  return search(obj);
+}
+
+function _findDeepConflicts(p) {
+  return _findDeepValue(p, 'conflicts') || [];
+}
 
 export function buildResultPanels() {
   console.log('[Dashboard] Building Result Panels...', state.planData);
@@ -33,8 +75,10 @@ export function buildConflictPanel() {
   const el = document.getElementById('ov-conflicts');
   if (!el) return;
 
-  const conflicts = state.planData?.conflicts || state.currentInput?.conflicts || [];
-  if (!conflicts.length) {
+  const p = state.planData || {};
+  const conflicts = _findDeepValue(p, 'conflicts') || state.currentInput?.conflicts || [];
+  
+  if (!conflicts.length || !Array.isArray(conflicts)) {
     el.innerHTML = '<div class="project-empty-desc">갈등 분석 데이터가 없습니다.</div>';
     return;
   }
@@ -85,11 +129,11 @@ function renderOverview(retryCount = 0) {
     const inputEps = input.episodes ? parseInt(input.episodes.toString().replace(/[^0-9]/g, '')) : 8;
     const epCount = p.episodes_count || inputEps || (Array.isArray(p.episodes) ? p.episodes.length : 8);
 
-    // Budget & PPL extraction with deep search
-    let budgetRaw = p.budget || stats.budget || stats.budgetRaw;
-    if (typeof budgetRaw === 'object' && budgetRaw !== null) budgetRaw = budgetRaw.total || budgetRaw.amount || budgetRaw.value;
+    // Budget & PPL extraction with deep search (v0.23)
+    let budgetRaw = _findDeepValue(p, 'budget') || _findDeepValue(p, 'total_budget');
+    if (typeof budgetRaw === 'object' && budgetRaw !== null) budgetRaw = budgetRaw.total || budgetRaw.amount || budgetRaw.value || budgetRaw.total_budget;
 
-    let pplRaw = p.ppl_revenue || p.ppl || stats.ppl || stats.ppl_revenue || stats.pplRaw;
+    let pplRaw = _findDeepValue(p, 'ppl') || _findDeepValue(p, 'ppl_revenue');
     if (Array.isArray(pplRaw)) {
       // sum it up if it's an array of objects
       pplRaw = pplRaw.reduce((acc, curr) => acc + (parseInt(curr.revenue || curr.amount || 0)), 0);
@@ -149,15 +193,17 @@ function renderOverview(retryCount = 0) {
     }
 
     // Update Conflicts
-    // Extremely robust search for conflicts: p.conflicts -> p.input.conflicts -> p.stats.conflicts -> p.input.logline_analysis.conflicts
-    const conflicts = p.conflicts || (p.input && p.input.conflicts) || (p.stats && p.stats.conflicts) || (p.input && p.input.logline_analysis && p.input.logline_analysis.conflicts) || [];
+    // Deep search to ensure no data is missed
+    const conflicts = _findDeepConflicts(p);
     const conflictGrid = document.getElementById('ov-conflicts');
+    
     if (conflictGrid) {
       if (conflicts && Array.isArray(conflicts) && conflicts.length > 0) {
         conflictGrid.innerHTML = conflicts.map(c => `
-          <div class="conflict-card ${c.color || 'ink'}">
-            <div class="conflict-label">${c.label || '갈등'}</div>
-            <div class="conflict-desc">${c.desc || ''}</div>
+          <div class="conflict-card">
+            <div class="conflict-label" style="background:var(--gold); color:#000; display:inline-block; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:900; margin-bottom:8px">${c.type || '필수 갈등'}</div>
+            ${c.character ? `<div class="conflict-character" style="font-size:12px; color:var(--gold); font-weight:800; margin-bottom:6px">${c.character}</div>` : ''}
+            <div class="conflict-desc" style="font-size:13px; line-height:1.5; color:var(--ink)">${c.desc || ''}</div>
           </div>
         `).join('');
       } else {
@@ -257,66 +303,63 @@ export function buildRelationMap() {
   const female = chars.find(c => c.role === '여주' || (c.gender && c.gender.includes('여'))) || chars[0];
   const subs = chars.filter(c => c !== male && c !== female).slice(0, 4);
 
-  const W = 800, H = 300; // Reduced height from 400
-  const cx = W / 2, cy = H / 2 + 30;
-  const mPos = { x: cx - 180, y: cy }; // Narrowed from 200
-  const fPos = { x: cx + 180, y: cy }; // Narrowed from 200
+  const W = 800, H = 350; 
+  const cx = W / 2, cy = H / 2 + 20;
+  const mPos = { x: cx - 140, y: cy + 20 };
+  const fPos = { x: cx + 140, y: cy + 20 };
 
   const arcPositions = [
-    { x: cx - 280, y: cy - 90 }, { x: cx - 90, y: cy - 120 },
-    { x: cx + 90, y: cy - 120 }, { x: cx + 280, y: cy - 90 },
+    { x: cx - 220, y: cy - 70 }, 
+    { x: cx - 70, y: cy - 100 },
+    { x: cx + 70, y: cy - 100 }, 
+    { x: cx + 220, y: cy - 70 },
   ];
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto; overflow:visible" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-        <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.15"/>
-      </filter>
-      <filter id="glow-gold" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="3" result="blur" />
-        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      <filter id="nodeShadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.1"/>
       </filter>
       <linearGradient id="gradGold" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#C9933A;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#E8B45A;stop-opacity:1" />
+        <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#AA8939;stop-opacity:1" />
       </linearGradient>
-      <linearGradient id="gradBlue" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" style="stop-color:#5EAED4;stop-opacity:1" />
-        <stop offset="100%" style="stop-color:#82C5E5;stop-opacity:1" />
+      <linearGradient id="gradDeepBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#2C3E50;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#34495E;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="gradGray" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#95a5a6;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#7f8c8d;stop-opacity:1" />
       </linearGradient>
     </defs>`;
 
-  // Links
-  svg += `<path d="M ${mPos.x} ${mPos.y} Q ${cx} ${cy - 70} ${fPos.x} ${fPos.y}" fill="none" stroke="url(#gradGold)" stroke-width="4" class="rel-link" opacity="0.8" filter="url(#glow-gold)"/>`;
+  // Draw Links with organic curves
+  svg += `<path d="M ${mPos.x} ${mPos.y} Q ${cx} ${cy - 40} ${fPos.x} ${fPos.y}" fill="none" stroke="url(#gradGold)" stroke-width="3" opacity="0.6" stroke-dasharray="0" />`;
   svg += `
-    <g transform="translate(${cx}, ${cy - 50})">
-      <rect x="-45" y="-10" width="90" height="20" rx="10" fill="#fff" stroke="var(--gold)" stroke-width="1"/>
-      <text font-size="10" fill="var(--gold)" text-anchor="middle" dominant-baseline="middle" font-weight="900">♥ 메인 관계</text>
+    <g transform="translate(${cx}, ${cy - 25})">
+      <rect x="-40" y="-10" width="80" height="20" rx="10" fill="#fff" stroke="#D4AF37" stroke-width="1"/>
+      <text font-size="10" fill="#D4AF37" text-anchor="middle" dominant-baseline="middle" font-weight="900">MAIN COUPLE</text>
     </g>
   `;
 
   subs.forEach((c, i) => {
     const pos = arcPositions[i];
     if (!pos) return;
-    svg += `<line x1="${pos.x}" y1="${pos.y}" x2="${cx}" y2="${cy}" stroke="#ddd" stroke-width="1.5" stroke-dasharray="4,3" class="rel-link" opacity="0.5"/>`;
+    svg += `<path d="M ${pos.x} ${pos.y} L ${cx} ${cy}" stroke="#eee" stroke-width="1" stroke-dasharray="4,2" opacity="0.8"/>`;
   });
 
-  // Nodes
   const nodeHtml = (p, n, grad, isMain = false) => `
-    <g class="rel-node ${isMain ? 'rel-node-main' : ''}" onclick="selectCharByName('${n}')" style="cursor:pointer" filter="url(#shadow)">
-      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 32 : 24}" fill="#fff" stroke="${isMain ? 'var(--gold)' : '#eee'}" stroke-width="1.5"/>
-      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 28 : 20}" fill="${grad}" opacity="1"/>
-      <text x="${p.x}" y="${p.y}" font-size="${isMain ? 16 : 12}" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="900">${n[0]}</text>
-      <g transform="translate(${p.x}, ${p.y + (isMain ? 48 : 38)})">
-        <rect x="-35" y="-10" width="70" height="20" rx="4" fill="rgba(255,255,255,0.95)" />
-        <text class="rel-text" font-size="11" fill="#222" text-anchor="middle" dominant-baseline="middle" font-weight="800">${n}</text>
-      </g>
+    <g class="rel-node" onclick="selectCharByName('${n}')" style="cursor:pointer" filter="url(#nodeShadow)">
+      <circle cx="${p.x}" cy="${p.y}" r="${isMain ? 28 : 22}" fill="${grad}" stroke="#fff" stroke-width="2"/>
+      <text x="${p.x}" y="${p.y}" font-size="${isMain ? 14 : 11}" fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="900">${n[0]}</text>
+      <text x="${p.x}" y="${p.y + (isMain ? 45 : 35)}" font-size="12" fill="#1A1A1B" text-anchor="middle" font-weight="800">${n}</text>
     </g>`;
 
   svg += nodeHtml(mPos, male.name, 'url(#gradGold)', true);
-  svg += nodeHtml(fPos, female.name, 'url(#gradBlue)', true);
+  svg += nodeHtml(fPos, female.name, 'url(#gradDeepBlue)', true);
   subs.forEach((c, i) => {
-    if (arcPositions[i]) svg += nodeHtml(arcPositions[i], c.name, '#aaa');
+    if (arcPositions[i]) svg += nodeHtml(arcPositions[i], c.name, 'url(#gradGray)');
   });
 
   svg += `</svg>`;
@@ -337,35 +380,166 @@ export function buildEpList() {
   }
 
   eps.forEach((ep, i) => {
+    const isCompleted = ep.status === 'completed';
+    const isWriting = ep.status === 'writing';
+    const currentIdx = ep.current_scene_idx || 0;
+    const totalScenes = ep.total_scenes_count || (ep.scenes?.length) || 0;
+    const pct = totalScenes > 0 ? Math.round((currentIdx / totalScenes) * 100) : 0;
+
     const div = document.createElement('div');
-    div.className = 'ep-item-r';
+    div.className = `ep-item-r ${isCompleted ? 'completed' : ''}`;
+    div.id = `ep-card-${ep.id || i}`;
+
     div.innerHTML = `
       <div class="ep-left-r">
-        <div class="ep-dot-r" style="background:${colors[i % 3]}; color:#fff">${ep.num || i + 1}</div>
+        <div class="ep-dot-r" style="background:${isCompleted ? 'var(--gold)' : (isWriting ? 'var(--teal)' : '#ccc')}; color:#fff">
+           ${isCompleted ? '✓' : (ep.num || i + 1)}
+        </div>
         <div class="ep-line-r"></div>
       </div>
       <div class="ep-content-r">
-        <div class="ep-header-r" onclick="toggleEp(${i})" style="cursor:pointer">
-          <span class="ep-num-r" style="color:${colors[i % 3]}">${ep.num || i + 1}화</span>
-          <span class="ep-title-r">${ep.title || ''}</span>
-          <span class="ep-chev" id="echev-${i}" style="margin-left:auto">▶</span>
+        <div class="ep-header-r" onclick="toggleEp(${i})" style="cursor:pointer; display:flex; align-items:center; width:100%">
+          <div style="display:flex; flex-direction:column; gap:2px">
+            <span class="ep-num-r" style="color:${isCompleted ? 'var(--gold)' : 'var(--ink2)'}; font-size:11px; font-weight:800">
+              ${ep.num || i + 1}화 
+              <span class="badge-${ep.status || 'pending'}">${ep.status === 'completed' ? '완성' : (ep.status === 'writing' ? '작성 중' : '대기')}</span>
+            </span>
+            <span class="ep-title-r" style="font-weight:700">${ep.title || '제목 생성 대기 중'}</span>
+          </div>
+          
+          <div style="margin-left:auto; display:flex; gap:8px; align-items:center">
+             ${!isCompleted ? `
+               <button class="btn-micro-${isWriting ? 'teal' : 'gold'}" onclick="event.stopPropagation(); startEpisodeGeneration('${ep.id}', ${i})">
+                 ${isWriting ? `⚡ 이어서 작성 (${pct}%)` : '✍️ 대본 작성'}
+               </button>
+             ` : `
+               <span style="font-size:11px; color:var(--gold); font-weight:800">대본 완성</span>
+             `}
+             <span class="ep-chev" id="echev-${i}">▶</span>
+          </div>
         </div>
-        <div class="ep-detail-r" id="edetail-${i}">
-          <div class="ep-body-r" style="margin-bottom:12px">${ep.story || ep.logline || ''}</div>
-          <div class="result-hero-logline" style="font-size:12px; margin-bottom:15px">엔딩: ${ep.ending || ''}</div>
-          ${ep.scenes ? `<div class="scene-list-r">${ep.scenes.map(s => `
-            <div class="scene-row" style="display:flex; gap:10px; margin-bottom:8px; padding:12px; background:var(--paper2); border-radius:12px; border:1px solid var(--border)">
-              <span class="scene-num" style="font-weight:800; color:var(--gold); flex-shrink:0">S#${s.num || ''}</span>
-              <div style="flex-grow:1">
-                <div class="scene-loc" style="font-weight:700; font-size:12px; margin-bottom:4px; color:var(--ink)">${s.loc || ''}</div>
-                <div class="scene-desc-r" style="font-size:12px; color:var(--ink2); line-height:1.5">${s.desc || ''}</div>
+        
+        <div class="ep-detail-r" id="edetail-${i}" style="display:none">
+          <div id="ep-progress-container-${i}" class="ep-progress-mini" style="display:${isWriting ? 'block' : 'none'}; margin-bottom:15px">
+             <div class="ep-progress-text" style="font-size:11px; margin-bottom:4px; font-weight:700; color:var(--teal)">씬 생성 중... (${currentIdx}/${totalScenes})</div>
+             <div class="ep-progress-bar-bg" style="width:100%; height:4px; background:var(--border); border-radius:2px; overflow:hidden">
+               <div id="ep-progress-fill-${i}" style="width:${pct}%; height:100%; background:var(--teal); transition:width 0.3s"></div>
+             </div>
+          </div>
+
+          <div class="ep-body-r" style="margin-bottom:12px; font-size:13px; color:var(--ink2)">${ep.story || ep.logline || '상세 줄거리가 없습니다.'}</div>
+          
+          <div class="scene-list-r" id="scene-list-container-${i}">
+            ${(ep.script && ep.script.length > 0) ? ep.script.map(s => `
+              <div class="scene-row script-scene">
+                <span class="scene-num">S#${s.num}</span>
+                <div class="scene-main">
+                  <div class="scene-loc">${s.loc}</div>
+                  <div class="scene-content">${s.content}</div>
+                </div>
               </div>
-            </div>`).join('')}</div>` : ''}
+            `).join('') : ((ep.scenes && ep.scenes.length > 0) ? ep.scenes.map(s => `
+              <div class="scene-row-outline" style="opacity:0.6; font-size:12px; margin-bottom:5px">
+                [S#${s.num}] ${s.place} - ${s.desc || ''}
+              </div>
+            `).join('') : '')}
+          </div>
+          
+          ${isCompleted ? `
+            <div class="ep-summary-box" style="margin-top:15px; padding:15px; background:var(--gold-soft); border-radius:12px; border:1px dashed var(--gold)">
+              <div style="font-weight:800; font-size:12px; margin-bottom:5px; color:var(--gold2)">✨ ${ep.num}화 핵심 요약 (다음 화의 참고 데이터)</div>
+              <div style="font-size:13px; line-height:1.6">${ep.ep_summary || '요약 생성 전입니다.'}</div>
+              ${!ep.ep_summary ? `<button class="btn-micro-gold" style="margin-top:10px" onclick="runEpSummary('${ep.id}', ${i})">3줄 요약 생성</button>` : ''}
+            </div>
+          ` : ''}
         </div>
       </div>`;
     el.appendChild(div);
   });
 }
+
+// Multi-turn Script Generation Orchestrator
+export async function startEpisodeGeneration(episodeId, epIdx) {
+  const ep = state.planData.episodes[epIdx];
+  if (!ep) return;
+
+  const container = document.getElementById(`ep-progress-container-${epIdx}`);
+  const fill = document.getElementById(`ep-progress-fill-${epIdx}`);
+  const detail = document.getElementById(`edetail-${epIdx}`);
+  const sceneList = document.getElementById(`scene-list-container-${epIdx}`);
+  
+  if (detail.style.display === 'none') window.toggleEp(epIdx);
+  if (container) container.style.display = 'block';
+
+  try {
+    // 1. Initial Prompt if Status is Pending
+    if (ep.status === 'pending') {
+      showToast(`${ep.num}화 대본 작성을 시작합니다.`, 'info');
+      const initRes = await initSceneGeneration(episodeId);
+      ep.status = 'writing';
+      ep.current_scene_idx = 0;
+    }
+
+    // 2. Loop through scenes
+    const total = ep.total_scenes_count || ep.scenes.length;
+    while (ep.current_scene_idx < total) {
+      const idx = ep.current_scene_idx;
+      const res = await generateNextScene(episodeId, idx);
+      
+      const pct = Math.round(((idx + 1) / total) * 100);
+      if (fill) fill.style.width = pct + '%';
+      
+      // Update local state and UI
+      if (!ep.script) ep.script = [];
+      ep.script.push(res.scene);
+      ep.current_scene_idx++;
+
+      // Live Render Scene
+      const sDiv = document.createElement('div');
+      sDiv.className = 'scene-row script-scene';
+      sDiv.innerHTML = `
+        <span class="scene-num">S#${res.scene.num}</span>
+        <div class="scene-main">
+          <div class="scene-loc">${res.scene.loc}</div>
+          <div class="scene-content">${res.scene.content}</div>
+        </div>
+      `;
+      sceneList.appendChild(sDiv);
+      sDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      if (res.isFinal) {
+        ep.status = 'completed';
+        break;
+      }
+    }
+
+    if (ep.status === 'completed') {
+      showToast(`${ep.num}화 대본이 완성되었습니다!`, 'success');
+      if (container) container.style.display = 'none';
+      buildEpList(); // Refresh to show summary button
+    }
+
+  } catch (err) {
+    console.error('Generation Error:', err);
+    showToast('대본 생성 중 오류가 발생했습니다: ' + err.message, 'error');
+  }
+}
+
+export async function runEpSummary(episodeId, epIdx) {
+  try {
+    const { summarizeEpisode } = await import('./api.js');
+    showToast('대본 내용을 요약하는 중...', 'info');
+    const res = await summarizeEpisode(episodeId);
+    state.planData.episodes[epIdx].ep_summary = res.summary;
+    showToast('요약이 완료되었습니다.', 'success');
+    buildEpList();
+  } catch (err) {
+    showToast('요약에 실패했습니다.', 'error');
+  }
+}
+
+window.startEpisodeGeneration = startEpisodeGeneration;
+window.runEpSummary = runEpSummary;
 
 export function buildBudget() {
   const n = state.planData?.episodes?.length || state.currentInput?.episodes || 8;

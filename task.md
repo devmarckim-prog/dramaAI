@@ -43,12 +43,21 @@
 
 ## 📊 DB 구조 최신화 및 리뷰 (완료)
 - [x] 프로젝트 ID 호환성 수정 (`BIGINT` -> `TEXT`)
-- [x] `samples` 테이블 구조 및 RLS 정책 수립
-- [x] 마스터 스키마 문서(`SUPABASE_SETUP.md`) 갱신
-- [x] 생성 루틴(`Generate`) 저장 프로세스 정밀 검토
+- [x] `js/modules/projects_list.js` 파일의 100% 진행률 고정 로직 제거
+- [x] 에러 발생 시의 진행률(`p.pct`) 출력 및 색상 강조
+- [x] 상세 에러 메시지(`p.error_msg`) UI 추가 노출
+- [x] (선택사항) 에러 시 '다시 시도' 버튼 가이드 텍스트 보강
+- [x] 최종 렌더링 검증 및 Walkthrough 업데이트
 
 ## 🛡️ 서버 안정화 및 최종 점검 (완료)
 - [x] 서버 강제 재가동 (`node serve.js` 백그라운드 실행)
 - [x] 포트 8081 상태 상시 모니터링
 - [x] 종료 전 최종 Health Check 검증
 - [x] Walkthrough에 서버 가동 상태 명시
+
+## 🔄 갈등 구조 복구 및 버전 동기화 (완료) [v0.24]
+- [x] '장군님의 횟집' 데이터베이스 보강 (갈등/캐릭터)
+- [x] 프로젝트 로드 시 `conflicts` 필드 매핑 오류 수정 (`projects_list.js`)
+- [x] 전역 버전 `v0.24` 동기화 (`state.js`, `index.html`, `VERSION.md`)
+- [x] 대시보드 갈등 구조 렌더링 로직 강화 (Deep Search 적용)
+- [x] 서버 가동 및 최종 렌더링 상태 검증

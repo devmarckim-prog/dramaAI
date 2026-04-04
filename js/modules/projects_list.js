@@ -32,7 +32,8 @@ export async function renderProjectCards() {
           if (bar) {
              const currentWidth = parseFloat(bar.style.width) || 0;
              const newPct = p.pct || 0;
-             if (newPct >= currentWidth || newPct === 100) {
+             // ✅ 서버값이 현재 표시값보다 낮으면 무시 (감소 방지)
+             if (newPct > currentWidth || newPct === 100) {
                bar.style.width = newPct + '%';
              }
           }
@@ -103,7 +104,7 @@ function _performFullRender(wrap, projects) {
     const p = normalizeProject(rawP);
     const isErr = p.status === 'error';
     const isGen = p.status === 'generating';
-    const pct = isErr ? 100 : (p.pct || 0);
+    const pct = p.pct || 0;
     const stepIdx = p.stepIdx;
 
     const delBtnHtml = p.is_sample
@@ -111,7 +112,7 @@ function _performFullRender(wrap, projects) {
       : `<button class="project-card-del" onclick="event.stopPropagation(); window.confirmDeleteProject('${p.id}')">&times;</button>`;
 
     const genre = p.genre || '로맨스';
-    const episodesVal = (p.episodes_count) || (p.episodes && typeof p.episodes === 'number' ? p.episodes : 8);
+    const episodesVal = p.episodes_count || 8;
     const target = (p.input && p.input.target_audience) || (p.stats && p.stats.target_audience) || '';
     const era = (p.input && p.input.setting_era) || (p.stats && p.stats.setting_era) || '';
 
@@ -125,7 +126,7 @@ function _performFullRender(wrap, projects) {
 
     if (isGen || isErr || p.status === 'sample_done' || p.status === 'done') {
       let statusText = statusLabels[p.status] || '진행 중';
-      if (isGen && typeof p.stepIdx === 'number' && p.stepIdx >= 0 && p.stepIdx < stepLabels.length) {
+      if ((isGen || isErr) && typeof p.stepIdx === 'number' && p.stepIdx >= 0 && p.stepIdx < stepLabels.length) {
         statusText = stepLabels[p.stepIdx];
       }
       const isPaused = p.status === 'sample_done';
@@ -167,6 +168,7 @@ function _performFullRender(wrap, projects) {
               
               ${isErr ? `
                 <div class="project-card-action-bar" style="margin-top:12px;">
+                  ${p.error_msg ? `<div class="project-card-error-hint" style="color:#ffcccc; font-size:9px; margin-bottom:8px; line-height:1.4; max-height:40px; overflow:hidden;">오류: ${p.error_msg}</div>` : ''}
                   <button class="btn btn-outline btn-sm btn-retry-gen" style="width:100%; font-size:11px; padding:6px; color:#fff; border-color:#fff;" 
                           onclick="event.stopPropagation(); window.resumeProject('${p.id}')">
                     🔄 다시 시도하기
@@ -244,6 +246,7 @@ export async function openProject(id) {
       episodes: p.episodes,
       stats: p.stats || p.budget || {},
       characters: p.chars || p.characters || [],
+      conflicts: p.conflicts || [],
       ppl: p.ppl || [],
       budget: p.budget || (p.stats && p.stats.budget)
     };
@@ -275,16 +278,29 @@ export async function confirmDeleteProject(id) {
   if (confirm('정말 이 프로젝트를 삭제하시겠습니까?')) {
     try {
       console.log('[Projects] Attempting to delete project:', id);
+      
+      // 1. Optimistic UI: Hide the card immediately
+      const card = document.getElementById(`gen-card-${id}`) || 
+                   Array.from(document.querySelectorAll('.project-slate-card')).find(c => c.onclick && c.onclick.toString().includes(id));
+      if (card) {
+        card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.9)';
+        setTimeout(() => { if(card.parentNode) card.style.display = 'none'; }, 300);
+      }
+
       const success = await deleteProject(id);
       if (success) {
         showToast('프로젝트가 삭제되었습니다.', 'success');
-        // RE-RENDER the list immediately
-        if (window.renderProjectCards) {
-          await window.renderProjectCards();
-        } else {
-          location.reload(); // Fallback
-        }
+        // 2. Full re-render to sync state
+        await renderProjectCards();
       } else {
+        // Rollback if failed
+        if (card) {
+          card.style.display = '';
+          card.style.opacity = '1';
+          card.style.transform = 'scale(1)';
+        }
         showToast('삭제에 실패했습니다. 다시 시도해주세요.', 'error');
       }
     } catch (e) {
@@ -328,3 +344,6 @@ function _getCleanEps(val, p) {
 
   return 8;
 }
+
+// ✅ 외부 모듈(샘플 관리 등)에서 UI 갱신을 트리거할 수 있도록 노출
+window.renderProjectCards = renderProjectCards;

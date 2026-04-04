@@ -648,18 +648,17 @@ router.get('/samples', async (req, res) => {
     const { data, error } = await supabase
       .from('samples')
       .select('*')
-      .order('updated_at', { ascending: false });
+      .order('id', { ascending: true }); // samples 테이블은 updated_at 컬럼이 없으므로 id 정렬
 
     if (error) throw error;
     
-    // Diagnostic logging for Admin
-    if (data.length === 0) {
+    if (!data || data.length === 0) {
       console.warn('[Admin API] Samples table is empty in current database.');
     } else {
       console.log(`[Admin API] Fetched ${data.length} samples successfully.`);
     }
 
-    res.json(data);
+    res.json(data || []);
   } catch (err) {
     console.error('[Admin API] Samples Fetch Error:', err);
     res.status(500).json({ error: err.message });
@@ -673,14 +672,13 @@ router.post('/samples', async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields: id, title, data' });
     }
 
+    const upsertData = { id, title, data };
+    // updated_at은 DB에 컬럼이 있는 경우만 포함 (없으면 Supabase가 무시)
+    // 안전하게 제외하여 스키마 오류 방지
+
     const { error } = await supabase
       .from('samples')
-      .upsert({
-        id,
-        title,
-        data,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'id' });
+      .upsert(upsertData, { onConflict: 'id' });
 
     if (error) throw error;
     res.json({ success: true, message: 'Sample updated successfully' });
@@ -697,26 +695,63 @@ router.post('/samples/batch', async (req, res) => {
       return res.status(400).json({ error: 'Invalid batch data' });
     }
 
-    // Upsert all samples in batch
     const results = await Promise.all(samples.map(s => {
       return supabase
         .from('samples')
-        .upsert({
-          id: s.id,
-          title: s.title,
-          data: s.data,
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'id' });
+        .upsert(
+          { id: s.id, title: s.title, data: s.data },
+          { onConflict: 'id' }
+        );
     }));
 
     const errors = results.filter(r => r.error);
     if (errors.length > 0) {
-      throw new Error(errors[0].error.message);
+      throw new Error(errors.map(r => r.error.message).join(', '));
     }
 
     res.json({ success: true, count: samples.length });
   } catch (err) {
     console.error('[Admin API] Batch Sample Save Error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete('/samples/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (!id) {
+      console.warn('[Admin API] Delete attempt with missing ID');
+      return res.status(400).json({ error: 'Sample ID is required' });
+    }
+
+    console.log(`[Admin API] Attempting to delete sample: ${id}`);
+    
+    // Check if it exists first (optional but good for logs)
+    const { data: existing, error: checkErr } = await supabase
+      .from('samples')
+      .select('id')
+      .eq('id', id)
+      .single();
+
+    if (checkErr || !existing) {
+      console.warn(`[Admin API] Sample ${id} not found for deletion.`);
+      return res.status(404).json({ error: 'Sample not found' });
+    }
+
+    const { error } = await supabase
+      .from('samples')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error(`[Admin API] DB Error during deletion for ${id}:`, error.message);
+      throw error;
+    }
+
+    console.log(`[Admin API] Sample ${id} deleted successfully from database.`);
+    res.json({ success: true, message: 'Sample deleted successfully' });
+  } catch (err) {
+    console.error(`[Admin API] Critical error deleting sample ${id}:`, err);
     res.status(500).json({ error: err.message });
   }
 });

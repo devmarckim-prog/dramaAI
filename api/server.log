@@ -12880,3 +12880,1958 @@
 [2026-04-03T00:03:29.930Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
 [2026-04-03T00:03:29.931Z] [Auth] Google Login requested from: http://localhost:8081/
 [2026-04-03T00:03:29.933Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:07:21.027Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.074Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.077Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.078Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.096Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.096Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.097Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.099Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.100Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.103Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.104Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.106Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.108Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.110Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.111Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.127Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.221Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.248Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.263Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.264Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:07:21.630Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.636Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-03T00:07:21.637Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-03T00:07:21.638Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-03T00:07:21.705Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:07:21.789Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-03T00:07:21.790Z] [DEBUG] Guest ID: f12dfcfd-2e60-481d-82df-35d0f82a30a4
+[2026-04-03T00:07:21.791Z] [Auth] Authorized Guest: f12dfcfd... (ID Type: Unique)
+[2026-04-03T00:08:19.351Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.384Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.389Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.390Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.409Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.411Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.412Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.415Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.416Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.418Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.419Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.420Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.423Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.425Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.427Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.429Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.704Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.770Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.851Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:08:19.853Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:08:22.096Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:08:22.097Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T00:08:22.099Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:14:52.951Z] SERVER STARTING...
+[2026-04-03T00:14:52.953Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-03T00:14:53.082Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-03T00:14:53.086Z] [System] All modules loaded successfully.
+[2026-04-03T00:14:53.089Z] [Mount] User API Routes -> /api
+[2026-04-03T00:14:53.090Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-03T00:15:15.260Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.307Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.309Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.310Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.365Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.424Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.425Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.427Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.428Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.431Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.432Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.433Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.435Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.438Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.439Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.442Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.457Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.469Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.475Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:15:15.476Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:15:39.083Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.085Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-03T00:15:39.149Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.158Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.160Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.226Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.310Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.312Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.314Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.318Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.319Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.323Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.325Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.327Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.329Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.331Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.336Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.350Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.366Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.374Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:15:39.376Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:15:39.627Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T00:16:36.667Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:16:36.669Z] [Auth] Google Login requested from: http://localhost:8081/admin
+[2026-04-03T00:16:36.671Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:16:52.050Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.123Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.128Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.129Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.236Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.971Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.973Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.975Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.978Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.980Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.982Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.984Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.987Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.989Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.991Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:52.992Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:53.176Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:53.370Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:16:53.395Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:16:53.398Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:16:53.527Z] [REQUEST] GET /api/profile | Auth: YES | Guest: NO
+[2026-04-03T00:16:53.678Z] [Auth] Token validation failed: invalid JWT: unable to parse or verify signature, token signature is invalid: crypto/ecdsa: verification error. Path: /profile
+[2026-04-03T00:16:54.006Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:16:54.008Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:16:59.456Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.458Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-03T00:16:59.518Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.520Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.523Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.592Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.779Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.781Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.784Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.786Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.788Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.792Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.794Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.796Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.797Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.799Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.803Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.817Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.834Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.845Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:16:59.847Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:17:00.082Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T00:17:06.990Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T00:17:20.464Z] [REQUEST] GET /api/admin/users | Auth: YES | Guest: NO
+[2026-04-03T00:17:20.468Z] [REQUEST] GET /api/admin/projects | Auth: YES | Guest: NO
+[2026-04-03T00:17:26.947Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:17:26.999Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.003Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.004Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.075Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.140Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.141Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.142Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.144Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.149Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.151Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.152Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.153Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.154Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.155Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.160Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.172Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.187Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.194Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:17:27.196Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:17:45.175Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.176Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-03T00:17:45.241Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.243Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.246Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.308Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.373Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.375Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.376Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.377Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.381Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.383Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.386Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.388Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.390Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.392Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.395Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.407Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.421Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.429Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:17:45.430Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:17:45.649Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T00:17:51.194Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:17:51.197Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:17:51.514Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:17:51.516Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:17:57.220Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:17:57.662Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:17:57.664Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:18:19.162Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.227Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.232Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.234Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.325Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.402Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.405Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.408Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.412Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.414Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.416Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.421Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.423Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.425Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.427Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.429Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.447Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.461Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.470Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.472Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:18:19.608Z] [REQUEST] GET /api/profile | Auth: YES | Guest: NO
+[2026-04-03T00:18:19.656Z] [Auth] Token validation failed: invalid JWT: unable to parse or verify signature, token signature is invalid: crypto/ecdsa: verification error. Path: /profile
+[2026-04-03T00:18:19.702Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:18:19.704Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:18:38.465Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.467Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-03T00:18:38.527Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.546Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.548Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.627Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.699Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.701Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.705Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.707Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.709Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.710Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.712Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.713Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.718Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.720Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.722Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.739Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.754Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.770Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:18:38.772Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:18:38.992Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T00:18:45.063Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.117Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.125Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.126Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.192Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.249Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.251Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.253Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.255Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.255Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.259Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.262Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.263Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.264Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.266Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.270Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.289Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.304Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.311Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:18:45.313Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:24:05.040Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.041Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-03T00:24:05.052Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.053Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.054Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.078Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.079Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.080Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.081Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.082Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.084Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.086Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.087Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.087Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.088Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.089Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.092Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.314Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.421Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.443Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:24:05.444Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:24:05.978Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T00:24:10.110Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:24:10.110Z] [Auth] Google Login requested from: http://localhost:8081/admin
+[2026-04-03T00:24:10.111Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:24:38.331Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.332Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-03T00:24:38.344Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.346Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.346Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.372Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.622Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.623Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.624Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.627Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.628Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.629Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.630Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.632Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.632Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.634Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.635Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.720Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.770Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.776Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:24:38.777Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:24:38.879Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T00:24:46.748Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-03T00:24:46.750Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-03T00:24:46.773Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:24:46.776Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:24:46.778Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.176Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.390Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.390Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.391Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.392Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.393Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.393Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.395Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.396Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.396Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.397Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.398Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.411Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.446Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.587Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T00:24:47.785Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:24:47.786Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:24:49.739Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:24:49.739Z] [Auth] Google Login requested from: http://localhost:8081/admin
+[2026-04-03T00:24:49.740Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:27:05.643Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:27:05.679Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:27:05.681Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:27:05.682Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:05.762Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.088Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.089Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.091Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.093Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.094Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.094Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.095Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.096Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.099Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.100Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.101Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.156Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.313Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.324Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:27:06.325Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:27:12.207Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.208Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-03T00:27:12.246Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.249Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.250Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.266Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.267Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.269Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.271Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.273Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.274Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.275Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.276Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.278Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.278Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.280Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.297Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.358Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.382Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.388Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:27:12.390Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:27:12.527Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T00:27:23.605Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:27:23.606Z] [Auth] Google Login requested from: http://localhost:8081/admin
+[2026-04-03T00:27:23.607Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:40:35.076Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.174Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.186Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.189Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.303Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.306Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.315Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.318Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.321Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.323Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.325Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.327Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.334Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.336Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.339Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:35.346Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:40:36.320Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:36.763Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:40:36.787Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:40:36.790Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:40:45.924Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-03T00:40:45.928Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-03T00:40:46.014Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.018Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.021Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.154Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.280Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.282Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.284Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.288Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.291Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.292Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.296Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.298Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.303Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.305Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.307Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.327Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.344Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.356Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:40:46.358Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:40:46.672Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T00:40:59.230Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:40:59.231Z] [Auth] Google Login requested from: http://localhost:8081/admin
+[2026-04-03T00:40:59.233Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:43:35.333Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:43:35.423Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:43:35.428Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:43:35.430Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:35.538Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.477Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.480Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.482Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.484Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.490Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.492Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.496Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.498Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.501Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.506Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.508Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.641Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:36.909Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:43:37.193Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:43:37.200Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:43:45.148Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.149Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-03T00:43:45.221Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.225Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.226Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.344Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.482Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.485Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.487Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.492Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.495Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.497Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.501Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.502Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.507Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.508Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.510Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.539Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.557Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.570Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:43:45.572Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:43:45.864Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T00:43:58.856Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:43:58.858Z] [Auth] Google Login requested from: http://localhost:8081/admin
+[2026-04-03T00:43:58.859Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:46:39.072Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:46:39.179Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:46:39.185Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:46:39.187Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:39.284Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.220Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.223Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.225Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.229Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.233Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.235Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.237Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.243Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.246Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.250Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.254Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.416Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.701Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.924Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:46:40.928Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:47:01.189Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:47:01.191Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T00:47:01.192Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:49:25.753Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:49:25.858Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:49:25.863Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:49:25.866Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:25.986Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:25.988Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:25.990Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:25.992Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:25.994Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:25.996Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:26.004Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:26.006Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:26.007Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:26.009Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:26.013Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:26.019Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:49:27.231Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:49:27.440Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:49:27.467Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:49:27.469Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:49:49.910Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:49:49.912Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T00:49:49.913Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:51:14.484Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.573Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.578Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.581Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.707Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.709Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.711Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.716Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.718Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.720Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.723Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.725Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.727Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.729Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.733Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:14.755Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:51:16.016Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:51:16.308Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:51:16.328Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:51:16.331Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:51:44.243Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:51:44.245Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T00:51:44.246Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:54:11.019Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.115Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.118Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.122Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.265Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.268Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.274Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.277Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.279Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.281Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.282Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.284Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.292Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.295Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.297Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:11.299Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:54:12.501Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:54:12.883Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:54:12.984Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:54:12.986Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:54:50.627Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:54:50.628Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T00:54:50.629Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:56:16.442Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.470Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.479Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.480Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.535Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.538Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.540Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.544Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.547Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.549Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.550Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.552Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.554Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.559Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.561Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:16.562Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:56:17.209Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:56:17.600Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:56:17.646Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:56:17.650Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:56:19.955Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:56:19.957Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T00:56:19.958Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T00:57:24.914Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.026Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.031Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.034Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.160Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.165Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.168Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.170Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.172Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.174Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.180Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.182Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.184Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.188Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.190Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:25.214Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T00:57:26.510Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T00:57:26.719Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T00:57:26.737Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T00:57:26.740Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T00:57:49.507Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T00:57:49.508Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T00:57:49.510Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T01:00:11.481Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T01:00:11.561Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:00:11.563Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:00:11.566Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:11.678Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.571Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.578Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.580Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.582Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.584Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.586Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.590Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.593Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.597Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.599Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.601Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.726Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:00:12.981Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:00:13.269Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:00:13.272Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:00:34.276Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T01:00:34.278Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T01:00:34.279Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T01:03:18.653Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T01:03:18.732Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:03:18.735Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:03:18.737Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:18.820Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:03:19.642Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:19.646Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:19.651Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:19.653Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:19.654Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:19.656Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:19.657Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:19.662Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:19.666Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:19.668Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:19.671Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:20.180Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:03:20.382Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:03:20.464Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:03:20.466Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:03:51.743Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T01:03:51.745Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T01:03:51.747Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T01:06:16.818Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T01:06:16.912Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:06:16.916Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:06:16.917Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.022Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.024Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.028Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.030Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.033Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.034Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.037Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.039Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.042Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.045Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.047Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:17.052Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:06:18.184Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:18.395Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:06:18.415Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:06:18.417Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:06:24.202Z] [REQUEST] GET /admin | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.204Z] [Route Admin] Redirecting to SPA: /admin
+[2026-04-03T01:06:24.271Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.273Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.274Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.337Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.421Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.423Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.425Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.429Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.430Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.431Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.432Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.435Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.437Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.439Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.441Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.452Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.466Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.474Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:06:24.475Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:06:24.708Z] [REQUEST] GET /api/admin/samples | Auth: YES | Guest: NO
+[2026-04-03T01:07:01.955Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T01:07:01.956Z] [Auth] Google Login requested from: http://localhost:8081/admin
+[2026-04-03T01:07:01.956Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T01:09:26.276Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T01:09:26.355Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:09:26.376Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:09:26.378Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:26.464Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.178Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.179Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.181Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.185Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.186Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.189Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.190Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.192Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.194Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.196Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.198Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.412Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.804Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.825Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:09:27.827Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:09:54.686Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T01:09:54.688Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T01:09:54.689Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T01:12:35.204Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T01:12:35.265Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:12:35.279Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:12:35.281Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:35.346Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.021Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.022Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.025Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.027Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.029Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.032Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.034Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.035Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.038Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.039Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.043Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.138Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.602Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.693Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:12:36.695Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:12:59.811Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T01:12:59.812Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T01:12:59.813Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T01:16:51.005Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.078Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.119Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.124Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.234Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.238Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.247Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.249Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.252Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.256Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.258Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.261Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.268Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.270Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.272Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:51.292Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:16:52.259Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:16:52.674Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:16:52.716Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:16:52.717Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:17:12.662Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T01:17:12.664Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T01:17:12.664Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T01:19:15.204Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.294Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.298Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.300Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.418Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.420Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.425Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.427Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.429Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.430Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.434Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.436Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.439Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.441Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.443Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:15.455Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:19:16.725Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:19:16.890Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:19:16.921Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:19:16.923Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:19:38.908Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T01:19:38.909Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T01:19:38.911Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T01:21:54.306Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T01:21:54.388Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:21:54.391Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:21:54.396Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:54.507Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.269Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.273Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.274Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.278Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.279Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.281Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.283Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.284Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.286Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.290Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.291Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.300Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.454Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.832Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:21:55.835Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:22:26.772Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T01:22:26.773Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T01:22:26.773Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T01:24:35.921Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T01:24:35.992Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:24:35.995Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:24:35.996Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.092Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.093Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.095Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.100Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.102Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.103Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.107Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.109Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.113Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.115Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.117Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:36.127Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:24:37.439Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:24:37.586Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:24:37.604Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:24:37.606Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:24:59.267Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T01:24:59.268Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T01:24:59.270Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T01:25:58.010Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.069Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.071Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.073Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.149Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.867Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.868Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.870Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.873Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.875Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.878Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.880Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.884Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.886Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.893Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:58.896Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:59.038Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:25:59.264Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:25:59.283Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:25:59.286Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:28:36.726Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T01:28:36.791Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T01:28:36.795Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T01:28:36.798Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:36.880Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.650Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.656Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.658Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.662Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.664Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.666Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.668Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.671Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.673Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.678Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.680Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:37.839Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T01:28:38.411Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T01:28:38.429Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T01:28:38.431Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T01:29:03.487Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T01:29:03.489Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T01:29:03.491Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T02:44:55.144Z] SERVER STARTING...
+[2026-04-03T02:44:55.146Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-03T02:44:55.229Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-03T02:44:55.232Z] [System] All modules loaded successfully.
+[2026-04-03T02:44:55.234Z] [Mount] User API Routes -> /api
+[2026-04-03T02:44:55.234Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-03T04:17:23.441Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.480Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.488Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.490Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.516Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.785Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.787Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.788Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.790Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.792Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.801Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.803Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.804Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.805Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.807Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.814Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.873Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:23.931Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T04:17:24.026Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T04:17:24.028Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T04:17:26.617Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.634Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.635Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.636Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.665Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.909Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.910Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.911Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.913Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.915Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.916Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.918Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.918Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.919Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.921Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:26.927Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:27.026Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T04:17:27.066Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T04:17:27.071Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T04:17:27.073Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T04:17:29.419Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T04:17:29.420Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T04:17:29.422Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T09:39:35.236Z] SERVER STARTING...
+[2026-04-03T09:39:35.238Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-03T09:39:35.323Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-03T09:39:35.325Z] [System] All modules loaded successfully.
+[2026-04-03T09:39:35.327Z] [Mount] User API Routes -> /api
+[2026-04-03T09:39:35.327Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-03T09:41:08.889Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T09:41:08.943Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T09:41:08.945Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T09:41:08.948Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.310Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.544Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.546Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.547Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.549Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.551Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.555Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.556Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.560Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.564Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.565Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.566Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.589Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.677Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.761Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T09:41:09.763Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T09:41:12.297Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T09:41:12.299Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T09:41:12.300Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T09:41:44.210Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.235Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.237Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.238Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.677Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.901Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.903Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.903Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.906Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.907Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.908Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.908Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.909Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.909Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.912Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.913Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:44.936Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:45.029Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T09:41:45.095Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T09:41:45.096Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T09:41:51.356Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.383Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.389Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.390Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.418Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.675Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.676Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.677Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.678Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.682Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.683Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.684Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.685Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.686Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.687Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.693Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.750Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.821Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.827Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T09:41:51.829Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T09:41:53.853Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T09:41:53.854Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T09:41:53.855Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T09:52:49.643Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T09:52:49.656Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T09:52:49.658Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T09:52:49.661Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:49.699Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.047Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.049Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.052Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.053Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.054Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.055Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.059Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.061Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.063Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.064Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.064Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.168Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.260Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.270Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T09:52:50.271Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T10:45:22.149Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.170Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.171Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.173Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.191Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.192Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.194Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.197Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.200Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.201Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.202Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.207Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.208Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.210Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.211Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.212Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.491Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.618Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.652Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T10:45:22.653Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T10:45:25.137Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T10:45:25.138Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T10:45:25.139Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T16:59:16.164Z] SERVER STARTING...
+[2026-04-03T16:59:16.166Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-03T16:59:16.245Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-03T16:59:16.247Z] [System] All modules loaded successfully.
+[2026-04-03T16:59:16.249Z] [Mount] User API Routes -> /api
+[2026-04-03T16:59:16.249Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-03T17:00:04.343Z] SERVER STARTING...
+[2026-04-03T17:00:04.345Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-03T17:00:04.424Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-03T17:00:04.427Z] [System] All modules loaded successfully.
+[2026-04-03T17:00:04.428Z] [Mount] User API Routes -> /api
+[2026-04-03T17:00:04.429Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-03T17:00:13.032Z] [REQUEST] GET /api/test | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.018Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.047Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.051Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.053Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.083Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.316Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.317Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.319Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.324Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.325Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.326Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.330Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.331Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.333Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.334Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.337Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.399Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.443Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.515Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T17:00:35.517Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T17:00:42.915Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.936Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.937Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.939Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.955Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.957Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.958Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.959Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.962Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.963Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.963Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.964Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.965Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.966Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.969Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:42.971Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T17:00:43.183Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T17:00:43.230Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T17:00:43.286Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T17:00:43.288Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T17:00:46.463Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T17:00:46.464Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T17:00:46.465Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T17:04:01.121Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.137Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.139Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.141Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.165Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.166Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.167Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.171Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.173Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.174Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.175Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.177Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.179Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.180Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.181Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.185Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.411Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.460Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.524Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T17:04:01.525Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T17:04:05.154Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T17:04:05.155Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T17:04:05.156Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T17:04:14.686Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.706Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.707Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.708Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.726Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.727Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.728Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.728Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.731Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.732Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.733Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.734Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.735Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.737Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.739Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.746Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T17:04:14.981Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T17:04:15.100Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T17:04:15.110Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T17:04:15.112Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T17:04:17.130Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T17:04:17.131Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T17:04:17.131Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T17:05:59.605Z] [REQUEST] GET /api/test | Auth: NO | Guest: NO
+[2026-04-03T17:06:09.706Z] [REQUEST] POST /api/generate/start | Auth: NO | Guest: YES
+[2026-04-03T17:06:09.707Z] [DEBUG] Guest ID: test-fp-1775235969691
+[2026-04-03T17:06:09.718Z] [Auth] Authorized Guest: test-fp-... (ID Type: Shared)
+[2026-04-03T17:06:09.719Z] [Generate] Request to start generation for p-test-1775235969691 (Action: full)
+[2026-04-03T17:06:10.144Z] [ERROR] [Generate] Initialization failed: Project not found: p-test-1775235969691
+[2026-04-03T17:06:47.700Z] [REQUEST] POST /api/projects | Auth: NO | Guest: YES
+[2026-04-03T17:06:47.700Z] [DEBUG] Guest ID: test-1775236007683
+[2026-04-03T17:06:47.701Z] [Auth] Authorized Guest: test-177... (ID Type: Shared)
+[2026-04-03T17:06:47.702Z] [Projects] Creating new project: g-e098b-1775236007702 for user: e098bba0-8c4e-41c6-8149-41efd79854dc
+[2026-04-03T17:06:48.021Z] [REQUEST] POST /api/generate/start | Auth: NO | Guest: YES
+[2026-04-03T17:06:48.021Z] [DEBUG] Guest ID: test-1775236007683
+[2026-04-03T17:06:48.022Z] [Auth] Authorized Guest: test-177... (ID Type: Shared)
+[2026-04-03T17:06:48.022Z] [Generate] Request to start generation for g-e098b-1775236007702 (Action: full)
+[2026-04-03T17:06:48.160Z] [Generate] Project g-e098b-1775236007702 initialized. Triggering Supabase Edge Function.
+[2026-04-03T17:07:01.819Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-03T17:07:01.819Z] [DEBUG] Guest ID: test
+[2026-04-03T17:07:01.820Z] [Auth] Authorized Guest: test... (ID Type: Shared)
+[2026-04-03T17:09:19.552Z] [ERROR] [Generate Edge] Non-OK response (546): Unknown error
+[2026-04-03T22:37:53.715Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T22:37:53.728Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T22:37:53.729Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T22:37:53.730Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:53.759Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.012Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.013Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.015Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.016Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.018Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.019Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.022Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.024Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.026Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.031Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.032Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.106Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.192Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.198Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T22:37:54.199Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T22:38:00.617Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.637Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.638Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.639Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.655Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.656Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.658Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.660Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.661Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.663Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.664Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.665Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.665Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.667Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.668Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.670Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.701Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.708Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.713Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T22:38:00.715Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T22:38:43.868Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T22:38:43.882Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T22:38:43.883Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T22:38:43.885Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:43.914Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.148Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.149Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.150Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.150Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.153Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.154Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.155Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.157Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.158Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.162Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.164Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.200Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.280Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.295Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T22:38:44.298Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T22:38:48.007Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.026Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.029Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.030Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.049Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.079Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.081Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.082Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.083Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.084Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.084Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.088Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.090Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.091Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.093Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.094Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.100Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.107Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.113Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T22:38:48.114Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T22:39:29.842Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.861Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.863Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.864Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.893Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.894Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.896Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.899Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.901Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.903Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.905Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.906Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.910Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.911Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.913Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:29.915Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T22:39:30.137Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T22:39:30.177Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T22:39:30.246Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T22:39:30.247Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T22:39:36.397Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T22:39:36.398Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T22:39:36.399Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T22:39:58.614Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T22:39:58.616Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T22:40:00.036Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T22:40:00.037Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T22:40:00.038Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T22:41:12.418Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.433Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.434Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.436Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.467Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.469Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.470Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.471Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.475Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.476Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.477Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.478Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.480Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.480Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.483Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.486Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.707Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.759Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.820Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T22:41:12.822Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T22:41:19.626Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T22:41:19.627Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T22:41:19.627Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T22:41:53.673Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.703Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.704Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.705Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.724Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.725Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.725Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.726Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.730Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.731Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.731Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.732Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.733Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.734Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.740Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.744Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T22:41:53.999Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T22:41:54.094Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T22:41:54.126Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T22:41:54.127Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T22:41:56.428Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T22:41:56.429Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T22:41:56.430Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T23:07:42.118Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.167Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.169Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.171Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.190Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.191Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.192Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.195Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.197Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.198Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.200Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.204Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.205Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.206Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.208Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.213Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.441Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.484Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.552Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T23:07:42.553Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T23:07:45.155Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T23:07:45.156Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T23:07:45.157Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T23:12:11.378Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.392Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.394Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.395Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.413Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.414Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.415Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.416Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.420Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.421Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.422Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.423Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.423Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.424Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.427Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.429Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.671Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.730Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.790Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T23:12:11.791Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T23:12:13.977Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T23:12:13.997Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T23:12:13.999Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.000Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.012Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.013Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.014Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.015Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.016Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.017Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.021Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.022Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.024Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.025Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.025Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.029Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.059Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.067Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.073Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T23:12:14.074Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T23:12:16.859Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T23:12:16.860Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T23:12:16.861Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T23:16:12.267Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.295Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.297Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.300Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.327Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.329Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.330Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.332Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.334Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.335Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.336Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.337Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.338Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.341Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.342Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.343Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.551Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.598Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.653Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T23:16:12.654Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T23:16:14.654Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.678Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.680Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.681Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.704Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.732Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.733Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.734Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.735Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.736Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.737Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.740Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.742Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.743Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.745Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.746Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.753Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.761Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.765Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T23:16:14.767Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T23:16:16.208Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T23:16:16.209Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T23:16:16.210Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-03T23:16:36.750Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.767Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.768Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.770Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.783Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.784Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.785Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.787Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.789Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.790Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.791Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.792Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.793Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.798Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.800Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:36.807Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-03T23:16:37.051Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-03T23:16:37.103Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-03T23:16:37.169Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-03T23:16:37.170Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-03T23:16:39.388Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-03T23:16:39.389Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-03T23:16:39.390Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-04T00:46:50.832Z] SERVER STARTING...
+[2026-04-04T00:46:50.834Z] [System] Loading API routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\api.js
+[2026-04-04T00:46:50.937Z] [System] Loading Admin routes from C:\Users\happy\Downloads\Gravity APP\디렉터즈 아레나\api\routes\admin.js
+[2026-04-04T00:46:50.941Z] [System] All modules loaded successfully.
+[2026-04-04T00:46:50.943Z] [Mount] User API Routes -> /api
+[2026-04-04T00:46:50.944Z] [Mount] Admin API Routes -> /api/admin
+[2026-04-04T01:40:18.681Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:40:18.723Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:40:18.726Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:40:18.730Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.386Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.631Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.632Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.634Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.637Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.638Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.639Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.645Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.646Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.647Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.648Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.651Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.743Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.822Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:40:19.824Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:40:22.253Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.280Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.281Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.282Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.354Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.356Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.357Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.358Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.360Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.361Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.365Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.366Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.367Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.368Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.369Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.369Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.397Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.419Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:40:22.421Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:40:49.425Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.475Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.477Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.479Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.500Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.501Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.502Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.505Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.507Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.508Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.509Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.512Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.514Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.516Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.518Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.525Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.834Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.984Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:40:49.985Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:41:06.462Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.477Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.480Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.482Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.501Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.502Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.503Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.503Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.504Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.504Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.506Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.507Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.508Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.509Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.510Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.512Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.541Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.556Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:41:06.558Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:41:08.479Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:41:08.481Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:41:18.055Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.070Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.071Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.073Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.084Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.085Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.086Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.086Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.088Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.089Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.090Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.090Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.090Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.091Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.094Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.100Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.118Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.125Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:41:18.126Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:43:05.128Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.144Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.146Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.148Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.173Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.404Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.405Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.406Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.408Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.410Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.411Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.414Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.415Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.416Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.420Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.423Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.456Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.527Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:43:05.529Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:44:39.159Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.188Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.191Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.192Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.233Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.491Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.492Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.494Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.496Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.497Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.499Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.501Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.504Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.505Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.505Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.507Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.592Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.697Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.786Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:44:39.787Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:44:44.955Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:44:44.979Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:44:44.985Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:44:44.987Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.027Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.377Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.379Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.383Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.385Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.387Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.388Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.389Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.390Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.394Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.395Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.398Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.519Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.635Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.646Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:44:45.648Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:45:48.172Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.210Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.214Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.215Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.237Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.240Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.241Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.243Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.246Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.247Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.249Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.251Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.252Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.253Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.257Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.262Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.336Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.358Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.366Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:45:48.368Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:46:26.495Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T01:46:26.496Z] [DEBUG] Guest ID: f7701f1e-9b53-4431-84a8-75e1aa7cd69c
+[2026-04-04T01:46:26.498Z] [Auth] Authorized Guest: f7701f1e... (ID Type: Unique)
+[2026-04-04T01:47:07.609Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T01:47:07.610Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T01:47:07.611Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T01:47:18.886Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T01:47:18.887Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T01:47:18.887Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T01:47:25.721Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T01:47:25.722Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T01:47:25.722Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T01:48:34.735Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:48:34.781Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:48:34.783Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:48:34.786Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.253Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.556Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.557Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.559Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.561Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.563Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.564Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.566Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.567Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.568Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.572Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.573Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.609Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.767Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.853Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:48:35.856Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:48:39.019Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-04T01:48:39.020Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-04T01:48:39.022Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-04T01:52:06.642Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:52:06.677Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:52:06.679Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:52:06.681Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.038Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.288Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.289Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.290Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.291Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.292Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.292Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.295Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.296Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.297Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.298Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.298Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.323Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.418Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.487Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:52:07.489Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:52:09.769Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-04T01:52:09.770Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-04T01:52:09.770Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-04T01:53:12.761Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T01:53:12.792Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T01:53:12.797Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T01:53:12.798Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:12.842Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.324Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.326Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.328Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.330Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.331Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.332Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.334Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.335Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.336Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.337Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.339Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.554Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.683Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T01:53:13.684Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T01:53:13.686Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T01:53:13.712Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.732Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T01:53:13.735Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T01:53:14.329Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T01:53:14.331Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T01:53:14.332Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T01:53:20.827Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T01:53:20.829Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T01:53:20.831Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T01:53:31.810Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T01:53:31.811Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T01:53:31.812Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T01:53:51.984Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T01:53:51.985Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T01:53:51.986Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:00:17.819Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T02:00:17.858Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T02:00:17.861Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T02:00:17.862Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:17.921Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.419Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.420Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.422Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.425Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.427Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.428Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.430Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.431Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.433Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.435Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.437Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.561Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.794Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:00:18.795Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:00:18.796Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:00:18.819Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.870Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T02:00:18.872Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T02:00:19.440Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:00:19.441Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:00:19.442Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:00:39.257Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:00:39.258Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:00:39.260Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:00:45.958Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.011Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.013Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.015Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.068Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.245Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.247Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.248Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.251Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.253Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.254Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.256Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.258Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.259Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.262Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.263Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.276Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.291Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:00:46.292Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:00:46.294Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:00:46.301Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.307Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T02:00:46.310Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T02:00:46.532Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:00:46.533Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:00:46.535Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:01:01.727Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:01:01.728Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:01:01.729Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:01:17.898Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:01:17.900Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:01:17.902Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:01:35.147Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T02:01:35.149Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T02:01:40.681Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T02:01:40.683Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T02:01:40.904Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T02:01:40.907Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T02:01:47.932Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:01:47.933Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:01:47.934Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:02:09.485Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:02:09.487Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:02:09.488Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:02:18.691Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:02:18.693Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:02:18.695Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:02:32.206Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:02:32.207Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:02:32.209Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:02:48.815Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:02:48.817Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:02:48.818Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:03:03.766Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:03:03.767Z] [DEBUG] Guest ID: 2be84614-99db-433c-901d-97336b76edc9
+[2026-04-04T02:03:03.768Z] [Auth] Authorized Guest: 2be84614... (ID Type: Unique)
+[2026-04-04T02:03:43.946Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T02:03:43.948Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T02:04:00.709Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:04:00.710Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T02:04:00.712Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T02:04:12.272Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:04:12.273Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T02:04:12.274Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T02:04:27.781Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:04:27.782Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T02:04:27.784Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T02:04:42.398Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:04:42.400Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T02:04:42.401Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T02:04:51.000Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.074Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.078Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.080Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.169Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.433Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.435Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.437Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.444Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.445Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.447Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.450Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.452Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.455Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.459Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.461Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.485Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.501Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:04:51.502Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T02:04:51.504Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T02:04:51.512Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.521Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T02:04:51.524Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T02:04:51.839Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:04:51.840Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T02:04:51.841Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T02:05:02.607Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:05:02.609Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T02:05:02.611Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T02:05:12.097Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:05:12.098Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T02:05:12.100Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T02:05:23.180Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:05:23.181Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T02:05:23.182Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T02:05:31.899Z] [REQUEST] GET /api/projects | Auth: NO | Guest: YES
+[2026-04-04T02:05:31.901Z] [DEBUG] Guest ID: e0b5c060-c11c-4b9e-a046-b49f266e7321
+[2026-04-04T02:05:31.902Z] [Auth] Authorized Guest: e0b5c060... (ID Type: Unique)
+[2026-04-04T02:08:05.325Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T02:08:05.377Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T02:08:05.381Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T02:08:05.383Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.041Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.465Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.466Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.469Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.471Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.472Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.473Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.477Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.480Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.481Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.484Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.486Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.580Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.721Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.846Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T02:08:06.848Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T02:09:05.399Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.421Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.425Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.426Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.443Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.444Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.445Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.448Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.449Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.450Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.452Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.455Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.457Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.459Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.461Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.464Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T02:09:05.848Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:06.029Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T02:09:06.041Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T02:09:06.044Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T02:09:08.056Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-04T02:09:08.057Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-04T02:09:08.058Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-04T02:09:52.881Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.901Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.905Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.906Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.923Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.924Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.927Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.928Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.929Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.930Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.931Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.934Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.936Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.937Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.938Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:52.947Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T02:09:53.307Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T02:09:53.378Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T02:09:53.471Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T02:09:53.472Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T02:09:55.866Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-04T02:09:55.867Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-04T02:09:55.868Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...
+[2026-04-04T02:10:11.053Z] [REQUEST] GET / | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.075Z] [REQUEST] GET /css/style.css | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.079Z] [REQUEST] GET /assets/img/logo.png | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.080Z] [REQUEST] GET /js/app.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.097Z] [REQUEST] GET /js/modules/state.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.098Z] [REQUEST] GET /js/modules/auth.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.100Z] [REQUEST] GET /js/modules/navigation.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.101Z] [REQUEST] GET /js/modules/wizard.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.102Z] [REQUEST] GET /js/modules/projects_list.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.103Z] [REQUEST] GET /js/modules/settings.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.106Z] [REQUEST] GET /js/modules/dashboard.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.107Z] [REQUEST] GET /js/modules/api.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.108Z] [REQUEST] GET /js/modules/script.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.109Z] [REQUEST] GET /js/modules/admin.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.111Z] [REQUEST] GET /js/modules/samples.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.114Z] [REQUEST] GET /assets/img/hero_premium.png | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.587Z] [REQUEST] GET /js/modules/constants.js | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.715Z] [REQUEST] GET /api/samples | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.724Z] [REQUEST] GET /favicon.ico | Auth: NO | Guest: NO
+[2026-04-04T02:10:11.725Z] [SPA Fallback] Serving index.html for unknown path: /favicon.ico
+[2026-04-04T02:10:13.659Z] [REQUEST] GET /api/auth/google | Auth: NO | Guest: NO
+[2026-04-04T02:10:13.660Z] [Auth] Google Login requested from: http://localhost:8081/
+[2026-04-04T02:10:13.662Z] [Auth] Generated OAuth URL: https://stfonaiuxavzbqwikcqb.supabase.co/auth/v1/a...

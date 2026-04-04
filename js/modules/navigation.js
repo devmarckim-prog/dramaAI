@@ -37,11 +37,23 @@ export function showDebugLog() {
   if (el) el.classList.add('active');
 }
 
-import { state } from './state.js';
-// Removed circular imports to prevent initialization issues
-// import { handleLogout } from './auth.js';
-// import { renderSettingsProfile } from './settings.js';
-// import { buildResultPanels } from './dashboard.js';
+import { state, APP_VERSION } from './state.js';
+
+/**
+ * Sync APP_VERSION to all .version-tag elements
+ */
+export function syncVersionUI() {
+  document.querySelectorAll('.version-tag').forEach(el => {
+    el.textContent = APP_VERSION;
+  });
+}
+
+// Auto-sync on script load if DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', syncVersionUI);
+} else {
+  syncVersionUI();
+}
 
 export function showPage(pageId) {
   const adminEmail = 'dev.marckim@gmail.com';

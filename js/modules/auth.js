@@ -3,7 +3,7 @@
  */
 
 import { state } from './state.js';
-import { showPage, showToast } from './navigation.js';
+import { showPage, showToast, syncVersionUI } from './navigation.js';
 
 export function renderNav() {
   const user = state.currentUser;
@@ -47,6 +47,9 @@ export function renderNav() {
   } else {
     nav.innerHTML = `<button class="btn btn-primary" onclick="showLoginModal()">로그인</button>`;
   }
+
+  // Ensure version tag is synced whenever nav is rendered
+  syncVersionUI();
 }
 
 export async function handleLogout() {
